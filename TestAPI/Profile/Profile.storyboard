@@ -30,8 +30,9 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </imageView>
-                                    <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6GV-zm-7uq">
+                                    <imageView opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6GV-zm-7uq">
                                         <rect key="frame" x="144.33333333333334" y="95.333333333333343" width="65" height="65"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="65" id="UjR-JL-T8S"/>
                                             <constraint firstAttribute="width" secondItem="6GV-zm-7uq" secondAttribute="height" multiplier="1:1" id="mTc-Cd-NeO"/>

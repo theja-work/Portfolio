@@ -56,7 +56,9 @@ public class HomeViewController : UIViewController {
     }
     
     @IBAction func videoButtonAction(_ sender: HomeButtons) {
+        let videoVC = VideoViewController.viewController()
         
+        self.navigationController?.pushViewController(videoVC, animated: true)
     }
     
     

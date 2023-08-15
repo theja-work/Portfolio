@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "editProfile.png",
+      "filename" : "70-704605_edit-icon-red-edit-icon-hd-png-download.png.jpeg",
       "idiom" : "universal",
       "scale" : "1x"
     },
@@ -17,5 +17,8 @@
   "info" : {
     "author" : "xcode",
     "version" : 1
+  },
+  "properties" : {
+    "template-rendering-intent" : "original"
   }
 }

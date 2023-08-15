@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Video View Controller-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="VideoViewController" id="Y6W-OH-hqX" customClass="VideoViewController" customModule="TestAPI" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mQg-62-cJd">
+                                <rect key="frame" x="18.666666666666657" y="59" width="355.66666666666674" height="200"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="DOj-nu-cZh"/>
+                                    <constraint firstAttribute="width" secondItem="mQg-62-cJd" secondAttribute="height" multiplier="16:9" id="Jf0-9Z-8fh"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B2c-W9-dDe" customClass="HomeButtons" customModule="TestAPI" customModuleProvider="target">
+                                <rect key="frame" x="108" y="299" width="177" height="44.333333333333314"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="B2c-W9-dDe" secondAttribute="height" multiplier="4:1" id="3SK-9A-wmu"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="Play"/>
+                                <connections>
+                                    <action selector="playButtonAction:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="p3r-sd-03L"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aNU-zC-Bzn" customClass="HomeButtons" customModule="TestAPI" customModuleProvider="target">
+                                <rect key="frame" x="108" y="393.33333333333331" width="177" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="aNU-zC-Bzn" secondAttribute="height" multiplier="4:1" id="MjF-XD-d9m"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="Back"/>
+                                <connections>
+                                    <action selector="backButtonAction:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="5Pp-xA-ab8"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="B2c-W9-dDe" firstAttribute="width" secondItem="5EZ-qb-Rvc" secondAttribute="width" multiplier="0.45" id="Gwq-Bg-bhz"/>
+                            <constraint firstItem="mQg-62-cJd" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="I3l-Ep-FYi"/>
+                            <constraint firstItem="aNU-zC-Bzn" firstAttribute="width" secondItem="B2c-W9-dDe" secondAttribute="width" id="PmY-Jb-HKd"/>
+                            <constraint firstItem="aNU-zC-Bzn" firstAttribute="top" secondItem="B2c-W9-dDe" secondAttribute="bottom" constant="50" id="SA4-fj-RuP"/>
+                            <constraint firstItem="aNU-zC-Bzn" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="Tr0-HD-YKb"/>
+                            <constraint firstItem="mQg-62-cJd" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="WpG-l5-L8F"/>
+                            <constraint firstItem="B2c-W9-dDe" firstAttribute="top" secondItem="mQg-62-cJd" secondAttribute="bottom" constant="40" id="r9R-OD-ccu"/>
+                            <constraint firstItem="B2c-W9-dDe" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="x2x-Un-itg"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="backButton" destination="aNU-zC-Bzn" id="nXD-pD-6x3"/>
+                        <outlet property="playButton" destination="B2c-W9-dDe" id="wJO-Mf-gUl"/>
+                        <outlet property="playerView" destination="mQg-62-cJd" id="aTc-Ib-ckN"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="57" y="4"/>
+        </scene>
+    </scenes>
+</document>

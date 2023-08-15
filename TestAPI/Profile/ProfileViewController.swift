@@ -82,61 +82,113 @@ public class ProfileViewController : UIViewController {
     }
     
     func getUserData() {
-        let request = NSFetchRequest<NSFetchRequestResult>.init(entityName: "Profile")
         
         var name = ""
         var mobile = ""
         var age = ""
         
-        request.returnsObjectsAsFaults = false
+        guard let context = self.context else {return}
         
+//        DispatchQueue.main.async {
+//            do {
+//                let fetch = try context.fetch(Profile.fetchRequest())
+//
+//                print(fetch)
+//
+//                guard let user = fetch.first else {return}
+//
+//                if let value = user.name , value.count != 0 {
+//                    self.nameField.text = value
+//                }
+//                else {
+//                    self.showError(message: "No name found , \(user.name)")
+//                }
+//
+//                if let value = user.mobile , value.count != 0 {
+//                    self.mobileField.text = value
+//                }
+//                else {
+//                    self.showError(message: "No mobile number found , \(user.mobile)")
+//                }
+//
+//                if let value = user.age , value.count != 0 {
+//                    self.ageField.text = value
+//                }
+//                else {
+//                    self.showError(message: "No age found \(user.age)")
+//                }
+//
+//                if let value = user.profilePicture {
+//                    if self.testSDKinstance.setupImageForView(view: self.profileImageView, from: value) == false {
+//                        if let image = UIImage(data: value) {
+//                            self.profileImageView.image = image
+//                        }
+//                        else {
+//                            self.showError(message: "Erro getting sdk for image setup")
+//                        }
+//                    }
+//                }
+//                else {
+//                    self.showError(message: "No profile picture")
+//                }
+//            }
+//
+//            catch {
+//                print(error)
+//            }
+//        }
+        
+        
+        // old method
+        let request = NSFetchRequest<NSFetchRequestResult>.init(entityName: "Profile")
+
+        request.returnsObjectsAsFaults = false
+
         do {
-            let delegte = UIApplication.shared.delegate as! AppDelegate
-            
-            let context = delegte.persistentContainer.viewContext
-            
+            guard let context = self.context else {return}
+
             let result = try context.fetch(request)
-            
+
             for data in result as! [NSManagedObject] {
                 if let value = data.value(forKey: "name") as? String {
                     name = value
                 }
-                
+
                 if let value = data.value(forKey: "mobile") as? String {
                     mobile = value
                 }
-                
+
                 if let value = data.value(forKey: "age") as? String {
                     age = value
                 }
-                
+
                 if let value = data.value(forKey: "profilePicture") as? Data {
-                    
+
                     if testSDKinstance.setupImageForView(view: self.profileImageView, from: value) == false {
-                        
+
                         if let image = UIImage(data: value) {
                             self.profileImageView.image = image
                         }
-                        
+
                     }
-                    
+
                 }
             }
-            
+
         }
-        
+
         catch {
             print(error)
         }
-        
+
         if name.count != 0 {
             self.nameField.text = name
         }
-        
+
         if mobile.count != 0 {
             self.mobileField.text = mobile
         }
-        
+
         if age.count != 0 {
             self.ageField.text = age
         }
@@ -167,6 +219,8 @@ public class ProfileViewController : UIViewController {
         self.editImageToggle.clipsToBounds = true
         self.editImageToggle.layer.masksToBounds = true
         self.editImageToggle.layer.cornerRadius = 8
+        self.editImageToggle.backgroundColor = .clear
+        self.editImageToggle.isOpaque = false
     }
     
     public func textFieldSetup() {
@@ -206,6 +260,10 @@ public class ProfileViewController : UIViewController {
     public func buttonSetup() {
         editButton.setupStyle(type: .Edit)
         saveButton.setupStyle(type: .Save)
+    }
+    
+    func showError(message:String) {
+        print("ProfileViewController : \(message)")
     }
     
     @IBAction func editProfileAction(_ sender : ProfileButtons) {
@@ -272,8 +330,6 @@ public class ProfileViewController : UIViewController {
         }
         
         guard let context = self.context else {return}
-        
-        let entity = NSEntityDescription.entity(forEntityName: "Profile", in: context)
         
         let user = Profile(context: context)
         
