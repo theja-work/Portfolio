@@ -17,16 +17,34 @@
 		6B74DFBE2A8647EB008886C7 /* ColorCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B74DFBD2A8647EB008886C7 /* ColorCodes.swift */; };
 		6B74DFC02A86682A008886C7 /* CustomFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B74DFBF2A86682A008886C7 /* CustomFonts.swift */; };
 		6B74DFC22A867229008886C7 /* ProfileEditButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B74DFC12A867229008886C7 /* ProfileEditButtons.swift */; };
+		6B78FA742A8BB76300346C13 /* TestSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B78FA722A8BB75900346C13 /* TestSDK.xcframework */; };
+		6B78FA752A8BB76300346C13 /* TestSDK.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6B78FA722A8BB75900346C13 /* TestSDK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6B9D59C22A7FA89D007129CB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B9D59C12A7FA89D007129CB /* AppDelegate.swift */; };
 		6B9D59C42A7FA89D007129CB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B9D59C32A7FA89D007129CB /* SceneDelegate.swift */; };
 		6B9D59C92A7FA89D007129CB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B9D59C72A7FA89D007129CB /* Main.storyboard */; };
 		6B9D59CC2A7FA89D007129CB /* TestAPI.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6B9D59CA2A7FA89D007129CB /* TestAPI.xcdatamodeld */; };
 		6B9D59CE2A7FA89F007129CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6B9D59CD2A7FA89F007129CB /* Assets.xcassets */; };
 		6B9D59D12A7FA89F007129CB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B9D59CF2A7FA89F007129CB /* LaunchScreen.storyboard */; };
+		6BA2225C2A8B97AC0081B8E1 /* Profile+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA2225A2A8B97AC0081B8E1 /* Profile+CoreDataClass.swift */; };
+		6BA2225D2A8B97AC0081B8E1 /* Profile+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA2225B2A8B97AC0081B8E1 /* Profile+CoreDataProperties.swift */; };
 		6BF56F022A7FBC5900C4BB41 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BF56F012A7FBC5900C4BB41 /* HomeViewController.swift */; };
 		6BF56F062A7FBD7200C4BB41 /* HomeButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BF56F052A7FBD7200C4BB41 /* HomeButtons.swift */; };
 		B3D85F672A8714480043D43B /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3D85F662A8714480043D43B /* ImagePicker.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		6BA222D22A8BACBC0081B8E1 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				6B78FA752A8BB76300346C13 /* TestSDK.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		6B74DFA42A863FF9008886C7 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Bold.ttf"; sourceTree = "<group>"; };
@@ -39,6 +57,7 @@
 		6B74DFBD2A8647EB008886C7 /* ColorCodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCodes.swift; sourceTree = "<group>"; };
 		6B74DFBF2A86682A008886C7 /* CustomFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFonts.swift; sourceTree = "<group>"; };
 		6B74DFC12A867229008886C7 /* ProfileEditButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditButtons.swift; sourceTree = "<group>"; };
+		6B78FA722A8BB75900346C13 /* TestSDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = TestSDK.xcframework; sourceTree = "<group>"; };
 		6B9D59BE2A7FA89D007129CB /* TestAPI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestAPI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B9D59C12A7FA89D007129CB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6B9D59C32A7FA89D007129CB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -47,6 +66,8 @@
 		6B9D59CD2A7FA89F007129CB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6B9D59D02A7FA89F007129CB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6B9D59D22A7FA89F007129CB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6BA2225A2A8B97AC0081B8E1 /* Profile+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Profile+CoreDataClass.swift"; sourceTree = "<group>"; };
+		6BA2225B2A8B97AC0081B8E1 /* Profile+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Profile+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		6BF56F012A7FBC5900C4BB41 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		6BF56F052A7FBD7200C4BB41 /* HomeButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeButtons.swift; sourceTree = "<group>"; };
 		B3D85F662A8714480043D43B /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
@@ -57,6 +78,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6B78FA742A8BB76300346C13 /* TestSDK.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -90,6 +112,8 @@
 		6B74DFB72A864684008886C7 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				6BA2225A2A8B97AC0081B8E1 /* Profile+CoreDataClass.swift */,
+				6BA2225B2A8B97AC0081B8E1 /* Profile+CoreDataProperties.swift */,
 				6B74DFB82A8646A0008886C7 /* ProfileViewController.swift */,
 				6B74DFBA2A8646DF008886C7 /* Profile.storyboard */,
 			);
@@ -123,6 +147,7 @@
 		6B9D59C02A7FA89D007129CB /* TestAPI */ = {
 			isa = PBXGroup;
 			children = (
+				6BA222CD2A8BAC8C0081B8E1 /* Supporting Frameworks */,
 				6B74DFB72A864684008886C7 /* Profile */,
 				6B74DF972A863E5A008886C7 /* UI Supporting files */,
 				6B9D59C12A7FA89D007129CB /* AppDelegate.swift */,
@@ -135,6 +160,14 @@
 				6B9D59CA2A7FA89D007129CB /* TestAPI.xcdatamodeld */,
 			);
 			path = TestAPI;
+			sourceTree = "<group>";
+		};
+		6BA222CD2A8BAC8C0081B8E1 /* Supporting Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6B78FA722A8BB75900346C13 /* TestSDK.xcframework */,
+			);
+			path = "Supporting Frameworks";
 			sourceTree = "<group>";
 		};
 		6BF56F032A7FBCB100C4BB41 /* Home */ = {
@@ -172,6 +205,7 @@
 				6B9D59BA2A7FA89D007129CB /* Sources */,
 				6B9D59BB2A7FA89D007129CB /* Frameworks */,
 				6B9D59BC2A7FA89D007129CB /* Resources */,
+				6BA222D22A8BACBC0081B8E1 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -242,12 +276,14 @@
 				6B74DFB92A8646A0008886C7 /* ProfileViewController.swift in Sources */,
 				6B74DFC02A86682A008886C7 /* CustomFonts.swift in Sources */,
 				6B9D59C22A7FA89D007129CB /* AppDelegate.swift in Sources */,
+				6BA2225C2A8B97AC0081B8E1 /* Profile+CoreDataClass.swift in Sources */,
 				6B74DFC22A867229008886C7 /* ProfileEditButtons.swift in Sources */,
 				6B9D59CC2A7FA89D007129CB /* TestAPI.xcdatamodeld in Sources */,
 				6BF56F062A7FBD7200C4BB41 /* HomeButtons.swift in Sources */,
 				6B9D59C42A7FA89D007129CB /* SceneDelegate.swift in Sources */,
 				B3D85F672A8714480043D43B /* ImagePicker.swift in Sources */,
 				6B74DFBE2A8647EB008886C7 /* ColorCodes.swift in Sources */,
+				6BA2225D2A8B97AC0081B8E1 /* Profile+CoreDataProperties.swift in Sources */,
 				6BF56F022A7FBC5900C4BB41 /* HomeViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

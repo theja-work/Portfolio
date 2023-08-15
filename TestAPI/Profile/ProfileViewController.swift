@@ -7,6 +7,8 @@
 
 import Foundation
 import UIKit
+import CoreData
+import TestSDK
 
 public class ProfileViewController : UIViewController {
     
@@ -34,15 +36,18 @@ public class ProfileViewController : UIViewController {
     
     @IBOutlet weak var profileDetailsScrollView: UIScrollView!
     
-    
     @IBOutlet weak var scrollViewContentHeightConstaint: NSLayoutConstraint!
     
+    let testSDKinstance = TestSDKFrameWork.shared
+    
+    let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext
     
     public class func viewController() -> UIViewController {
         
         let storyboard = UIStoryboard(name: "Profile", bundle: nil)
         
         let viewController = storyboard.instantiateViewController(withIdentifier: "ProfileViewController") as? ProfileViewController
+        
         
         
         return viewController!
@@ -55,6 +60,15 @@ public class ProfileViewController : UIViewController {
         
         initialSetup()
         
+        getUserData()
+        
+        
+    }
+    
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.editImageToggle.isUserInteractionEnabled = false
     }
     
     public func initialSetup() {
@@ -65,6 +79,67 @@ public class ProfileViewController : UIViewController {
         profileImageSetup()
         
         scrollViewContentHeightConstaint.constant = CGFloat((self.nameField.frame.height * 3.0) + (40.0 * 6.0) + (self.saveButton.frame.height * 2.0) + (self.view.frame.height * 0.25))
+    }
+    
+    func getUserData() {
+        let request = NSFetchRequest<NSFetchRequestResult>.init(entityName: "Profile")
+        
+        var name = ""
+        var mobile = ""
+        var age = ""
+        
+        request.returnsObjectsAsFaults = false
+        
+        do {
+            let delegte = UIApplication.shared.delegate as! AppDelegate
+            
+            let context = delegte.persistentContainer.viewContext
+            
+            let result = try context.fetch(request)
+            
+            for data in result as! [NSManagedObject] {
+                if let value = data.value(forKey: "name") as? String {
+                    name = value
+                }
+                
+                if let value = data.value(forKey: "mobile") as? String {
+                    mobile = value
+                }
+                
+                if let value = data.value(forKey: "age") as? String {
+                    age = value
+                }
+                
+                if let value = data.value(forKey: "profilePicture") as? Data {
+                    
+                    if testSDKinstance.setupImageForView(view: self.profileImageView, from: value) == false {
+                        
+                        if let image = UIImage(data: value) {
+                            self.profileImageView.image = image
+                        }
+                        
+                    }
+                    
+                }
+            }
+            
+        }
+        
+        catch {
+            print(error)
+        }
+        
+        if name.count != 0 {
+            self.nameField.text = name
+        }
+        
+        if mobile.count != 0 {
+            self.mobileField.text = mobile
+        }
+        
+        if age.count != 0 {
+            self.ageField.text = age
+        }
     }
     
     @objc func editImageToggleAction() {
@@ -145,6 +220,7 @@ public class ProfileViewController : UIViewController {
         self.ageField.isEnabled = true
         
         self.nameField.becomeFirstResponder()
+        self.editImageToggle.isUserInteractionEnabled = true
         
     }
     
@@ -153,10 +229,65 @@ public class ProfileViewController : UIViewController {
         self.editImageToggle.isHidden = true
         self.editImageToggle.image = nil
         self.view.sendSubviewToBack(editImageToggle)
+        self.editImageToggle.isUserInteractionEnabled = false
         
         self.nameField.isEnabled = false
         self.mobileField.isEnabled = false
         self.ageField.isEnabled = false
+        
+        var name = ""
+        var mobile = ""
+        var age = ""
+        var imageData = Data()
+        
+        if let value = nameField.text {
+            name = value
+        }
+        else {
+            name = "John Doe"
+        }
+        
+        if let value = mobileField.text {
+            mobile = value
+        }
+        else {
+            mobile = "0000 000 000"
+        }
+        
+        if let value = ageField.text {
+            age = value
+        }
+        else {
+            age = "000"
+        }
+        
+        if let value = self.profileImageView.image , let data = value.pngData(){
+            imageData = data
+        }
+        else {
+            let image = UIImage(named: "place_holder")
+            if let data = image?.pngData() {
+                imageData = data
+            }
+        }
+        
+        guard let context = self.context else {return}
+        
+        let entity = NSEntityDescription.entity(forEntityName: "Profile", in: context)
+        
+        let user = Profile(context: context)
+        
+        user.name = name
+        user.mobile = mobile
+        user.age = age
+        user.profilePicture = imageData
+        
+        do {
+            try context.save()
+        }
+        catch {
+            print(error)
+        }
         
     }
 }

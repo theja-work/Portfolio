@@ -1,0 +1,18 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.7.2 (swiftlang-5.7.2.135.5 clang-1400.0.29.51)
+// swift-module-flags: -target arm64-apple-ios16.2 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name TestSDK
+// swift-module-flags-ignorable: -enable-bare-slash-regex
+import Foundation
+import Swift
+@_exported import TestSDK
+import UIKit
+import _Concurrency
+import _StringProcessing
+public class TestSDKFrameWork {
+  public static let shared: TestSDK.TestSDKFrameWork
+  public func setBackgroundColor(forView: UIKit.UIView, color: UIKit.UIColor)
+  public init()
+  public class func createSDKInstance() -> TestSDK.TestSDKFrameWork
+  public func setupImageForView(view: UIKit.UIImageView, from data: Foundation.Data) -> Swift.Bool
+  @objc deinit
+}
