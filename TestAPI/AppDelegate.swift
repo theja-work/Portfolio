@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let rootVC = storyBoard.instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController
         
         window?.rootViewController = rootVC
-        
+        UIBarButtonItem.appearance().setBackButtonTitlePositionAdjustment(UIOffset(horizontal: -1000.0, vertical: 0.0), for: .default)
         
         
         return true

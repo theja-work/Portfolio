@@ -17,8 +17,6 @@
 		6B74DFBE2A8647EB008886C7 /* ColorCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B74DFBD2A8647EB008886C7 /* ColorCodes.swift */; };
 		6B74DFC02A86682A008886C7 /* CustomFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B74DFBF2A86682A008886C7 /* CustomFonts.swift */; };
 		6B74DFC22A867229008886C7 /* ProfileEditButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B74DFC12A867229008886C7 /* ProfileEditButtons.swift */; };
-		6B78FA742A8BB76300346C13 /* TestSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B78FA722A8BB75900346C13 /* TestSDK.xcframework */; };
-		6B78FA752A8BB76300346C13 /* TestSDK.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6B78FA722A8BB75900346C13 /* TestSDK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6B9D59C22A7FA89D007129CB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B9D59C12A7FA89D007129CB /* AppDelegate.swift */; };
 		6B9D59C42A7FA89D007129CB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B9D59C32A7FA89D007129CB /* SceneDelegate.swift */; };
 		6B9D59C92A7FA89D007129CB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B9D59C72A7FA89D007129CB /* Main.storyboard */; };
@@ -32,16 +30,18 @@
 		6BFF3F1C2A8C15A50094F063 /* VideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BFF3F1B2A8C15A50094F063 /* VideoViewController.swift */; };
 		6BFF3F1E2A8C16020094F063 /* VideoViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6BFF3F1D2A8C16020094F063 /* VideoViewController.storyboard */; };
 		B3D85F672A8714480043D43B /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3D85F662A8714480043D43B /* ImagePicker.swift */; };
+		B3D85F6C2A8C94BA0043D43B /* TestSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B78FA722A8BB75900346C13 /* TestSDK.xcframework */; };
+		B3D85F6D2A8C94BA0043D43B /* TestSDK.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6B78FA722A8BB75900346C13 /* TestSDK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		6BA222D22A8BACBC0081B8E1 /* Embed Frameworks */ = {
+		B3D85F6E2A8C94BA0043D43B /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				6B78FA752A8BB76300346C13 /* TestSDK.xcframework in Embed Frameworks */,
+				B3D85F6D2A8C94BA0043D43B /* TestSDK.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -82,7 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6B78FA742A8BB76300346C13 /* TestSDK.xcframework in Frameworks */,
+				B3D85F6C2A8C94BA0043D43B /* TestSDK.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -219,7 +219,7 @@
 				6B9D59BA2A7FA89D007129CB /* Sources */,
 				6B9D59BB2A7FA89D007129CB /* Frameworks */,
 				6B9D59BC2A7FA89D007129CB /* Resources */,
-				6BA222D22A8BACBC0081B8E1 /* Embed Frameworks */,
+				B3D85F6E2A8C94BA0043D43B /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -450,6 +450,7 @@
 				DEVELOPMENT_TEAM = Z536F9Q4L7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TestAPI/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Portfolio;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -479,6 +480,7 @@
 				DEVELOPMENT_TEAM = Z536F9Q4L7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TestAPI/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Portfolio;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
