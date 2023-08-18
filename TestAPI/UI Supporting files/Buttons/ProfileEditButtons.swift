@@ -16,7 +16,6 @@ public class ProfileButtons : HomeButtons {
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        print("not implemented")
     }
     
     public func setupStyle(type : ProfileButton) {

@@ -16,7 +16,6 @@ public class HomeButtons : UIButton {
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        print("not implemented")
     }
     
     public func setupStyle(type : HomeButtonType) {

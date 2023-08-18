@@ -38,11 +38,19 @@ public class VideoViewController : UIViewController {
     var player : AVPlayer? = nil
     var animationCounter = 0
     var loader : UIActivityIndicatorView!
+    var topNavBarPlayerOffset = 0.0
+    
+    let playerRotationAnimationKey = "on_rotation_key"
+    let playerScaleAnimationKey = "on_scale_key"
     
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.backButtonDisplayMode = .minimal
+        self.navigationController?.navigationBar.tintColor = ColorCodes.SkyBlue.color
+        
+        guard let navHeight = self.navigationController?.navigationBar.frame.size.height else {return}
+        
+        topNavBarPlayerOffset = (navHeight - 3) * 2
         
         buttonSetup()
         setupLoader()
@@ -68,14 +76,18 @@ public class VideoViewController : UIViewController {
     }
     
     public func setupLoader() {
-        self.loader = UIActivityIndicatorView(frame: CGRect(origin: self.playerView.center, size: CGSize(width: 40, height: 40)))
+        self.loader = UIActivityIndicatorView(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: 60, height: 60)))
         
         loader.style = .medium
-        loader.color = ColorCodes.LimeLight.color
-        loader.center = self.playerView.center
+        loader.color = ColorCodes.SkyBlue.color
         loader.backgroundColor = .clear
         
         self.playerView.addSubview(loader)
+        loader.center = self.playerView.center
+        loader.translatesAutoresizingMaskIntoConstraints = false
+        loader.centerYAnchor.constraint(equalTo: playerView.centerYAnchor).isActive = true
+        loader.centerXAnchor.constraint(equalTo: playerView.centerXAnchor).isActive = true
+        
     }
     
     public func showLoader() {
@@ -98,11 +110,13 @@ public class VideoViewController : UIViewController {
     
     public func playerSetup() {
         //self.playerView.translatesAutoresizingMaskIntoConstraints = false
-        let imageUrl = "https://images.wallpapersden.com/image/download/i-am-groot-hd-baby-groot_bWpuaWuUmZqaraWkpJRnamtlrWZpaWU.jpg"
+        let imageUrl = "https://i.ytimg.com/vi/aqz-KE-bpKQ/maxresdefault.jpg"
         
-        let request = URLRequest(url: URL(string: imageUrl)!)
+        var request = URLRequest(url: URL(string: imageUrl)!)
         
         self.showLoader()
+        
+        request.httpMethod = "GET"
         
         let task = URLSession.shared.dataTask(with: request) {[weak self] imageData, response, requestError in
             guard let strongSelf = self else {return}
@@ -123,26 +137,31 @@ public class VideoViewController : UIViewController {
         }
         
         task.resume()
+        
+        addPlayerObservers()
+    }
+    
+    public func addPlayerObservers() {
+        
+        
+        
     }
     
     public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         
+        guard topNavBarPlayerOffset != 0 else {return}
+        
         if UIDevice.current.orientation.isLandscape {
-            print("landscape")
-            //self.playerViewHeightConstraint.constant = self.view.frame.size.width
             self.navigationController?.isNavigationBarHidden = true
 
             self.animationCounter = 1
             
-            let topOffset = self.view.frame.size.height / 8.1
-            
-            playerViewTopConstraint.constant = topOffset
+            playerViewTopConstraint.constant = topNavBarPlayerOffset//82
             
             hidePlayerBoundButton()
             
+            
         } else {
-            print("portrait")
-            //self.playerViewHeightConstraint.constant = 200
             self.navigationController?.isNavigationBarHidden = false
 
             self.animationCounter = 0
@@ -150,28 +169,74 @@ public class VideoViewController : UIViewController {
             playerViewTopConstraint.constant = 0
             
             showPlayerBoundButton()
+            
         }
         
         if animationCounter == 1 {
-            UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 10) { [weak self] in
+            UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 5) { [weak self] in
                 guard let strongSelf = self else {return}
                 
                 let x = 16.0/9.0
                 
-                strongSelf.playerView.transform = CGAffineTransform(scaleX: x, y: x)
+                strongSelf.playerLandscapeTransition()
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
+                    strongSelf.playerView.transform = CGAffineTransform(scaleX: x, y: x)
+                })
                 
             }
-            
             
         }
         else {
             
-            UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 10) { [weak self] in
+            UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 5) { [weak self] in
                 guard let strongSelf = self else {return}
                 
-                strongSelf.playerView.transform = .identity
+                strongSelf.playerPortraitTransition()
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
+                    
+                    strongSelf.playerView.transform = .identity
+                })
+                
             }
             
+        }
+    }
+    
+    public func playerLandscapeTransition() {
+        if self.playerView.layer.animation(forKey: playerRotationAnimationKey) == nil {
+            let animation = CABasicAnimation(keyPath: "transform.rotation.z")
+            animation.fromValue = 0
+            animation.toValue = CGFloat.pi / 30
+            animation.duration = 0.1
+            self.playerView.layer.add(animation, forKey: playerRotationAnimationKey)
+        }
+        
+        if self.playerView.layer.animation(forKey: playerScaleAnimationKey) == nil {
+            let animation = CABasicAnimation(keyPath: "transform.scale")
+            animation.fromValue = 1
+            animation.toValue = 2
+            animation.duration = 0.2
+            self.playerView.layer.add(animation, forKey: playerScaleAnimationKey)
+        }
+    }
+    
+    public func playerPortraitTransition() {
+        if self.playerView.layer.animation(forKey: playerRotationAnimationKey) == nil {
+            let animation = CABasicAnimation(keyPath: "transform.rotation.z")
+            animation.fromValue = 0
+            animation.toValue = -CGFloat.pi / 30
+            animation.duration = 0.2
+            self.playerView.layer.add(animation, forKey: playerRotationAnimationKey)
+        }
+        
+        if self.playerView.layer.animation(forKey: playerScaleAnimationKey) == nil {
+            let animation = CABasicAnimation(keyPath: "transform.scale")
+            animation.fromValue = 2
+            animation.toValue = 1
+            animation.duration = 0.3
+            self.playerView.layer.add(animation, forKey: playerScaleAnimationKey)
         }
     }
     
@@ -207,15 +272,16 @@ public class VideoViewController : UIViewController {
         playerLayer.videoGravity = .resizeAspect
         self.playerView.layer.addSublayer(playerLayer)
         
-        
-        
     }
     
     @IBAction func playButtonAction(_ sender : HomeButtons) {
         
         
         self.getVideoFromServer()
-        self.player?.play()
+        
+        DispatchQueue.main.async {
+            self.player?.play()
+        }
         
         //self.playButton.isHidden = true
     }
