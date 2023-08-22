@@ -19,6 +19,7 @@ public enum ColorCodes {
     case HomeBackground
     case LightGreen
     case SkyBlue
+    case BlueGray
     
     var code : String {
         switch self {
@@ -31,6 +32,7 @@ public enum ColorCodes {
         case .HomeBackground    : return "#94b8b8"
         case .LightGreen        : return "#ccffcc"
         case .SkyBlue           : return "#80d4ff"
+        case .BlueGray          : return "#50717d"
         }
     }
     

@@ -17,8 +17,8 @@ public enum CustomFont {
     
     var name : String {
         switch self {
-        case .OS_Regular        : return "OpenSans-Regular"
         case .OS_Bold           : return "OpenSans-Bold"
+        case .OS_Regular        : return "OpenSans-Regular"
         case .OS_Semibold       : return "OpenSans-Semibold"
         case .OS_Bold_Italic    : return "OpenSans-BoldItalic"
         case .OS_Semibold_Italic: return "OpenSans-SemiboldItalic"

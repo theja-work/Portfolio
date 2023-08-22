@@ -21,11 +21,10 @@ public class VideoViewController : UIViewController {
         
         return viewController
     }
+    
     @IBOutlet weak var playerThumbnailImageview: UIImageView!
     
     @IBOutlet weak var playerView : UIView!
-    
-    @IBOutlet weak var playerViewHeightConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var playerViewTopConstraint: NSLayoutConstraint!
     
@@ -35,10 +34,26 @@ public class VideoViewController : UIViewController {
     
     @IBOutlet weak var backButton : HomeButtons!
     
+    @IBOutlet weak var metaDataScrollView: UIScrollView!
+    
+    @IBOutlet weak var videoTitleLabel: UILabel!
+    
+    @IBOutlet weak var videoDescriptionLabel: UILabel!
+    
+    @IBOutlet weak var scrollableContentHeight: NSLayoutConstraint!
+    
+    @IBOutlet weak var thumbnailDurationLabel: UILabel!
+    
+    @IBOutlet weak var metaDataHolderView: UIView!
+    
+    
     var player : AVPlayer? = nil
     var animationCounter = 0
     var loader : UIActivityIndicatorView!
     var topNavBarPlayerOffset = 0.0
+    
+    var videoItem : VideoItem?
+    var viewModel : VideoViewModel?
     
     let playerRotationAnimationKey = "on_rotation_key"
     let playerScaleAnimationKey = "on_scale_key"
@@ -52,26 +67,21 @@ public class VideoViewController : UIViewController {
         
         topNavBarPlayerOffset = (navHeight - 3) * 2
         
+        setupViewModel()
+        
         buttonSetup()
         setupLoader()
         playerSetup()
-        
     }
     
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+    }
+    
+    public func setupViewModel() {
         
-        
-//        if self.playerView.layer.animation(forKey: "onRotation") == nil {
-//            let animation = CABasicAnimation(keyPath: "transform.rotation.z")
-//            animation.fromValue = NSNumber.FloatLiteralType(floatLiteral: 0.0)
-//            animation.toValue = NSNumber.FloatLiteralType(floatLiteral:CGFloat.pi / 2)
-//            animation.duration = 2.0
-//            animation.delegate = self
-//            //animation.repeatCount = Float(CGFloat.infinity)
-//            self.playerView.layer.add(animation, forKey: "onRotation")
-//        }
+        self.viewModel = VideoViewModel(api: VideoServiceAPI())
         
     }
     
@@ -109,36 +119,100 @@ public class VideoViewController : UIViewController {
     }
     
     public func playerSetup() {
-        //self.playerView.translatesAutoresizingMaskIntoConstraints = false
-        let imageUrl = "https://i.ytimg.com/vi/aqz-KE-bpKQ/maxresdefault.jpg"
-        
-        var request = URLRequest(url: URL(string: imageUrl)!)
         
         self.showLoader()
         
-        request.httpMethod = "GET"
+        viewModel?.getDataFromServer(responseHandler: { [weak self] dataResponse in
+            guard let strongSelf = self else {return}
+            
+            switch dataResponse {
+            case .success(let video) :
+                strongSelf.videoItem = video
+                strongSelf.setupMetaData()
+                strongSelf.setupThumbnail()
+                
+            case .serverError(let error, let message) :
+                print("VideoViewController : Server error with \(error) :: message : \(message)")
+                
+            case .dataNotFound :
+                print("VideoViewController : No data found")
+                
+            case .networkError :
+                print("VideoViewController : network error")
+            }
+            
+        })
         
-        let task = URLSession.shared.dataTask(with: request) {[weak self] imageData, response, requestError in
+        addPlayerObservers()
+    }
+    
+    public func setupMetaData() {
+        
+        DispatchQueue.main.async {
+            self.metaDataHolderView.clipsToBounds = false
+            self.metaDataHolderView.layer.masksToBounds = false
+            self.metaDataHolderView.layer.cornerRadius = 12
+            self.metaDataHolderView.backgroundColor = ColorCodes.BlueGray.color
+        }
+        
+        labelUISetup()
+        
+        guard let title = self.videoItem?.videoTitle , let description = self.videoItem?.videoDescription else {return}
+        
+        guard let duration = self.videoItem?.videoDuration else {return}
+        
+        DispatchQueue.main.async {
+            self.videoTitleLabel.text = title
+            self.videoDescriptionLabel.text = description
+            self.thumbnailDurationLabel.text = duration
+            self.thumbnailDurationLabel.layoutSubviews()
+        }
+        
+    }
+    
+    public func setupThumbnail() {
+        
+        guard let video = self.videoItem else {return}
+        let thumbnailUrl = video.videoThumbnailUrl
+        guard thumbnailUrl.isEmpty == false else {return}
+        
+        let url = URL(string: thumbnailUrl)!
+        
+        let request = URLRequest(url: url)
+        
+        let task = URLSession.shared.dataTask(with: request) { [weak self] imageData, response, error in
+            
             guard let strongSelf = self else {return}
             
             strongSelf.hideLoader()
             
-            if requestError == nil , imageData != nil {
-                
-                if let data = imageData , let image = UIImage(data: data) {
-                    DispatchQueue.main.async {
-                        strongSelf.playerThumbnailImageview.image = image
-                    }
-                    //strongSelf.showThumbnail()
+            if let data = imageData , error == nil {
+                DispatchQueue.main.async {
+                    strongSelf.playerThumbnailImageview.image = UIImage(data: data)
                 }
-                
             }
             
         }
         
         task.resume()
+    }
+    
+    public func labelUISetup() {
         
-        addPlayerObservers()
+        
+        DispatchQueue.main.async {
+            self.videoTitleLabel.font = CustomFont.OS_Bold.font
+            self.videoDescriptionLabel.font = CustomFont.OS_Semibold.font
+            self.videoDescriptionLabel.numberOfLines = 0
+            self.thumbnailDurationLabel.font = UIFont(name: "OpenSans-Regular", size: 5)
+            self.thumbnailDurationLabel.backgroundColor = UIColor.darkGray
+            self.thumbnailDurationLabel.textColor = .white
+            self.thumbnailDurationLabel.clipsToBounds = true
+            self.thumbnailDurationLabel.layer.masksToBounds = true
+            self.thumbnailDurationLabel.layer.cornerRadius = 6
+            self.thumbnailDurationLabel.textAlignment = .center
+        }
+        
     }
     
     public func addPlayerObservers() {
@@ -179,6 +253,7 @@ public class VideoViewController : UIViewController {
                 let x = 16.0/9.0
                 
                 strongSelf.playerLandscapeTransition()
+                strongSelf.hideMetaData()
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
                     strongSelf.playerView.transform = CGAffineTransform(scaleX: x, y: x)
@@ -193,6 +268,7 @@ public class VideoViewController : UIViewController {
                 guard let strongSelf = self else {return}
                 
                 strongSelf.playerPortraitTransition()
+                strongSelf.showMetaData()
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
                     
@@ -240,11 +316,21 @@ public class VideoViewController : UIViewController {
         }
     }
     
+    public func hideMetaData() {
+        self.metaDataScrollView.alpha = 0.0
+        self.metaDataScrollView.isUserInteractionEnabled = false
+    }
+    
+    public func showMetaData() {
+        self.metaDataScrollView.alpha = 1.0
+        self.metaDataScrollView.isUserInteractionEnabled = true
+    }
+    
     public func buttonSetup() {
-        self.playButton.setupStyle(type: .Video)
+        self.playButton.setupStyle(type: .Image)
         self.playButton.setTitle("Play", for: .normal)
         
-        self.backButton.setupStyle(type: .Video)
+        self.backButton.setupStyle(type: .Image)
         self.backButton.setTitle("Back", for: .normal)
     }
     
@@ -254,7 +340,7 @@ public class VideoViewController : UIViewController {
         
         //let videoURL = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"
         
-        let videoURL = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+        guard let videoURL = self.videoItem?.videoUrl else {return}
         
         let url = URL(string: videoURL)!
         
