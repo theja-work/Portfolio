@@ -102,6 +102,8 @@ public class VideoViewController : UIViewController {
     
     public func showLoader() {
         DispatchQueue.main.async {
+            if self.loader.isAnimating , self.loader.isHidden == false {return}
+            
             self.view.bringSubviewToFront(self.loader)
             self.playerView.bringSubviewToFront(self.loader)
             self.loader.isHidden = false
@@ -172,29 +174,39 @@ public class VideoViewController : UIViewController {
     
     public func setupThumbnail() {
         
+        DispatchQueue.main.async {
+            self.playerThumbnailImageview.image = UIImage(named: "placeholder_16x9")
+        }
+        
+        self.showLoader()
+        
         guard let video = self.videoItem else {return}
-        let thumbnailUrl = video.videoThumbnailUrl
-        guard thumbnailUrl.isEmpty == false else {return}
         
-        let url = URL(string: thumbnailUrl)!
-        
-        let request = URLRequest(url: url)
-        
-        let task = URLSession.shared.dataTask(with: request) { [weak self] imageData, response, error in
+        ImagePickerManager.getImageFromUrl(url: video.videoThumbnailUrl, onCompletion: { [weak self] imageResponse in
             
             guard let strongSelf = self else {return}
             
             strongSelf.hideLoader()
             
-            if let data = imageData , error == nil {
+            switch imageResponse {
+                
+            case .success(let image) :
+                
                 DispatchQueue.main.async {
-                    strongSelf.playerThumbnailImageview.image = UIImage(data: data)
+                    strongSelf.playerThumbnailImageview.image = image
                 }
+                
+            case .dataNotFound :
+                print("VideoViewController : image not found")
+                
+            case .serverError(let code, let message) :
+                print("VideoViewController : server error with code : \(code) :: message : \(message)")
+                
+            case .networkError :
+                print("VideoViewController : network error")
             }
             
-        }
-        
-        task.resume()
+        })
     }
     
     public func labelUISetup() {

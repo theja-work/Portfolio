@@ -94,3 +94,49 @@ class ImagePickerManager: NSObject, UIImagePickerControllerDelegate, UINavigatio
     }
 
 }
+
+extension ImagePickerManager {
+    public class func getImageFromUrl(url:String , onCompletion : @escaping (DataLoader<UIImage>) -> Void) {
+        
+        guard url.count != 0 , url.isEmpty == false else {return}
+        
+        let request = URLRequest(url: URL(string: url)!)
+        
+        let task = URLSession.shared.dataTask(with: request) { imageData, urlResponse , error in
+            
+            if let data = imageData , error == nil {
+                if let image = UIImage(data: data) {
+                    onCompletion(DataLoader.success(response: image))
+                }
+            }
+            
+            if imageData == nil , error != nil {
+                
+                if let response = urlResponse as? HTTPURLResponse {
+                    
+                    if response.statusCode == 404 {
+                        
+                        onCompletion(DataLoader.dataNotFound)
+                        return
+                    }
+                    
+                    if response.statusCode == 500 {
+                        
+                        onCompletion(DataLoader.serverError(error: "500", message: "Internal Server Error"))
+                        return
+                    }
+                    
+                    if response.statusCode >= 400 {
+                        
+                        onCompletion(DataLoader.serverError(error: "400", message: "Bad request"))
+                        return
+                    }
+                    
+                }
+            }
+            
+        }
+        
+        task.resume()
+    }
+}
