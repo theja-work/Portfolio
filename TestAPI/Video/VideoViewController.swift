@@ -46,11 +46,31 @@ public class VideoViewController : UIViewController {
     
     @IBOutlet weak var metaDataHolderView: UIView!
     
+    @IBOutlet weak var playerControlsView: UIView!
+    
+    @IBOutlet weak var seekbarHolderView: UIView!
+    
+    @IBOutlet weak var playerBackwardButtonHolderView: UIView!
+    
+    @IBOutlet weak var playerForewardButtonHolderView: UIView!
+    
+    @IBOutlet weak var playerPlayButtonHolderView: UIView!
+    
+    @IBOutlet weak var playerBackwardButtonImageview: UIImageView!
+    
+    @IBOutlet weak var playerPlayButtonImageview: UIImageView!
+    
+    @IBOutlet weak var playerForwardButtonImageview: UIImageView!
+    
     
     var player : AVPlayer? = nil
     var animationCounter = 0
     var loader : UIActivityIndicatorView!
     var topNavBarPlayerOffset = 0.0
+    var thumbnailDidTap = false
+    var playButtonTap = false
+    var backwardButtonTap = false
+    var forwardButtonTap = false
     
     var videoItem : VideoItem?
     var viewModel : VideoViewModel?
@@ -145,7 +165,153 @@ public class VideoViewController : UIViewController {
             
         })
         
+        setupPlayerControls()
+        
         addPlayerObservers()
+    }
+    
+    public func setupPlayerControls() {
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(updatePlayerControls))
+        
+        self.playerView.addGestureRecognizer(tap)
+        
+        
+        
+        self.playerControlsView.isHidden = true
+        //self.playerControlsView.alpha = 0.0
+        self.playerControlsView.backgroundColor = .black.withAlphaComponent(0.25)
+        
+        
+        let backwardtap = UITapGestureRecognizer(target: self, action: #selector(backwardPlayerAction))
+        let forewardtap = UITapGestureRecognizer(target: self, action: #selector(forwardPlayerAction))
+        let playTap = UITapGestureRecognizer(target: self, action: #selector(playerPlayAction))
+        
+        self.playerBackwardButtonHolderView.addGestureRecognizer(backwardtap)
+        self.playerForewardButtonHolderView.addGestureRecognizer(forewardtap)
+        self.playerPlayButtonHolderView.addGestureRecognizer(playTap)
+        
+        DispatchQueue.main.async {
+            self.playerBackwardButtonImageview.image = UIImage(named: "player_backward_10_secs")
+            self.playerPlayButtonImageview.image = UIImage(named: "player_pause_button")
+            self.playerForwardButtonImageview.image = UIImage(named: "player_forward_10_secs")
+            
+        }
+        
+    }
+    
+    @objc func updatePlayerControls() {
+        
+        if player?.timeControlStatus == .playing {
+            
+        }
+        
+        if thumbnailDidTap == false {
+            showPlayerControls()
+        }
+        else {
+            hidePlayerControls()
+        }
+        
+        thumbnailDidTap = !thumbnailDidTap
+        
+        
+    }
+    
+    public func showPlayerControls() {
+        print("VideoViewController : show player controls")
+        
+        //self.view.bringSubviewToFront(playerControlsView)
+        self.playerControlsView.alpha = 0.0
+        
+        UIView.animate(withDuration: 0.6, delay: 0 , options: .curveEaseOut) { [weak self] in
+            guard let strongSelf = self else {return}
+            
+            
+            strongSelf.playerControlsView.alpha = 1.0
+            strongSelf.seekbarHolderView.alpha = 1.0
+            
+            //strongSelf.playerControlsView.backgroundColor = UIColor(red: 108, green: 122, blue: 137, alpha: 0.0)
+            
+            strongSelf.playerControlsView.isHidden = false
+            strongSelf.seekbarHolderView.isHidden = false
+            
+            strongSelf.playerControlsView.isUserInteractionEnabled = true
+            
+            
+        } completion: { finished in
+            if finished {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+                    UIView.animate(withDuration: 0.6, delay: 0, options: .curveEaseOut) {
+                        [weak self] in
+                            guard let strongSelf = self else {return}
+                            
+                            strongSelf.seekbarHolderView.alpha = 0.0
+                            strongSelf.playerControlsView.alpha = 0.0
+                            
+                        strongSelf.playerControlsView.backgroundColor = .black.withAlphaComponent(0.25)
+                        strongSelf.thumbnailDidTap = !strongSelf.thumbnailDidTap
+                        strongSelf.playerControlsView.isUserInteractionEnabled = true
+                    }
+                })
+            }
+        }
+    }
+    
+    public func hidePlayerControls() {
+        print("VideoViewController : hide player controls")
+        
+        //self.view.sendSubviewToBack(playerControlsView)
+        
+        UIView.animate(withDuration: 0.6, delay: 0 , options: .curveEaseOut) { [weak self] in
+            guard let strongSelf = self else {return}
+            
+            strongSelf.seekbarHolderView.alpha = 0.0
+            strongSelf.playerControlsView.alpha = 0.0
+            
+            strongSelf.playerControlsView.backgroundColor = .clear
+            
+            //strongSelf.playerControlsView.isUserInteractionEnabled = false
+            
+            strongSelf.thumbnailDidTap = !strongSelf.thumbnailDidTap
+            
+//            strongSelf.seekbarHolderView.isHidden = true
+//            strongSelf.playerControlsView.isHidden = true
+            
+            
+        }
+
+    }
+    
+    @objc func backwardPlayerAction() {
+        print("VideoViewController : backward player action")
+        
+        //self.player?.currentItem?.seek(to: CMTime(seconds: 10, preferredTimescale: CMTimeScale(1.0)))
+    }
+    
+    @objc func forwardPlayerAction() {
+        print("VideoViewController : foreward player action")
+        
+        //self.player?.currentItem?.seek(to: CMTime(seconds: 100, preferredTimescale: .zero))
+    }
+    
+    @objc func playerPlayAction() {
+        print("VideoViewController : player play action")
+        
+        if playButtonTap == false {
+            self.playerPlayButtonImageview.image = UIImage(named: "player_play_button")
+            
+            if self.player?.timeControlStatus == .playing {
+                self.player?.pause()
+            }
+        }
+        else {
+            self.playerPlayButtonImageview.image = UIImage(named: "player_pause_button")
+            
+            self.player?.play()
+        }
+        
+        playButtonTap = !playButtonTap
     }
     
     public func setupMetaData() {
