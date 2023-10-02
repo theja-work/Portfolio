@@ -36,10 +36,10 @@
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="211"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9bH-qa-n3C">
-                                                <rect key="frame" x="0.0" y="158.33333333333334" width="375" height="52.666666666666657"/>
+                                                <rect key="frame" x="0.0" y="179.33333333333334" width="375" height="31.666666666666657"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9oY-ZU-Phh">
-                                                        <rect key="frame" x="9.9999999999999964" y="12.999999999999998" width="52.666666666666657" height="26.333333333333329"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9oY-ZU-Phh">
+                                                        <rect key="frame" x="10.000000000000002" y="7.9999999999999991" width="31.666666666666671" height="15.666666666666664"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" secondItem="9oY-ZU-Phh" secondAttribute="height" multiplier="2:1" id="jQH-P3-jpQ"/>
                                                         </constraints>
@@ -48,10 +48,10 @@
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="nVO-NC-gtO">
-                                                        <rect key="frame" x="67.666666666666671" y="23" width="249.66666666666663" height="6.6666666666666679"/>
+                                                        <rect key="frame" x="46.666666666666657" y="13.666666666666657" width="291.66666666666674" height="4"/>
                                                     </progressView>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oZZ-gF-bh1">
-                                                        <rect key="frame" x="312.33333333333331" y="12.999999999999998" width="52.666666666666686" height="26.333333333333329"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oZZ-gF-bh1">
+                                                        <rect key="frame" x="333.33333333333331" y="7.9999999999999991" width="31.666666666666686" height="15.666666666666664"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" secondItem="oZZ-gF-bh1" secondAttribute="height" multiplier="2:1" id="Ghj-LS-YAH"/>
                                                         </constraints>
@@ -143,7 +143,7 @@
                                             <constraint firstItem="zDu-Cb-y40" firstAttribute="height" secondItem="y4t-zE-L2h" secondAttribute="height" id="Tep-f9-DoV"/>
                                             <constraint firstItem="9dO-fg-hlD" firstAttribute="width" secondItem="9dO-fg-hlD" secondAttribute="height" multiplier="1:1" id="cYz-Tq-u2Q"/>
                                             <constraint firstItem="y4t-zE-L2h" firstAttribute="centerX" secondItem="ANS-GC-POC" secondAttribute="centerX" id="gxY-Ol-JIF"/>
-                                            <constraint firstItem="9bH-qa-n3C" firstAttribute="height" secondItem="ANS-GC-POC" secondAttribute="height" multiplier="0.25" id="hwC-vs-CcS"/>
+                                            <constraint firstItem="9bH-qa-n3C" firstAttribute="height" secondItem="ANS-GC-POC" secondAttribute="height" multiplier="0.15" id="hwC-vs-CcS"/>
                                             <constraint firstAttribute="bottom" secondItem="9bH-qa-n3C" secondAttribute="bottom" id="srW-Lx-eN0"/>
                                             <constraint firstItem="zDu-Cb-y40" firstAttribute="leading" secondItem="y4t-zE-L2h" secondAttribute="trailing" constant="20" id="tyr-pA-Ia3"/>
                                             <constraint firstItem="9dO-fg-hlD" firstAttribute="centerY" secondItem="ANS-GC-POC" secondAttribute="centerY" id="vEj-ni-jzG"/>
@@ -285,6 +285,7 @@
                         <outlet property="playerForwardButtonImageview" destination="9y7-DX-cO5" id="fhc-WW-f8b"/>
                         <outlet property="playerPlayButtonHolderView" destination="y4t-zE-L2h" id="GgT-MP-lW6"/>
                         <outlet property="playerPlayButtonImageview" destination="YTD-MV-oL3" id="CcA-c1-FIk"/>
+                        <outlet property="playerProgressView" destination="nVO-NC-gtO" id="FlC-kx-fyz"/>
                         <outlet property="playerThumbnailImageview" destination="VY1-Zi-xRa" id="6aA-in-NgM"/>
                         <outlet property="playerView" destination="mQg-62-cJd" id="aTc-Ib-ckN"/>
                         <outlet property="playerViewTopConstraint" destination="WpG-l5-L8F" id="hrJ-Gi-bC0"/>

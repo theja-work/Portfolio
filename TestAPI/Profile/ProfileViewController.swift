@@ -40,6 +40,8 @@ public class ProfileViewController : UIViewController {
     
     let testSDKinstance = TestSDKFrameWork.shared
     
+    var loader : UIActivityIndicatorView!
+    
     let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext
     
     public class func viewController() -> UIViewController {
@@ -197,6 +199,8 @@ public class ProfileViewController : UIViewController {
     @objc func editImageToggleAction() {
         
         self.view.endEditing(true)
+        
+        
         
         ImagePickerManager.shared.pickImage(self) { [weak self] image in
             guard let strongSelf = self else {return}

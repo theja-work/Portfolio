@@ -23,4 +23,8 @@ public class VideoViewModel {
         
     }
     
+    public func getDataFromServerWith(videoLink : String , responseHandler : @escaping (_ response:DataLoader<VideoItem>) -> Void) {
+        self.api?.getViedoItemFromLink(link: videoLink, response: responseHandler)
+    }
+    
 }

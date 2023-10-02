@@ -17,4 +17,8 @@ public class VideoServiceAPI : VideoServiceProtocol {
         VideoService.getVideoItem(responseHandler: response)
     }
     
+    public func getViedoItemFromLink(link: String, response: @escaping ((DataLoader<VideoItem>) -> Void)) {
+        VideoService.getVideoItemFromLink(link: link, responseHandelr: response)
+    }
+    
 }

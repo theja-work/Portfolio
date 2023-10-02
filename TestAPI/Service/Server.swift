@@ -120,7 +120,8 @@ extension Server {
                 return jsonArray
             }
         } catch {
-            print("Error parsing JSON: \(error)")
+            print("Error parsing JSON to Dictionary Array: \(error)")
+            print("Server_url : \(self.serviceUrl)")
         }
         
         return []
@@ -133,6 +134,7 @@ extension Server {
             }
         } catch {
             print("Error parsing JSON: \(error)")
+            print("Server_url : \(self.serviceUrl)")
         }
         
         return [:]

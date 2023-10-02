@@ -20,6 +20,7 @@ public enum ColorCodes {
     case LightGreen
     case SkyBlue
     case BlueGray
+    case turmeric
     
     var code : String {
         switch self {
@@ -33,6 +34,7 @@ public enum ColorCodes {
         case .LightGreen        : return "#ccffcc"
         case .SkyBlue           : return "#80d4ff"
         case .BlueGray          : return "#50717d"
+        case .turmeric          : return "#FFC300"
         }
     }
     

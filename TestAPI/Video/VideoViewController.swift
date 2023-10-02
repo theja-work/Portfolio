@@ -62,6 +62,7 @@ public class VideoViewController : UIViewController {
     
     @IBOutlet weak var playerForwardButtonImageview: UIImageView!
     
+    @IBOutlet weak var playerProgressView: UIProgressView!
     
     var player : AVPlayer? = nil
     var animationCounter = 0
@@ -162,7 +163,6 @@ public class VideoViewController : UIViewController {
             case .networkError :
                 print("VideoViewController : network error")
             }
-            
         })
         
         setupPlayerControls()
@@ -175,8 +175,6 @@ public class VideoViewController : UIViewController {
         let tap = UITapGestureRecognizer(target: self, action: #selector(updatePlayerControls))
         
         self.playerView.addGestureRecognizer(tap)
-        
-        
         
         self.playerControlsView.isHidden = true
         //self.playerControlsView.alpha = 0.0
@@ -191,10 +189,17 @@ public class VideoViewController : UIViewController {
         self.playerForewardButtonHolderView.addGestureRecognizer(forewardtap)
         self.playerPlayButtonHolderView.addGestureRecognizer(playTap)
         
+        
         DispatchQueue.main.async {
-            self.playerBackwardButtonImageview.image = UIImage(named: "player_backward_10_secs")
+            self.playerBackwardButtonImageview.image = UIImage(named: "player_backward_secs")
             self.playerPlayButtonImageview.image = UIImage(named: "player_pause_button")
-            self.playerForwardButtonImageview.image = UIImage(named: "player_forward_10_secs")
+            self.playerForwardButtonImageview.image = UIImage(named: "player_forward_secs")
+            
+            self.playerBackwardButtonImageview.tintColor = ColorCodes.turmeric.color
+            self.playerForwardButtonImageview.tintColor = ColorCodes.turmeric.color
+            self.playerPlayButtonImageview.tintColor = ColorCodes.turmeric.color
+            
+            self.playerProgressView.progressTintColor = ColorCodes.turmeric.color
             
         }
         
@@ -219,19 +224,21 @@ public class VideoViewController : UIViewController {
     }
     
     public func showPlayerControls() {
+        
         print("VideoViewController : show player controls")
         
-        //self.view.bringSubviewToFront(playerControlsView)
-        self.playerControlsView.alpha = 0.0
-        
-        UIView.animate(withDuration: 0.6, delay: 0 , options: .curveEaseOut) { [weak self] in
+        UIView.animate(withDuration: 0.9, delay: 0 , options: .curveEaseOut) { [weak self] in
             guard let strongSelf = self else {return}
             
-            
+            strongSelf.playerView.alpha = 0.75
             strongSelf.playerControlsView.alpha = 1.0
             strongSelf.seekbarHolderView.alpha = 1.0
             
-            //strongSelf.playerControlsView.backgroundColor = UIColor(red: 108, green: 122, blue: 137, alpha: 0.0)
+            strongSelf.view.bringSubviewToFront(strongSelf.playerView)
+            strongSelf.playerView.bringSubviewToFront(strongSelf.playerControlsView)
+            strongSelf.playerView.bringSubviewToFront(strongSelf.playerBackwardButtonHolderView)
+            strongSelf.playerView.bringSubviewToFront(strongSelf.playerForewardButtonHolderView)
+            strongSelf.playerView.bringSubviewToFront(strongSelf.playerPlayButtonHolderView)
             
             strongSelf.playerControlsView.isHidden = false
             strongSelf.seekbarHolderView.isHidden = false
@@ -242,57 +249,52 @@ public class VideoViewController : UIViewController {
         } completion: { finished in
             if finished {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
-                    UIView.animate(withDuration: 0.6, delay: 0, options: .curveEaseOut) {
-                        [weak self] in
-                            guard let strongSelf = self else {return}
-                            
-                            strongSelf.seekbarHolderView.alpha = 0.0
-                            strongSelf.playerControlsView.alpha = 0.0
-                            
-                        strongSelf.playerControlsView.backgroundColor = .black.withAlphaComponent(0.25)
-                        strongSelf.thumbnailDidTap = !strongSelf.thumbnailDidTap
-                        strongSelf.playerControlsView.isUserInteractionEnabled = true
-                    }
+                    self.autoFadePlayerControls(duration: 0.9)
                 })
             }
         }
     }
     
     public func hidePlayerControls() {
-        print("VideoViewController : hide player controls")
         
-        //self.view.sendSubviewToBack(playerControlsView)
-        
-        UIView.animate(withDuration: 0.6, delay: 0 , options: .curveEaseOut) { [weak self] in
-            guard let strongSelf = self else {return}
-            
-            strongSelf.seekbarHolderView.alpha = 0.0
-            strongSelf.playerControlsView.alpha = 0.0
-            
-            strongSelf.playerControlsView.backgroundColor = .clear
-            
-            //strongSelf.playerControlsView.isUserInteractionEnabled = false
-            
-            strongSelf.thumbnailDidTap = !strongSelf.thumbnailDidTap
-            
-//            strongSelf.seekbarHolderView.isHidden = true
-//            strongSelf.playerControlsView.isHidden = true
-            
-            
-        }
+        self.autoFadePlayerControls(duration: 0.9)
 
     }
     
     @objc func backwardPlayerAction() {
-        print("VideoViewController : backward player action")
+        //print("VideoViewController : backward player action")
         
-        //self.player?.currentItem?.seek(to: CMTime(seconds: 10, preferredTimescale: CMTimeScale(1.0)))
+        self.player?.currentItem?.cancelPendingSeeks()
+        
+        guard let duration = self.player?.currentItem?.duration else {return}
+        guard let currentTime = self.player?.currentItem?.currentTime().seconds else {return}
+        
+        let position = CMTimeMakeWithSeconds(currentTime - 10.0, preferredTimescale: Int32(NSEC_PER_SEC))
+        
+        //print("VideoViewController : postion = \(currentTime) / \(duration.timescale) = \(position)")
+        
+        if self.player?.currentItem?.canStepForward == true {
+            let myTime = CMTime(seconds: position.seconds, preferredTimescale: duration.timescale)
+            player?.seek(to: myTime, toleranceBefore: .zero, toleranceAfter: .zero)
+        }
     }
     
     @objc func forwardPlayerAction() {
-        print("VideoViewController : foreward player action")
+        //print("VideoViewController : foreward player action")
         
-        //self.player?.currentItem?.seek(to: CMTime(seconds: 100, preferredTimescale: .zero))
+        self.player?.currentItem?.cancelPendingSeeks()
+        
+        guard let duration = self.player?.currentItem?.duration else {return}
+        guard let currentTime = self.player?.currentItem?.currentTime().seconds else {return}
+        
+        let position = CMTimeMakeWithSeconds(currentTime + 10.0, preferredTimescale: Int32(NSEC_PER_SEC))
+        
+        //print("VideoViewController : postion = \(currentTime) / \(duration.timescale) = \(position)")
+        
+        if self.player?.currentItem?.canStepBackward == true {
+            let myTime = CMTime(seconds: position.seconds, preferredTimescale: duration.timescale)
+            self.player?.seek(to: myTime, toleranceBefore: .zero, toleranceAfter: .zero)
+        }
     }
     
     @objc func playerPlayAction() {
@@ -312,6 +314,35 @@ public class VideoViewController : UIViewController {
         }
         
         playButtonTap = !playButtonTap
+    }
+    
+    public func autoFadePlayerControls(duration:CGFloat) {
+        
+        print("VideoViewController : hide player controls")
+        
+        UIView.animate(withDuration: duration,delay: 0.0,options: .transitionCrossDissolve, animations: {
+            
+            [weak self] in
+                guard let strongSelf = self else {return}
+            
+            strongSelf.playerView.alpha = 1.0
+                
+            strongSelf.seekbarHolderView.alpha = 0.0
+            strongSelf.playerControlsView.alpha = 0.0
+                
+            strongSelf.playerControlsView.backgroundColor = .black.withAlphaComponent(0.25)
+            strongSelf.thumbnailDidTap = !strongSelf.thumbnailDidTap
+            
+        },completion: { isCompleted in
+            
+            if isCompleted {
+                self.view.sendSubviewToBack(self.playerView)
+                self.playerView.sendSubviewToBack(self.playerControlsView)
+                self.playerView.sendSubviewToBack(self.playerBackwardButtonHolderView)
+                self.playerView.sendSubviewToBack(self.playerForewardButtonHolderView)
+                self.playerView.sendSubviewToBack(self.playerPlayButtonHolderView)
+            }
+        })
     }
     
     public func setupMetaData() {
@@ -376,7 +407,6 @@ public class VideoViewController : UIViewController {
     }
     
     public func labelUISetup() {
-        
         
         DispatchQueue.main.async {
             self.videoTitleLabel.font = CustomFont.OS_Bold.font
@@ -514,7 +544,7 @@ public class VideoViewController : UIViewController {
     
     public func getVideoFromServer() {
         
-        self.playerView.backgroundColor = .clear
+        //self.playerView.backgroundColor = .clear
         
         //let videoURL = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"
         
@@ -533,6 +563,7 @@ public class VideoViewController : UIViewController {
         playerLayer.frame = self.playerView.bounds
         playerLayer.backgroundColor = UIColor.clear.cgColor
         
+        
         playerLayer.videoGravity = .resizeAspect
         self.playerView.layer.addSublayer(playerLayer)
         
@@ -546,6 +577,10 @@ public class VideoViewController : UIViewController {
         DispatchQueue.main.async {
             self.player?.play()
         }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5, execute: {
+            self.updatePlayerControls()
+        })
         
         //self.playButton.isHidden = true
     }
