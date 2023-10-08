@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 import CoreData
 import AVFoundation
+import TestSDK
 
 public class VideoViewController : UIViewController {
     
@@ -21,6 +22,8 @@ public class VideoViewController : UIViewController {
         
         return viewController
     }
+    
+    var testSDK : TestSDKFrameWork?
     
     @IBOutlet weak var playerThumbnailImageview: UIImageView!
     
@@ -64,6 +67,13 @@ public class VideoViewController : UIViewController {
     
     @IBOutlet weak var playerProgressView: UIProgressView!
     
+    @IBOutlet weak var remainingTimeLabel: UILabel!
+    
+    @IBOutlet weak var elapsedTimeLabel: UILabel!
+    
+    
+    public var progressUpdateTimer : Timer?
+    
     var player : AVPlayer? = nil
     var animationCounter = 0
     var loader : UIActivityIndicatorView!
@@ -93,11 +103,25 @@ public class VideoViewController : UIViewController {
         buttonSetup()
         setupLoader()
         playerSetup()
+        
+        testSDKmethod()
+    }
+    
+    func testSDKmethod() {
+        testSDK = TestSDKFrameWork()
+        
+        testSDK?.setBackgroundColor(forView: self.view, color: ColorCodes.BlueGray.color)
     }
     
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+    }
+    
+    public override func viewWillDisappear(_ animated: Bool) {
+        self.player?.pause()
+        
+        self.player = nil
     }
     
     public func setupViewModel() {
@@ -189,6 +213,15 @@ public class VideoViewController : UIViewController {
         self.playerForewardButtonHolderView.addGestureRecognizer(forewardtap)
         self.playerPlayButtonHolderView.addGestureRecognizer(playTap)
         
+        self.progressUpdateTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateProgressBar), userInfo: nil, repeats: true)
+        
+        self.playerForewardButtonHolderView.layer.masksToBounds = true
+        self.playerBackwardButtonHolderView.layer.masksToBounds = true
+        self.playerPlayButtonHolderView.layer.masksToBounds = true
+        
+        self.playerForewardButtonHolderView.layer.cornerRadius = 8.0
+        self.playerBackwardButtonHolderView.layer.cornerRadius = 8.0
+        self.playerPlayButtonHolderView.layer.cornerRadius = 8.0
         
         DispatchQueue.main.async {
             self.playerBackwardButtonImageview.image = UIImage(named: "player_backward_secs")
@@ -200,8 +233,43 @@ public class VideoViewController : UIViewController {
             self.playerPlayButtonImageview.tintColor = ColorCodes.turmeric.color
             
             self.playerProgressView.progressTintColor = ColorCodes.turmeric.color
+            self.playerProgressView.progress = 0.0
+            
+            self.playerForewardButtonHolderView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+            self.playerBackwardButtonHolderView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+            self.playerPlayButtonHolderView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+            self.seekbarHolderView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
             
         }
+        
+    }
+    
+    @objc func updateProgressBar() {
+        
+        guard let position = self.player?.currentItem?.currentTime().seconds else {return}
+        
+        let posInt = Int(position)
+        
+        let seconds = posInt * 60 / 100
+        
+        let sec = "\(posInt * 60 / 100)"
+        let min = "\(position * 60 / 100)"
+        
+        if self.player?.currentItem?.isPlaybackLikelyToKeepUp == true {
+            print("VideoViewController : playing : \(min) : \(sec)")
+            
+            DispatchQueue.main.async {
+                self.playerProgressView.setProgress(Float(position / 1000), animated: true)
+                self.playerProgressView.setNeedsLayout()
+                self.playerProgressView.layoutIfNeeded()
+            }
+        }
+        
+        if seconds <= 60 {
+            self.elapsedTimeLabel.text = "00:00:\(seconds)"
+        }
+        
+        //self.playerProgressView.progress
         
     }
     
@@ -305,12 +373,15 @@ public class VideoViewController : UIViewController {
             
             if self.player?.timeControlStatus == .playing {
                 self.player?.pause()
+                self.progressUpdateTimer?.invalidate()
             }
         }
         else {
             self.playerPlayButtonImageview.image = UIImage(named: "player_pause_button")
             
             self.player?.play()
+            self.progressUpdateTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateProgressBar), userInfo: nil, repeats: true)
+            self.progressUpdateTimer?.fire()
         }
         
         playButtonTap = !playButtonTap
@@ -391,6 +462,7 @@ public class VideoViewController : UIViewController {
                 
                 DispatchQueue.main.async {
                     strongSelf.playerThumbnailImageview.image = image
+                    strongSelf.playerView.isUserInteractionEnabled = false
                 }
                 
             case .dataNotFound :
@@ -567,10 +639,24 @@ public class VideoViewController : UIViewController {
         playerLayer.videoGravity = .resizeAspect
         self.playerView.layer.addSublayer(playerLayer)
         
+        self.remainingTimeLabel.textColor = UIColor.white
+        self.elapsedTimeLabel.textColor = UIColor.white
+        
+        guard let currentItem = self.player?.currentItem else {return}
+
+        let currentTime = CMTimeGetSeconds(currentItem.duration)
+
+        let sec = currentTime.hashValue
+        //let min = Int(currentTime / 60))
+        
+        self.remainingTimeLabel.text = "00 : 00"
+        self.elapsedTimeLabel.font = UIFont(name: "OpenSans-Regular", size: 4)
+        
+        print("VideoViewController : ela_time : \(sec) : \(currentTime)")
+        
     }
     
     @IBAction func playButtonAction(_ sender : HomeButtons) {
-        
         
         self.getVideoFromServer()
         
@@ -580,7 +666,10 @@ public class VideoViewController : UIViewController {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.5, execute: {
             self.updatePlayerControls()
+            self.progressUpdateTimer?.fire()
         })
+        
+        self.playerView.isUserInteractionEnabled = true
         
         //self.playButton.isHidden = true
     }
@@ -589,6 +678,7 @@ public class VideoViewController : UIViewController {
         DispatchQueue.main.async {
             self.view.sendSubviewToBack(self.playerThumbnailImageview)
             self.playerThumbnailImageview.isHidden = true
+            self.playerThumbnailImageview.isUserInteractionEnabled = true
         }
     }
     
@@ -596,6 +686,7 @@ public class VideoViewController : UIViewController {
         DispatchQueue.main.async {
             self.view.bringSubviewToFront(self.playerThumbnailImageview)
             self.playerThumbnailImageview.isHidden = false
+            self.playerThumbnailImageview.isUserInteractionEnabled = false
         }
     }
     
