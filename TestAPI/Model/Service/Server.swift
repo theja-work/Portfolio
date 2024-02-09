@@ -82,6 +82,7 @@ public class Server {
                     }
                     else {
                         let jsonDict = self.convertDataToDictionary(data)
+                        print(jsonDict)
                     }
                 }
             }

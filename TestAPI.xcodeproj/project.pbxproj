@@ -163,16 +163,12 @@
 		6B9D59C02A7FA89D007129CB /* TestAPI */ = {
 			isa = PBXGroup;
 			children = (
-				6BA8E1942A929EFA00ACBDEB /* Service */,
-				6BFF3F1A2A8C158D0094F063 /* Video */,
-				6BA222CD2A8BAC8C0081B8E1 /* Supporting Frameworks */,
-				6B74DFB72A864684008886C7 /* Profile */,
-				6B74DF972A863E5A008886C7 /* UI Supporting files */,
+				B31D204A2B766C5900B09FC1 /* Model */,
+				B31D204B2B766C6200B09FC1 /* View */,
+				B31D204C2B766C7300B09FC1 /* Controller */,
 				6B9D59C12A7FA89D007129CB /* AppDelegate.swift */,
 				6B9D59C32A7FA89D007129CB /* SceneDelegate.swift */,
 				6B9D59C72A7FA89D007129CB /* Main.storyboard */,
-				6BF56F032A7FBCB100C4BB41 /* Home */,
-				6B9D59CD2A7FA89F007129CB /* Assets.xcassets */,
 				6B9D59CF2A7FA89F007129CB /* LaunchScreen.storyboard */,
 				6B9D59D22A7FA89F007129CB /* Info.plist */,
 				6B9D59CA2A7FA89D007129CB /* TestAPI.xcdatamodeld */,
@@ -228,11 +224,39 @@
 		6BFF3F1A2A8C158D0094F063 /* Video */ = {
 			isa = PBXGroup;
 			children = (
-				6BA8E1972A92B29900ACBDEB /* ViewModel */,
 				6BFF3F1B2A8C15A50094F063 /* VideoViewController.swift */,
 				6BFF3F1D2A8C16020094F063 /* VideoViewController.storyboard */,
 			);
 			path = Video;
+			sourceTree = "<group>";
+		};
+		B31D204A2B766C5900B09FC1 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				6BA8E1942A929EFA00ACBDEB /* Service */,
+				6BA8E1972A92B29900ACBDEB /* ViewModel */,
+				6BA222CD2A8BAC8C0081B8E1 /* Supporting Frameworks */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		B31D204B2B766C6200B09FC1 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				6B74DF972A863E5A008886C7 /* UI Supporting files */,
+				6B9D59CD2A7FA89F007129CB /* Assets.xcassets */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		B31D204C2B766C7300B09FC1 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				6BF56F032A7FBCB100C4BB41 /* Home */,
+				6BFF3F1A2A8C158D0094F063 /* Video */,
+				6B74DFB72A864684008886C7 /* Profile */,
+			);
+			path = Controller;
 			sourceTree = "<group>";
 		};
 		B3D85F652A87142F0043D43B /* Image */ = {

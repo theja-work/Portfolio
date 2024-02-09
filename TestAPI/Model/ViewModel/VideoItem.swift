@@ -29,7 +29,7 @@ public class VideoItem : Codable {
     
     public class func Parse(jsonObject : [String:Any]) -> VideoItem? {
         
-        var video = VideoItem()
+        let video = VideoItem()
         
         if let value : String = jsonObject.valueFor(key: "title") {
             video.videoTitle = value

@@ -89,7 +89,7 @@ public class ProfileViewController : UIViewController {
         var mobile = ""
         var age = ""
         
-        guard let context = self.context else {return}
+        //guard let context = self.context else {return}
         
 //        DispatchQueue.main.async {
 //            do {
