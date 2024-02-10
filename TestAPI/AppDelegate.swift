@@ -20,20 +20,37 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-        
-        let rootVC = storyBoard.instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController
-        
-        window?.rootViewController = rootVC
-        UIBarButtonItem.appearance().setBackButtonTitlePositionAdjustment(UIOffset(horizontal: -1000.0, vertical: 0.0), for: .default)
+        setStaringScreen()
         
         var newArguments = ProcessInfo.processInfo.arguments
         newArguments.append("-FIRDebugEnabled")
         ProcessInfo.processInfo.setValue(newArguments, forKey: "arguments")
         
         FirebaseApp.configure()
+        var params : [String:Any] = [String:Any]()
+        params["App_name"] = "Test API"
+        if let version : String = Bundle.main.infoDictionary?.valueFor(key: "app_version") {
+            params["App_version"] = version
+        }
+        
+        if let id:String = Bundle.main.bundleIdentifier {
+            params["Bundle_ID"] = id
+        }
+        
+        Analytics.logEvent("App_launch_event", parameters: params)
         
         return true
+    }
+    
+    func setStaringScreen() {
+        
+        let storyBoard = UIStoryboard(name: "Login", bundle: nil)
+        
+        let rootVC = storyBoard.instantiateViewController(withIdentifier: "LoginVC") as? LoginViewController
+        
+        window?.rootViewController = rootVC
+        //UIBarButtonItem.appearance().setBackButtonTitlePositionAdjustment(UIOffset(horizontal: -1000.0, vertical: 0.0), for: .default)
+        
     }
 
     // MARK: UISceneSession Lifecycle
@@ -42,22 +59,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when a new scene session is being created.
         // Use this method to select a configuration to create the new scene with.
         return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
-    }
-    
-    func applicationDidBecomeActive(_ application: UIApplication) {
-        
-        var params : [String:Any] = [String:Any]()
-        params["App name"] = "Test API"
-        if let version : String = Bundle.main.infoDictionary?.valueFor(key: "app_version") {
-            params["App version"] = version
-        }
-        
-        if let id:String = Bundle.main.bundleIdentifier {
-            params["Bundle ID"] = id
-        }
-        
-        Analytics.logEvent("App launch event", parameters: params)
-        
     }
 
     func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {

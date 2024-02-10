@@ -82,6 +82,7 @@ public class VideoViewController : UIViewController {
     var playButtonTap = false
     var backwardButtonTap = false
     var forwardButtonTap = false
+    var controlFadeSeconds = 0.9
     
     var videoItem : VideoItem?
     var viewModel : VideoViewModel?
@@ -391,7 +392,7 @@ public class VideoViewController : UIViewController {
         
         print("VideoViewController : hide player controls")
         
-        UIView.animate(withDuration: duration,delay: 0.0,options: .transitionCrossDissolve, animations: {
+        UIView.animate(withDuration: controlFadeSeconds,delay: 0.0,options: .transitionCrossDissolve, animations: {
             
             [weak self] in
                 guard let strongSelf = self else {return}

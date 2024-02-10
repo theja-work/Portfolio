@@ -12,7 +12,7 @@ import FirebaseAuth
 import GoogleSignIn
 import NVActivityIndicatorView
 
-public class HomeViewController : UIViewController {
+public class HomeViewController : BaseViewController {
     
     @IBOutlet weak var buttonHolder: UIView!
     
@@ -24,14 +24,21 @@ public class HomeViewController : UIViewController {
     
     @IBOutlet weak var videoButton: HomeButtons!
     
-    var loader : Loader?
+    public class func HomeViewController() -> HomeViewController {
+        
+        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+        
+        let viewController = storyBoard.instantiateViewController(withIdentifier: "HomeViewController") as! HomeViewController
+        
+        return viewController
+        
+    }
     
     override public func viewDidLoad() {
         super.viewDidLoad()
         
         self.view.backgroundColor = ColorCodes.HomeBackground.color
         
-        loader = Loader(view: self.view)
         setupButtons()
     }
     
@@ -59,19 +66,19 @@ public class HomeViewController : UIViewController {
     }
     
     @IBAction func audioButtonAction(_ sender: HomeButtons) {
-        print("signInWithGoogle : start loader")
+        
         loader?.showLoader()
         Task { @MainActor in
             
             if await signInWithGoogle() {
-                print("signInWithGoogle : stop loader")
+                
                 loader?.hideLoader()
                 let videoVC = VideoViewController.viewController()
                 
                 self.navigationController?.pushViewController(videoVC, animated: true)
             }
             else {
-                print("signInWithGoogle : stop loader")
+                
                 loader?.hideLoader()
             }
             
