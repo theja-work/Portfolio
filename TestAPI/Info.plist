@@ -49,7 +49,5 @@
 	</dict>
 	<key>app_version</key>
 	<string>0.0.1</string>
-	<key>UIMainStoryboardFile</key>
-	<string>Login</string>
 </dict>
 </plist>

@@ -108,6 +108,12 @@ public class VideoViewController : UIViewController {
         testSDKmethod()
     }
     
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        AppOrientation.lockOrientation(.all)
+    }
+    
     func testSDKmethod() {
         testSDK = TestSDKFrameWork()
         
@@ -248,16 +254,12 @@ public class VideoViewController : UIViewController {
     @objc func updateProgressBar() {
         
         guard let position = self.player?.currentItem?.currentTime().seconds else {return}
+        guard let duration = self.player?.currentItem?.duration.seconds else {return}
         
-        let posInt = Int(position)
-        
-        let seconds = posInt * 60 / 100
-        
-        let sec = "\(posInt * 60 / 100)"
-        let min = "\(position * 60 / 100)"
+        let elapsedTimeString = formatSecondsToString(position)
         
         if self.player?.currentItem?.isPlaybackLikelyToKeepUp == true {
-            print("VideoViewController : playing : \(min) : \(sec)")
+            print("VideoViewController : playing :\(elapsedTimeString)")
             
             DispatchQueue.main.async {
                 self.playerProgressView.setProgress(Float(position / 1000), animated: true)
@@ -266,12 +268,23 @@ public class VideoViewController : UIViewController {
             }
         }
         
-        if seconds <= 60 {
-            self.elapsedTimeLabel.text = "00:00:\(seconds)"
-        }
+        self.elapsedTimeLabel.text = "\(elapsedTimeString)"
         
+        let reminingTimeString = formatSecondsToString(duration - position)
+        
+        remainingTimeLabel.text = reminingTimeString
         //self.playerProgressView.progress
         
+    }
+    
+    func formatSecondsToString(_ seconds: TimeInterval) -> String {
+        if seconds.isNaN {
+            return "00:00:00"
+        }
+        let sec = Int(seconds.truncatingRemainder(dividingBy: 60))
+        let min = Int(seconds.truncatingRemainder(dividingBy: 3600) / 60)
+        let hour = Int(seconds / 3600)
+        return String(format: "%02d:%02d:%02d", hour, min, sec)
     }
     
     @objc func updatePlayerControls() {

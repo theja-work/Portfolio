@@ -45,6 +45,12 @@ public class LoginViewController : BaseViewController {
         return viewController
     }
     
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        AppOrientation.lockOrientation(.portrait)
+    }
+    
     func setupUI() {
         self.view.backgroundColor = ColorCodes.SkyBlue.color
         
