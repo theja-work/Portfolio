@@ -7,6 +7,10 @@
 
 import UIKit
 import CoreData
+import FirebaseCore
+import FirebaseAnalytics
+import FirebaseAuth
+import GoogleSignIn
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -23,6 +27,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = rootVC
         UIBarButtonItem.appearance().setBackButtonTitlePositionAdjustment(UIOffset(horizontal: -1000.0, vertical: 0.0), for: .default)
         
+        var newArguments = ProcessInfo.processInfo.arguments
+        newArguments.append("-FIRDebugEnabled")
+        ProcessInfo.processInfo.setValue(newArguments, forKey: "arguments")
+        
+        FirebaseApp.configure()
         
         return true
     }
@@ -34,11 +43,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to select a configuration to create the new scene with.
         return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
     }
+    
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        
+        var params : [String:Any] = [String:Any]()
+        params["App name"] = "Test API"
+        if let version : String = Bundle.main.infoDictionary?.valueFor(key: "app_version") {
+            params["App version"] = version
+        }
+        
+        if let id:String = Bundle.main.bundleIdentifier {
+            params["Bundle ID"] = id
+        }
+        
+        Analytics.logEvent("App launch event", parameters: params)
+        
+    }
 
     func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
         // Called when the user discards a scene session.
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
+    }
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        
+        return GIDSignIn.sharedInstance.handle(url)
     }
 
     // MARK: - Core Data stack
