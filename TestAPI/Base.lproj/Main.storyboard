@@ -73,11 +73,41 @@
                                     <constraint firstItem="DXH-qD-Wrq" firstAttribute="top" secondItem="g8w-uj-L3x" secondAttribute="top" constant="50" id="x1q-9O-Xve"/>
                                 </constraints>
                             </view>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="4Cg-eT-UnV">
+                                <rect key="frame" x="0.0" y="103" width="393" height="715"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="53q-D8-CF7">
+                                        <rect key="frame" x="0.0" y="50" width="393" height="43.666667938232422"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="53q-D8-CF7" id="4zL-6Y-VaA">
+                                            <rect key="frame" x="0.0" y="0.0" width="393" height="43.666667938232422"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="ZBc-YC-0Tv">
+                                        <rect key="frame" x="0.0" y="93.666667938232422" width="393" height="43.666667938232422"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ZBc-YC-0Tv" id="jcM-3S-BxL">
+                                            <rect key="frame" x="0.0" y="0.0" width="393" height="43.666667938232422"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="DaX-N8-6RF" id="w4N-DD-kar"/>
+                                    <outlet property="delegate" destination="DaX-N8-6RF" id="36b-Gn-7yN"/>
+                                </connections>
+                            </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="bCi-v3-mV1"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="bCi-v3-mV1" firstAttribute="trailing" secondItem="4Cg-eT-UnV" secondAttribute="trailing" id="HcD-4m-xpe"/>
+                            <constraint firstItem="4Cg-eT-UnV" firstAttribute="top" secondItem="bCi-v3-mV1" secondAttribute="top" id="PV3-tk-c84"/>
                             <constraint firstItem="g8w-uj-L3x" firstAttribute="height" secondItem="rxr-Ko-0cs" secondAttribute="height" multiplier="0.65" id="UOx-X0-qMf"/>
+                            <constraint firstItem="bCi-v3-mV1" firstAttribute="bottom" secondItem="4Cg-eT-UnV" secondAttribute="bottom" id="ZOD-hz-6hB"/>
+                            <constraint firstItem="4Cg-eT-UnV" firstAttribute="leading" secondItem="bCi-v3-mV1" secondAttribute="leading" id="gPN-pQ-XEu"/>
                             <constraint firstItem="g8w-uj-L3x" firstAttribute="centerX" secondItem="rxr-Ko-0cs" secondAttribute="centerX" id="rC4-2b-k3a"/>
                             <constraint firstItem="g8w-uj-L3x" firstAttribute="width" secondItem="rxr-Ko-0cs" secondAttribute="width" multiplier="0.75" id="sqj-31-OVi"/>
                             <constraint firstItem="g8w-uj-L3x" firstAttribute="centerY" secondItem="rxr-Ko-0cs" secondAttribute="centerY" id="wtn-BH-XkO"/>
@@ -90,6 +120,7 @@
                         <outlet property="imageButton" destination="pkL-VZ-6tQ" id="6ml-r3-3uU"/>
                         <outlet property="profileButton" destination="DXH-qD-Wrq" id="NHF-lL-xuS"/>
                         <outlet property="videoButton" destination="gsS-I3-lXO" id="zBh-Yi-BoX"/>
+                        <outlet property="videoListTableView" destination="4Cg-eT-UnV" id="fPi-s9-ATW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zQ4-tC-k5m" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

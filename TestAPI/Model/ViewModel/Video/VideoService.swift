@@ -64,9 +64,47 @@ public class VideoService {
         
     }
     
+    public class func getVideoList(responseHandler:@escaping ((_ response:DataLoader<[VideoItem]>) -> Void)) {
+        
+        let service = VideoAPI(api: .GetVideos)
+        
+        
+        service.apiRequest { response in
+            switch response {
+            case .success(let jsonResponse):
+                
+                var videos = [VideoItem]()
+                
+                for json in jsonResponse {
+                    if let videoItem = VideoItem.ParseV2(jsonObject: json) {
+                        videos.append(videoItem)
+                    }
+                }
+                
+                if videos.count != 0 {
+                    print("VideoService : item count : \(videos.count)")
+                    responseHandler(DataLoader.success(response: videos))
+                }
+                else {
+                    responseHandler(DataLoader.dataNotFound)
+                }
+                
+            case .dataNotFound : responseHandler(DataLoader.dataNotFound)
+                
+            case .networkError : responseHandler(DataLoader.networkError)
+                
+            case .serverError(let error, let message):
+                responseHandler(DataLoader.serverError(error: error, message: message))
+            }
+        }
+        
+        
+    }
+    
 }
 
 public protocol VideoServiceProtocol : AnyObject {
     func getVideoItem(response : @escaping ((DataLoader<VideoItem>) -> Void))
     func getViedoItemFromLink(link:String , response : @escaping ((DataLoader<VideoItem>) -> Void))
+    func getVideos(response:@escaping ((DataLoader<[VideoItem]>) -> Void))
 }

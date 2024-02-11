@@ -24,6 +24,10 @@ public class HomeViewController : BaseViewController {
     
     @IBOutlet weak var videoButton: HomeButtons!
     
+    @IBOutlet weak var videoListTableView: UITableView!
+    
+    var viewModel : VideoViewModel?
+    
     public class func HomeViewController() -> HomeViewController {
         
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
@@ -40,11 +44,27 @@ public class HomeViewController : BaseViewController {
         self.view.backgroundColor = ColorCodes.HomeBackground.color
         
         setupButtons()
+        self.buttonHolder.isHidden = true
+        setupViewModel()
+        setupVideoListView()
     }
     
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        
+    }
+    
+    func setupViewModel() {
+        
+        self.viewModel = VideoViewModel(api: VideoServiceAPI())
+        
+        self.viewModel?.getVideos()
+    }
+    
+    func setupVideoListView() {
+        
+        videoListTableView.register(UINib(nibName: VideoItemCell.nibName(), bundle: Bundle(for: VideoItemCell.classForCoder())), forCellReuseIdentifier: VideoItemCell.cellIdentifier())
         
     }
     
@@ -120,6 +140,29 @@ public class HomeViewController : BaseViewController {
         }
         
         return false
+    }
+    
+}
+
+extension HomeViewController : UITableViewDelegate , UITableViewDataSource {
+    
+    public func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.viewModel?.videos?.count ?? 10
+    }
+    
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: VideoItemCell.cellIdentifier(), for: indexPath) as? VideoItemCell
+        
+        guard let item = self.viewModel?.videos?[indexPath.row] else {return UITableViewCell()}
+        
+        cell?.setupCell(item: item)
+        
+        return cell ?? UITableViewCell()
     }
     
 }

@@ -73,11 +73,11 @@ public class LoginViewController : BaseViewController {
     }
     
     func setupUsernameField() {
-        usernameField.placeholder = "Username : ex - John Doe"
+        usernameField.placeholder = "Username : John Doe"
     }
     
     func setupPasswordField() {
-        passwordField.placeholder = "Password : ......."
+        passwordField.placeholder = "Password : •••••••••"
     }
     
     func setupLoginButton() {
@@ -90,7 +90,15 @@ public class LoginViewController : BaseViewController {
     }
     
     func setupRegisterLabel() {
-        registerLabel.text = "not a member? Register here"
+        
+        let text = "not a member? Register here"
+        let attriString = NSMutableAttributedString.init(string:text)
+        let nsRange = NSString(string: text)
+                .range(of: "Register here", options: String.CompareOptions.caseInsensitive)
+        
+        attriString.addAttribute(NSAttributedString.Key.foregroundColor, value: ColorCodes.DarkBlue.color, range: nsRange)
+        
+        registerLabel.attributedText = attriString
         //registerLabel.backgroundColor = ColorCodes.ButtonOrange.color
         
     }

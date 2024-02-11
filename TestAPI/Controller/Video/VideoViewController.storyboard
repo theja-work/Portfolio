@@ -39,23 +39,23 @@
                                                 <rect key="frame" x="0.0" y="179.33333333333334" width="375" height="31.666666666666657"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9oY-ZU-Phh">
-                                                        <rect key="frame" x="10" y="7.9999999999999991" width="79" height="15.666666666666664"/>
+                                                        <rect key="frame" x="5.0000000000000036" y="7.9999999999999991" width="63.333333333333343" height="15.666666666666664"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="width" secondItem="9oY-ZU-Phh" secondAttribute="height" multiplier="5:1" id="jQH-P3-jpQ"/>
+                                                            <constraint firstAttribute="width" secondItem="9oY-ZU-Phh" secondAttribute="height" multiplier="4:1" id="jQH-P3-jpQ"/>
                                                         </constraints>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="8"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.75" translatesAutoresizingMaskIntoConstraints="NO" id="nVO-NC-gtO">
-                                                        <rect key="frame" x="99" y="13.666666666666657" width="177" height="4"/>
+                                                        <rect key="frame" x="73.333333333333329" y="13.666666666666657" width="228.33333333333337" height="4"/>
                                                     </progressView>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oZZ-gF-bh1">
-                                                        <rect key="frame" x="286" y="7.9999999999999991" width="79" height="15.666666666666664"/>
+                                                        <rect key="frame" x="306.66666666666669" y="7.9999999999999991" width="63.333333333333314" height="15.666666666666664"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="width" secondItem="oZZ-gF-bh1" secondAttribute="height" multiplier="5:1" id="Ghj-LS-YAH"/>
+                                                            <constraint firstAttribute="width" secondItem="oZZ-gF-bh1" secondAttribute="height" multiplier="4:1" id="Ghj-LS-YAH"/>
                                                         </constraints>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="8"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
@@ -63,15 +63,15 @@
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstItem="nVO-NC-gtO" firstAttribute="centerY" secondItem="9oY-ZU-Phh" secondAttribute="centerY" id="6Al-7B-WhN"/>
-                                                    <constraint firstItem="nVO-NC-gtO" firstAttribute="trailing" secondItem="oZZ-gF-bh1" secondAttribute="leading" constant="-10" id="CJ1-Uf-FF6"/>
+                                                    <constraint firstItem="nVO-NC-gtO" firstAttribute="trailing" secondItem="oZZ-gF-bh1" secondAttribute="leading" constant="-5" id="CJ1-Uf-FF6"/>
                                                     <constraint firstItem="oZZ-gF-bh1" firstAttribute="centerY" secondItem="9bH-qa-n3C" secondAttribute="centerY" id="FWy-Ih-aNC"/>
                                                     <constraint firstItem="nVO-NC-gtO" firstAttribute="height" secondItem="9oY-ZU-Phh" secondAttribute="height" multiplier="0.25" id="FYb-Ja-cFD"/>
                                                     <constraint firstItem="oZZ-gF-bh1" firstAttribute="height" secondItem="9bH-qa-n3C" secondAttribute="height" multiplier="0.5" id="N1Q-eT-Fl8"/>
                                                     <constraint firstItem="9oY-ZU-Phh" firstAttribute="height" secondItem="9bH-qa-n3C" secondAttribute="height" multiplier="0.5" id="iIt-GJ-GUI"/>
                                                     <constraint firstItem="9oY-ZU-Phh" firstAttribute="centerY" secondItem="9bH-qa-n3C" secondAttribute="centerY" id="ilD-KD-GGW"/>
-                                                    <constraint firstAttribute="trailing" secondItem="oZZ-gF-bh1" secondAttribute="trailing" constant="10" id="kCm-cV-qGQ"/>
-                                                    <constraint firstItem="nVO-NC-gtO" firstAttribute="leading" secondItem="9oY-ZU-Phh" secondAttribute="trailing" constant="10" id="q8T-iZ-nAu"/>
-                                                    <constraint firstItem="9oY-ZU-Phh" firstAttribute="leading" secondItem="9bH-qa-n3C" secondAttribute="leading" constant="10" id="qhE-Xt-WhI"/>
+                                                    <constraint firstAttribute="trailing" secondItem="oZZ-gF-bh1" secondAttribute="trailing" constant="5" id="kCm-cV-qGQ"/>
+                                                    <constraint firstItem="nVO-NC-gtO" firstAttribute="leading" secondItem="9oY-ZU-Phh" secondAttribute="trailing" constant="5" id="q8T-iZ-nAu"/>
+                                                    <constraint firstItem="9oY-ZU-Phh" firstAttribute="leading" secondItem="9bH-qa-n3C" secondAttribute="leading" constant="5" id="qhE-Xt-WhI"/>
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9dO-fg-hlD" userLabel="Backward Button View">
@@ -162,10 +162,10 @@
                                     <constraint firstAttribute="trailing" secondItem="VY1-Zi-xRa" secondAttribute="trailing" id="YXp-P4-7qe"/>
                                     <constraint firstAttribute="bottom" secondItem="ANS-GC-POC" secondAttribute="bottom" id="bu9-Uz-Haj"/>
                                     <constraint firstAttribute="bottom" secondItem="VY1-Zi-xRa" secondAttribute="bottom" id="kfy-8e-XIt"/>
-                                    <constraint firstAttribute="width" constant="375" id="l0y-K8-scc"/>
                                     <constraint firstItem="ANS-GC-POC" firstAttribute="leading" secondItem="mQg-62-cJd" secondAttribute="leading" id="q6w-Xr-aSn"/>
                                     <constraint firstItem="ANS-GC-POC" firstAttribute="top" secondItem="mQg-62-cJd" secondAttribute="top" id="sjN-4Z-XbK"/>
                                     <constraint firstAttribute="trailing" secondItem="v5e-Lz-vRW" secondAttribute="trailing" constant="10" id="wOd-ar-wv7"/>
+                                    <constraint firstAttribute="width" constant="375" id="yeE-m8-gqf"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FpQ-KF-qeJ" userLabel="Meta Data Holder view">
@@ -290,7 +290,6 @@
                         <outlet property="playerThumbnailImageview" destination="VY1-Zi-xRa" id="6aA-in-NgM"/>
                         <outlet property="playerView" destination="mQg-62-cJd" id="aTc-Ib-ckN"/>
                         <outlet property="playerViewTopConstraint" destination="WpG-l5-L8F" id="hrJ-Gi-bC0"/>
-                        <outlet property="playerViewWidthConstraint" destination="l0y-K8-scc" id="ytr-2j-Nw7"/>
                         <outlet property="remainingTimeLabel" destination="9oY-ZU-Phh" id="Yb5-CX-NSX"/>
                         <outlet property="scrollableContentHeight" destination="t0d-eH-ws1" id="3gU-q8-jN6"/>
                         <outlet property="seekbarHolderView" destination="9bH-qa-n3C" id="Gxv-mU-sMW"/>

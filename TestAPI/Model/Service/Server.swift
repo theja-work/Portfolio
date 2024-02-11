@@ -30,6 +30,7 @@ public class Server {
             return
         }
 
+        print("api_url : \(self.serviceUrl)")
         var requestHTTP = URLRequest(url: url)
        // requestHTTP.timeoutInterval = 60.0
         requestHTTP.httpMethod = self.httpMethod.rawValue
@@ -84,6 +85,69 @@ public class Server {
                         let jsonDict = self.convertDataToDictionary(data)
                         print(jsonDict)
                     }
+                }
+            }
+            
+            task.resume()
+        }
+        
+    }
+    
+    public func callWithDataLoader(responseHandler: ((_ response : DataLoader<[[String:Any]]>) -> Void)? = nil) {
+        
+        guard let url = URL(string: self.serviceUrl) else {
+            
+            return
+        }
+
+        print("api_url : \(self.serviceUrl)")
+        var requestHTTP = URLRequest(url: url)
+       // requestHTTP.timeoutInterval = 60.0
+        requestHTTP.httpMethod = self.httpMethod.rawValue
+        requestHTTP.cachePolicy = .reloadRevalidatingCacheData
+        if jsonParameter != nil
+        {
+            requestHTTP.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            let jsonData = try? JSONSerialization.data(withJSONObject: jsonParameter as Any)
+            requestHTTP.httpBody = jsonData
+
+            let string  = NSString(data: jsonData!, encoding: String.Encoding.utf8.rawValue)
+            print("\(String(describing: string))")
+        }
+        
+        // initate loader
+        
+        DispatchQueue.global().async {
+            
+            let task = URLSession.shared.dataTask(with: requestHTTP) { responseData, requestResponse , responseError in
+                
+                if responseError != nil , responseData == nil {
+                    if let response = requestResponse as? HTTPURLResponse {
+                        if response.statusCode == 404 {
+                            
+                            responseHandler?(DataLoader.dataNotFound)
+                            return
+                        }
+                        
+                        if response.statusCode == 500 {
+                            
+                            responseHandler?(DataLoader.serverError(error: "500", message: "Internal Server Error"))
+                            return
+                        }
+                        
+                        if response.statusCode >= 400 {
+                            
+                            responseHandler?(DataLoader.serverError(error: "400", message: "Bad request"))
+                            return
+                        }
+                    }
+                }
+                
+                if responseData != nil , responseError == nil , let data = responseData ,let response = requestResponse as? HTTPURLResponse , response.statusCode == 200 {
+                    
+                    let jsonDict = self.convertDataToDictionaryArray(data)
+                    print("api_response : \(jsonDict)")
+                    responseHandler?(DataLoader.success(response: jsonDict))
                 }
             }
             

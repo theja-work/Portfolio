@@ -11,7 +11,7 @@ import CoreData
 import AVFoundation
 import TestSDK
 
-public class VideoViewController : UIViewController {
+public class VideoViewController : BaseViewController {
     
     public class func viewController() -> VideoViewController {
         
@@ -76,7 +76,7 @@ public class VideoViewController : UIViewController {
     
     var player : AVPlayer? = nil
     var animationCounter = 0
-    var loader : UIActivityIndicatorView!
+    var playerLoader : UIActivityIndicatorView!
     var topNavBarPlayerOffset = 0.0
     var thumbnailDidTap = false
     var playButtonTap = false
@@ -138,37 +138,37 @@ public class VideoViewController : UIViewController {
     }
     
     public func setupLoader() {
-        self.loader = UIActivityIndicatorView(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: 60, height: 60)))
+        self.playerLoader = UIActivityIndicatorView(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: 60, height: 60)))
         
-        loader.style = .medium
-        loader.color = ColorCodes.SkyBlue.color
-        loader.backgroundColor = .clear
+        playerLoader.style = .medium
+        playerLoader.color = ColorCodes.SkyBlue.color
+        playerLoader.backgroundColor = .clear
         
-        self.playerView.addSubview(loader)
-        loader.center = self.playerView.center
-        loader.translatesAutoresizingMaskIntoConstraints = false
-        loader.centerYAnchor.constraint(equalTo: playerView.centerYAnchor).isActive = true
-        loader.centerXAnchor.constraint(equalTo: playerView.centerXAnchor).isActive = true
+        self.playerView.addSubview(playerLoader)
+        playerLoader.center = self.playerView.center
+        playerLoader.translatesAutoresizingMaskIntoConstraints = false
+        playerLoader.centerYAnchor.constraint(equalTo: playerView.centerYAnchor).isActive = true
+        playerLoader.centerXAnchor.constraint(equalTo: playerView.centerXAnchor).isActive = true
         
     }
     
     public func showLoader() {
         DispatchQueue.main.async {
-            if self.loader.isAnimating , self.loader.isHidden == false {return}
+            if self.playerLoader.isAnimating , self.playerLoader.isHidden == false {return}
             
-            self.view.bringSubviewToFront(self.loader)
-            self.playerView.bringSubviewToFront(self.loader)
-            self.loader.isHidden = false
-            self.loader.startAnimating()
+            self.view.bringSubviewToFront(self.playerLoader)
+            self.playerView.bringSubviewToFront(self.playerLoader)
+            self.playerLoader.isHidden = false
+            self.playerLoader.startAnimating()
         }
     }
     
     public func hideLoader() {
         DispatchQueue.main.async {
-            self.view.sendSubviewToBack(self.loader)
-            self.playerView.sendSubviewToBack(self.loader)
-            self.loader.isHidden = true
-            self.loader.stopAnimating()
+            self.view.sendSubviewToBack(self.playerLoader)
+            self.playerView.sendSubviewToBack(self.playerLoader)
+            self.playerLoader.isHidden = true
+            self.playerLoader.stopAnimating()
         }
     }
     
@@ -443,12 +443,21 @@ public class VideoViewController : UIViewController {
         
         guard let title = self.videoItem?.videoTitle , let description = self.videoItem?.videoDescription else {return}
         
-        guard let duration = self.videoItem?.videoDuration else {return}
+        var duration = ""
+        
+        if let value:String = self.videoItem?.videoDuration {
+            duration = value
+        }
         
         DispatchQueue.main.async {
             self.videoTitleLabel.text = title
             self.videoDescriptionLabel.text = description
-            self.thumbnailDurationLabel.text = duration
+            if !StringHelper.isNilOrEmpty(string: duration) {
+                self.thumbnailDurationLabel.text = duration
+            }
+            else {
+                self.thumbnailDurationLabel.isHidden = true
+            }
             self.thumbnailDurationLabel.layoutSubviews()
         }
         
@@ -664,7 +673,7 @@ public class VideoViewController : UIViewController {
         //let min = Int(currentTime / 60))
         
         self.remainingTimeLabel.text = "00 : 00"
-        self.elapsedTimeLabel.font = UIFont(name: "OpenSans-Regular", size: 4)
+        //self.elapsedTimeLabel.font = UIFont(name: "OpenSans-Regular", size: 4)
         
         print("VideoViewController : ela_time : \(sec) : \(currentTime)")
         
