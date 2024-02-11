@@ -27,13 +27,37 @@ public class VideoItemCell : UITableViewCell {
     
     public func setupCell(item:VideoItem) {
         
-        ImagePickerManager.getImageFromUrl(url: item.videoThumbnailUrl) { [weak self] imageLoader in
+        self.selectionStyle = .none
+        setupImage(url: item.videoThumbnailUrl)
+        
+        titleLabel.text = item.videoTitle
+        
+        descriptionLabel.text = item.videoDescription
+        
+        self.backgroundColor = ColorCodes.SkyBlue.color
+        self.clipsToBounds = true
+        self.layer.masksToBounds = true
+        self.layer.cornerRadius = 8.0
+        self.setNeedsLayout()
+        self.layoutIfNeeded()
+        
+    }
+    
+    func setupImage(url:String) {
+        
+        guard !StringHelper.isNilOrEmpty(string: url) else {return}
+        
+        ImagePickerManager.getImageFromUrl(url: url) { [weak self] imageLoader in
             
             guard let strongSelf = self else {return}
             
             switch imageLoader {
             case .success(let image):
-                strongSelf.videoThumbnailImage.image = image
+                
+                DispatchQueue.main.async {
+                    strongSelf.videoThumbnailImage.image = image
+                    strongSelf.videoThumbnailImage.contentMode = .scaleToFill
+                }
                 
             case .serverError(let error, let message):
                 print("server error with error : \(error) : \(message)")
@@ -43,10 +67,6 @@ public class VideoItemCell : UITableViewCell {
             }
             
         }
-        
-        titleLabel.text = item.videoTitle
-        
-        descriptionLabel.text = item.videoDescription
         
     }
     

@@ -82,7 +82,6 @@ public class VideoService {
                 }
                 
                 if videos.count != 0 {
-                    print("VideoService : item count : \(videos.count)")
                     responseHandler(DataLoader.success(response: videos))
                 }
                 else {

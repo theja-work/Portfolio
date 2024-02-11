@@ -11,6 +11,8 @@ import FirebaseCore
 import FirebaseAuth
 import GoogleSignIn
 import NVActivityIndicatorView
+import RxSwift
+import RxCocoa
 
 public class HomeViewController : BaseViewController {
     
@@ -41,7 +43,9 @@ public class HomeViewController : BaseViewController {
     override public func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = ColorCodes.HomeBackground.color
+        self.view.backgroundColor = ColorCodes.ButtonBlueLight.color
+        self.navigationController?.navigationBar.backItem?.backButtonTitle = ""
+        self.navigationController?.navigationItem.backBarButtonItem = UIBarButtonItem(image: UIImage(named: ""), style: .done, target: nil, action: nil)
         
         setupButtons()
         self.buttonHolder.isHidden = true
@@ -60,12 +64,46 @@ public class HomeViewController : BaseViewController {
         self.viewModel = VideoViewModel(api: VideoServiceAPI())
         
         self.viewModel?.getVideos()
+        
+        setupObservers()
+    }
+    
+    func setupObservers() {
+        
+        self.viewModel?.output.isLoadingDriver.drive(onNext: {[weak self] loading in
+            
+            guard let localSelf = self else {return}
+            
+            if loading {
+                localSelf.loader?.showLoader()
+            }
+            else {
+                localSelf.loader?.hideLoader()
+            }
+            
+        }).disposed(by: bag)
+        
+        self.viewModel?.output.videoListDriver.drive(onNext: {[weak self] videos in
+            guard let localSelf = self else {return}
+            
+            if videos.count > 0 {
+                print("HomeViewcontroller : videos count : \(videos.count)")
+                
+                DispatchQueue.main.async {
+                    localSelf.videoListTableView.reloadData()
+                    localSelf.videoListTableView.setNeedsLayout()
+                    localSelf.videoListTableView.layoutIfNeeded()
+                }
+                
+            }
+        }).disposed(by: bag)
+        
     }
     
     func setupVideoListView() {
         
         videoListTableView.register(UINib(nibName: VideoItemCell.nibName(), bundle: Bundle(for: VideoItemCell.classForCoder())), forCellReuseIdentifier: VideoItemCell.cellIdentifier())
-        
+        videoListTableView.backgroundColor = ColorCodes.ButtonBlueLight.color
     }
     
     func setupButtons() {
@@ -151,7 +189,7 @@ extension HomeViewController : UITableViewDelegate , UITableViewDataSource {
     }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.viewModel?.videos?.count ?? 10
+        return self.viewModel?.videos?.count ?? 0
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -163,6 +201,30 @@ extension HomeViewController : UITableViewDelegate , UITableViewDataSource {
         cell?.setupCell(item: item)
         
         return cell ?? UITableViewCell()
+    }
+    
+    public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 90.0
+    }
+    
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        guard let item = self.viewModel?.videos?[indexPath.row] else {return}
+        
+        let videoDetailsVC = VideoViewController.viewController(item: item)
+        
+        self.navigationController?.pushViewController(videoDetailsVC, animated: true)
+    }
+    
+    public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath)
+    {
+        let verticalPadding: CGFloat = 10
+
+        let maskLayer = CALayer()
+        maskLayer.cornerRadius = 10    //if you want round edges
+        maskLayer.backgroundColor = UIColor.black.cgColor
+        maskLayer.frame = CGRect(x: cell.bounds.origin.x, y: cell.bounds.origin.y, width: cell.bounds.width, height: cell.bounds.height).insetBy(dx: 0, dy: verticalPadding/2)
+        cell.layer.mask = maskLayer
     }
     
 }

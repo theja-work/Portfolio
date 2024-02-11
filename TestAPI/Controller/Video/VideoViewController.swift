@@ -13,12 +13,15 @@ import TestSDK
 
 public class VideoViewController : BaseViewController {
     
-    public class func viewController() -> VideoViewController {
+    public class func viewController(item:VideoItem? = nil) -> VideoViewController {
         
         let storyBoard = UIStoryboard(name: "VideoViewController", bundle: nil)
         
         let viewController = storyBoard.instantiateViewController(withIdentifier: "VideoViewController") as! VideoViewController
         
+        if item != nil {
+            viewController.videoItem = item
+        }
         
         return viewController
     }
@@ -99,6 +102,8 @@ public class VideoViewController : BaseViewController {
         
         topNavBarPlayerOffset = (navHeight - 3) * 2
         
+        self.navigationController?.navigationBar.backItem?.backButtonTitle = ""
+        
         setupViewModel()
         
         buttonSetup()
@@ -176,6 +181,17 @@ public class VideoViewController : BaseViewController {
         
         self.showLoader()
         
+        //getVideo()
+        
+        setupMetaData()
+        setupThumbnail()
+        
+        setupPlayerControls()
+        
+        addPlayerObservers()
+    }
+    
+    func getVideo() {
         viewModel?.getDataFromServer(responseHandler: { [weak self] dataResponse in
             guard let strongSelf = self else {return}
             
@@ -195,10 +211,6 @@ public class VideoViewController : BaseViewController {
                 print("VideoViewController : network error")
             }
         })
-        
-        setupPlayerControls()
-        
-        addPlayerObservers()
     }
     
     public func setupPlayerControls() {

@@ -17,13 +17,13 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="NVF-Ll-hXZ">
-                        <rect key="frame" x="0.0" y="0.0" width="160" height="90"/>
+                        <rect key="frame" x="0.0" y="0.0" width="120" height="90"/>
                         <constraints>
-                            <constraint firstAttribute="width" secondItem="NVF-Ll-hXZ" secondAttribute="height" multiplier="16:9" id="J6R-7I-yRk"/>
+                            <constraint firstAttribute="width" secondItem="NVF-Ll-hXZ" secondAttribute="height" multiplier="4:3" id="J6R-7I-yRk"/>
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vkj-EF-YxM">
-                        <rect key="frame" x="165" y="5" width="205" height="25"/>
+                        <rect key="frame" x="125" y="10" width="245" height="25"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="25" id="TQZ-Ze-1TZ"/>
                         </constraints>
@@ -31,18 +31,18 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wsc-B9-OZH">
-                        <rect key="frame" x="165" y="35" width="205" height="50"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wsc-B9-OZH">
+                        <rect key="frame" x="125" y="30" width="245" height="55"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="Wsc-B9-OZH" firstAttribute="top" secondItem="vkj-EF-YxM" secondAttribute="bottom" constant="5" id="1Jr-ef-nfD"/>
+                    <constraint firstItem="Wsc-B9-OZH" firstAttribute="top" secondItem="vkj-EF-YxM" secondAttribute="bottom" constant="-5" id="1Jr-ef-nfD"/>
                     <constraint firstAttribute="trailing" secondItem="Wsc-B9-OZH" secondAttribute="trailing" constant="5" id="KFk-eG-Qg5"/>
                     <constraint firstItem="NVF-Ll-hXZ" firstAttribute="height" secondItem="wS0-ui-BKM" secondAttribute="height" id="TXD-pR-Ude"/>
-                    <constraint firstItem="vkj-EF-YxM" firstAttribute="top" secondItem="wS0-ui-BKM" secondAttribute="top" constant="5" id="XZe-Jz-qD9"/>
+                    <constraint firstItem="vkj-EF-YxM" firstAttribute="top" secondItem="wS0-ui-BKM" secondAttribute="top" constant="10" id="XZe-Jz-qD9"/>
                     <constraint firstAttribute="bottom" secondItem="Wsc-B9-OZH" secondAttribute="bottom" constant="5" id="cbQ-wl-w08"/>
                     <constraint firstItem="NVF-Ll-hXZ" firstAttribute="centerY" secondItem="wS0-ui-BKM" secondAttribute="centerY" id="cnI-mF-RBH"/>
                     <constraint firstItem="NVF-Ll-hXZ" firstAttribute="leading" secondItem="wS0-ui-BKM" secondAttribute="leading" id="p9e-iv-XWO"/>

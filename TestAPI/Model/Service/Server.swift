@@ -30,7 +30,7 @@ public class Server {
             return
         }
 
-        print("api_url : \(self.serviceUrl)")
+        //print("api_url : \(self.serviceUrl)")
         var requestHTTP = URLRequest(url: url)
        // requestHTTP.timeoutInterval = 60.0
         requestHTTP.httpMethod = self.httpMethod.rawValue
@@ -100,7 +100,7 @@ public class Server {
             return
         }
 
-        print("api_url : \(self.serviceUrl)")
+        //print("api_url : \(self.serviceUrl)")
         var requestHTTP = URLRequest(url: url)
        // requestHTTP.timeoutInterval = 60.0
         requestHTTP.httpMethod = self.httpMethod.rawValue
@@ -146,7 +146,7 @@ public class Server {
                 if responseData != nil , responseError == nil , let data = responseData ,let response = requestResponse as? HTTPURLResponse , response.statusCode == 200 {
                     
                     let jsonDict = self.convertDataToDictionaryArray(data)
-                    print("api_response : \(jsonDict)")
+                    //print("api_response : \(jsonDict)")
                     responseHandler?(DataLoader.success(response: jsonDict))
                 }
             }

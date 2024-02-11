@@ -47,7 +47,7 @@
                                 </connections>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vMu-KN-p4n">
-                                <rect key="frame" x="169.5" y="385" width="75" height="35"/>
+                                <rect key="frame" x="169.5" y="532" width="75" height="35"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="75" id="Qlm-u1-qbd"/>
                                     <constraint firstAttribute="height" constant="35" id="WIk-OV-zku"/>
@@ -117,12 +117,12 @@
                             <constraint firstItem="u66-Uf-VAj" firstAttribute="width" secondItem="5EZ-qb-Rvc" secondAttribute="width" multiplier="0.65" id="igs-ib-dO0"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="h69-57-wKB" secondAttribute="bottom" constant="40" id="jJR-mW-qHx"/>
                             <constraint firstItem="8rA-2L-6mT" firstAttribute="top" secondItem="ude-UT-rug" secondAttribute="bottom" constant="20" id="oeD-Sq-k2A"/>
-                            <constraint firstItem="vMu-KN-p4n" firstAttribute="top" secondItem="k5I-UF-Rgf" secondAttribute="bottom" constant="30" id="oet-9P-ieg"/>
+                            <constraint firstItem="vMu-KN-p4n" firstAttribute="top" relation="greaterThanOrEqual" secondItem="k5I-UF-Rgf" secondAttribute="bottom" constant="30" id="oet-9P-ieg"/>
                             <constraint firstItem="h69-57-wKB" firstAttribute="width" secondItem="HW3-aS-a8J" secondAttribute="width" id="qgd-NV-biw"/>
                             <constraint firstItem="vMu-KN-p4n" firstAttribute="centerX" secondItem="vDu-zF-Fre" secondAttribute="centerX" id="sZh-L2-WKm"/>
                             <constraint firstItem="k5I-UF-Rgf" firstAttribute="width" secondItem="u66-Uf-VAj" secondAttribute="width" id="skU-o6-eTs"/>
                             <constraint firstItem="ude-UT-rug" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="tPi-a9-gAc"/>
-                            <constraint firstItem="ude-UT-rug" firstAttribute="top" relation="greaterThanOrEqual" secondItem="vMu-KN-p4n" secondAttribute="bottom" constant="40" id="tZe-O3-fnP"/>
+                            <constraint firstItem="ude-UT-rug" firstAttribute="top" secondItem="vMu-KN-p4n" secondAttribute="bottom" constant="40" id="tZe-O3-fnP"/>
                             <constraint firstItem="WFy-3z-ozz" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="5" id="uzd-FC-Grw"/>
                             <constraint firstItem="HW3-aS-a8J" firstAttribute="centerX" secondItem="vDu-zF-Fre" secondAttribute="centerX" id="yvk-Os-noF"/>
                         </constraints>
