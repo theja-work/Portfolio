@@ -133,6 +133,15 @@
                                                             <action selector="saveProfileAction:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="Zbu-vM-egJ"/>
                                                         </connections>
                                                     </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y9u-jv-YbA" customClass="ProfileButtons" customModule="TestAPI" customModuleProvider="target">
+                                                        <rect key="frame" x="61.999999999999986" y="421.99999999999994" width="229.66666666666663" height="40"/>
+                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                        <state key="normal" title="Button"/>
+                                                        <connections>
+                                                            <action selector="logoutUser:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="SSH-8A-jAe"/>
+                                                            <action selector="saveProfileAction:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="hJf-8M-fAw"/>
+                                                        </connections>
+                                                    </button>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
@@ -142,14 +151,18 @@
                                                     <constraint firstItem="fdy-So-gtW" firstAttribute="centerX" secondItem="F1R-ql-LSN" secondAttribute="centerX" id="8ux-AR-4nH"/>
                                                     <constraint firstItem="0sk-Jo-3Gc" firstAttribute="centerX" secondItem="F1R-ql-LSN" secondAttribute="centerX" id="ALE-VI-x9g"/>
                                                     <constraint firstItem="fO7-1S-AeK" firstAttribute="top" secondItem="cJn-EK-EYy" secondAttribute="bottom" constant="40" id="AVd-Yu-m5q"/>
+                                                    <constraint firstItem="Y9u-jv-YbA" firstAttribute="top" secondItem="fdy-So-gtW" secondAttribute="bottom" constant="40" id="Ae2-q7-zll"/>
                                                     <constraint firstItem="0sk-Jo-3Gc" firstAttribute="top" secondItem="4He-IF-JE6" secondAttribute="bottom" constant="50" id="O4j-iZ-3f2"/>
+                                                    <constraint firstItem="Y9u-jv-YbA" firstAttribute="height" secondItem="fdy-So-gtW" secondAttribute="height" id="P7n-0W-8r5"/>
                                                     <constraint firstItem="mjB-aN-XIh" firstAttribute="centerY" secondItem="fO7-1S-AeK" secondAttribute="centerY" id="Prg-Mt-Qhg"/>
                                                     <constraint firstItem="0sk-Jo-3Gc" firstAttribute="width" secondItem="F1R-ql-LSN" secondAttribute="width" multiplier="0.65" id="S6r-2M-NUW"/>
                                                     <constraint firstItem="E17-z0-txl" firstAttribute="leading" secondItem="F1R-ql-LSN" secondAttribute="leading" constant="30" id="S7b-7b-Hex"/>
                                                     <constraint firstItem="fdy-So-gtW" firstAttribute="top" secondItem="0sk-Jo-3Gc" secondAttribute="bottom" constant="40" id="T09-Rm-f2U"/>
+                                                    <constraint firstItem="Y9u-jv-YbA" firstAttribute="width" secondItem="fdy-So-gtW" secondAttribute="width" id="W0V-Y0-d8o"/>
                                                     <constraint firstItem="fO7-1S-AeK" firstAttribute="leading" secondItem="F1R-ql-LSN" secondAttribute="leading" constant="30" id="Zhg-eS-9x6"/>
                                                     <constraint firstItem="E17-z0-txl" firstAttribute="top" secondItem="fO7-1S-AeK" secondAttribute="bottom" constant="40" id="a5h-zZ-IBW"/>
                                                     <constraint firstAttribute="height" id="efD-hr-zDE"/>
+                                                    <constraint firstItem="Y9u-jv-YbA" firstAttribute="centerX" secondItem="fdy-So-gtW" secondAttribute="centerX" id="gB7-5e-RPQ"/>
                                                     <constraint firstAttribute="trailing" secondItem="eKx-dK-MIu" secondAttribute="trailing" constant="30" id="h3Q-pg-xEP"/>
                                                     <constraint firstAttribute="trailing" secondItem="4He-IF-JE6" secondAttribute="trailing" constant="30" id="lJj-xh-X0o"/>
                                                     <constraint firstItem="eKx-dK-MIu" firstAttribute="centerY" secondItem="cJn-EK-EYy" secondAttribute="centerY" id="ldK-eA-NQx"/>
@@ -200,6 +213,7 @@
                         <outlet property="ageLabel" destination="E17-z0-txl" id="S56-RT-JrV"/>
                         <outlet property="editButton" destination="0sk-Jo-3Gc" id="dLp-AM-tJc"/>
                         <outlet property="editImageToggle" destination="6GV-zm-7uq" id="fBA-pG-bxA"/>
+                        <outlet property="logoutButton" destination="Y9u-jv-YbA" id="Dcj-ag-xqj"/>
                         <outlet property="mobileField" destination="mjB-aN-XIh" id="30H-x9-m6M"/>
                         <outlet property="mobileLabel" destination="fO7-1S-AeK" id="2OC-dV-We7"/>
                         <outlet property="nameField" destination="eKx-dK-MIu" id="1My-au-GMN"/>

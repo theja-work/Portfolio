@@ -14,6 +14,7 @@ public class VideoAPI {
         case GetVideoItem
         case GetVideoItemFromLink(link:String)
         case GetVideos
+        case GetVideosWithId(id:String)
     }
     
     var urlPath : String {
@@ -23,6 +24,9 @@ public class VideoAPI {
             return link
             
         case .GetVideos : return
+            "https://interview-e18de.firebaseio.com/media.json?print=pretty"
+            
+        case .GetVideosWithId : return
             "https://interview-e18de.firebaseio.com/media.json?print=pretty"
             
         }
@@ -35,6 +39,7 @@ public class VideoAPI {
         case .GetVideoItem : return .get
         case .GetVideoItemFromLink : return .get
         case .GetVideos : return .get
+        case .GetVideosWithId : return .get
         }
     }
     

@@ -20,6 +20,8 @@ extension Profile {
     @NSManaged public var mobile: String?
     @NSManaged public var name: String?
     @NSManaged public var profilePicture: Data?
+    @NSManaged public var user_id:String?
+    @NSManaged public var email_id:String?
 
 }
 

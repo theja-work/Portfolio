@@ -75,6 +75,11 @@ public class VideoViewController : BaseViewController {
     @IBOutlet weak var elapsedTimeLabel: UILabel!
     
     
+    @IBOutlet weak var descriptionHeight: NSLayoutConstraint!
+    
+    @IBOutlet weak var fullScreenbutton: UIButton!
+    
+    
     public var progressUpdateTimer : Timer?
     
     var player : AVPlayer? = nil
@@ -139,6 +144,25 @@ public class VideoViewController : BaseViewController {
     public func setupViewModel() {
         
         self.viewModel = VideoViewModel(api: VideoServiceAPI())
+        
+        guard let videoId = self.videoItem?.videoID else {return}
+        
+        self.viewModel?.getRelatedVideosWithId(videoID: videoId, completionHanlder: { [weak self] videosResponse in
+            
+            switch videosResponse {
+            case .success(let videos):
+                
+                for video in videos {
+                    print("VideoViewController : related video ids : \(video.videoID)")
+                }
+                
+            case .serverError(let error, let message):
+                print(error,message)
+                
+            default : break
+            }
+            
+        })
         
     }
     
@@ -269,22 +293,20 @@ public class VideoViewController : BaseViewController {
         guard let duration = self.player?.currentItem?.duration.seconds else {return}
         
         let elapsedTimeString = formatSecondsToString(position)
+        let reminingTimeString = formatSecondsToString(duration - position)
         
-        if self.player?.currentItem?.isPlaybackLikelyToKeepUp == true {
-            print("VideoViewController : playing :\(elapsedTimeString)")
+        if self.player?.timeControlStatus == .playing {
+            //print("VideoViewController : elapsed time :\(elapsedTimeString) :: remaining time : \(reminingTimeString)")
             
             DispatchQueue.main.async {
-                self.playerProgressView.setProgress(Float(position / 1000), animated: true)
+                self.playerProgressView.setProgress(Float(position / duration), animated: true)
                 self.playerProgressView.setNeedsLayout()
                 self.playerProgressView.layoutIfNeeded()
             }
         }
         
-        self.elapsedTimeLabel.text = "\(elapsedTimeString)"
-        
-        let reminingTimeString = formatSecondsToString(duration - position)
-        
-        remainingTimeLabel.text = reminingTimeString
+        elapsedTimeLabel.text = reminingTimeString
+        remainingTimeLabel.text = elapsedTimeString
         //self.playerProgressView.progress
         
     }
@@ -448,7 +470,7 @@ public class VideoViewController : BaseViewController {
             self.metaDataHolderView.clipsToBounds = false
             self.metaDataHolderView.layer.masksToBounds = false
             self.metaDataHolderView.layer.cornerRadius = 12
-            self.metaDataHolderView.backgroundColor = ColorCodes.BlueGray.color
+            self.metaDataHolderView.backgroundColor = ColorCodes.ButtonBlueDark.color
         }
         
         labelUISetup()
@@ -497,6 +519,7 @@ public class VideoViewController : BaseViewController {
                 
                 DispatchQueue.main.async {
                     strongSelf.playerThumbnailImageview.image = image
+                    strongSelf.playerThumbnailImageview.contentMode = .scaleToFill
                     strongSelf.playerView.isUserInteractionEnabled = false
                 }
                 
@@ -538,26 +561,20 @@ public class VideoViewController : BaseViewController {
     
     public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         
+        fullScreenTransition()
+    }
+    
+    func fullScreenTransition(fullScreenTapped:Bool = false) {
         guard topNavBarPlayerOffset != 0 else {return}
         
         if UIDevice.current.orientation.isLandscape {
-            self.navigationController?.isNavigationBarHidden = true
-
-            self.animationCounter = 1
             
-            playerViewTopConstraint.constant = topNavBarPlayerOffset//82
-            
-            hidePlayerBoundButton()
+            fullScreenTapped ? portraitPlayerUpdates() : landscapePlayerUpdates()
             
             
         } else {
-            self.navigationController?.isNavigationBarHidden = false
-
-            self.animationCounter = 0
             
-            playerViewTopConstraint.constant = 0
-            
-            showPlayerBoundButton()
+            fullScreenTapped ? landscapePlayerUpdates() : portraitPlayerUpdates()
             
         }
         
@@ -565,14 +582,7 @@ public class VideoViewController : BaseViewController {
             UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 5) { [weak self] in
                 guard let strongSelf = self else {return}
                 
-                let x = 16.0/9.0
-                
-                strongSelf.playerLandscapeTransition()
-                strongSelf.hideMetaData()
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
-                    strongSelf.playerView.transform = CGAffineTransform(scaleX: x, y: x)
-                })
+                fullScreenTapped ? strongSelf.portraitPlayerBlock() : strongSelf.landscapePlayerBlock()
                 
             }
             
@@ -582,17 +592,52 @@ public class VideoViewController : BaseViewController {
             UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 5) { [weak self] in
                 guard let strongSelf = self else {return}
                 
-                strongSelf.playerPortraitTransition()
-                strongSelf.showMetaData()
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
-                    
-                    strongSelf.playerView.transform = .identity
-                })
+                fullScreenTapped ? strongSelf.landscapePlayerBlock() : strongSelf.portraitPlayerBlock()
                 
             }
             
         }
+    }
+    
+    public func landscapePlayerUpdates() {
+        
+        self.navigationController?.isNavigationBarHidden = true
+        self.animationCounter = 1
+        
+        playerViewTopConstraint.constant = topNavBarPlayerOffset//82
+        
+        hidePlayerBoundButton()
+    }
+    
+    public func portraitPlayerUpdates() {
+        self.navigationController?.isNavigationBarHidden = false
+
+        self.animationCounter = 0
+        
+        playerViewTopConstraint.constant = 0
+        
+        showPlayerBoundButton()
+    }
+    
+    func landscapePlayerBlock() {
+        let x = 16.0/9.0
+        
+        playerLandscapeTransition()
+        hideMetaData()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
+            self.playerView.transform = CGAffineTransform(scaleX: x, y: x)
+        })
+    }
+    
+    func portraitPlayerBlock() {
+        playerPortraitTransition()
+        showMetaData()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
+            
+            self.playerView.transform = .identity
+        })
     }
     
     public func playerLandscapeTransition() {
@@ -647,6 +692,8 @@ public class VideoViewController : BaseViewController {
         
         self.backButton.setupStyle(type: .Image)
         self.backButton.setTitle("Back", for: .normal)
+        
+        self.fullScreenbutton.setImage(UIImage(named: "fullscreen"), for: .normal)
     }
     
     public func getVideoFromServer() {
@@ -689,6 +736,48 @@ public class VideoViewController : BaseViewController {
         
         print("VideoViewController : ela_time : \(sec) : \(currentTime)")
         
+    }
+    
+    
+    @IBAction func fullScreenAction(_ sender: UIButton) {
+        
+        if UIDevice.current.orientation == .landscapeLeft || UIDevice.current.orientation == .landscapeRight {
+            if #available(iOS 16.0, *) {
+                UIView.performWithoutAnimation {
+                    self.setNeedsUpdateOfSupportedInterfaceOrientations()
+                }
+                let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
+                    windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: .portrait)) { error in
+                        print(error)
+
+                    }
+                })
+            } else {
+                UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
+                UIViewController.attemptRotationToDeviceOrientation()
+            }
+        }
+        else {
+            if #available(iOS 16.0, *) {
+                UIView.performWithoutAnimation {
+                    self.setNeedsUpdateOfSupportedInterfaceOrientations()
+                }
+                let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
+                    windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: .landscapeRight)) { error in
+                        print(error)
+                    }
+                })
+            }else {
+                UIDevice.current.setValue(UIInterfaceOrientation.landscapeRight.rawValue, forKey: "orientation")
+                UIViewController.attemptRotationToDeviceOrientation()
+            }
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+            self.fullScreenTransition(fullScreenTapped: false)
+        })
     }
     
     @IBAction func playButtonAction(_ sender : HomeButtons) {

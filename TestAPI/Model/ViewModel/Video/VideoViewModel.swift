@@ -91,6 +91,17 @@ public class VideoViewModel {
         
     }
     
+    public func getRelatedVideosWithId(videoID:String,completionHanlder:@escaping ((_ response : DataLoader<[VideoItem]>) -> Void)) {
+        
+        guard let isBusy = try? self.output.isLoadingSubject.value() else {return}
+        if isBusy {return}
+        
+        self.output.isLoadingSubject.onNext(true)
+        
+        self.api?.getVideosWithId(videoId: videoID, response: completionHanlder)
+        
+    }
+    
     public func getVideosCount() -> Int? {
         
         if let count = videos?.count {return count}

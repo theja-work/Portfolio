@@ -100,10 +100,42 @@ public class VideoService {
         
     }
     
+    public class func getVideosWithId(id:String, responseHandler:@escaping ((DataLoader<[VideoItem]>) -> Void)) {
+        
+        let service = VideoAPI(api: .GetVideosWithId(id: id))
+        
+        service.apiRequest { response in
+            switch response {
+            case .success(let videosJson):
+                
+                var videos = [VideoItem]()
+                
+                for video in videosJson {
+                    
+                    if let videoItem = VideoItem.ParseV2(jsonObject: video) {
+                        videos.append(videoItem)
+                    }
+                }
+                
+                videos = videos.filter({$0.videoID != id})
+                
+                responseHandler(DataLoader.success(response: videos))
+                
+                
+            case .serverError(let error , let message):
+                print("server error with error : \(error) : message : \(message)")
+                
+                                default : break
+            }
+        }
+        
+    }
+    
 }
 
 public protocol VideoServiceProtocol : AnyObject {
     func getVideoItem(response : @escaping ((DataLoader<VideoItem>) -> Void))
     func getViedoItemFromLink(link:String , response : @escaping ((DataLoader<VideoItem>) -> Void))
     func getVideos(response:@escaping ((DataLoader<[VideoItem]>) -> Void))
+    func getVideosWithId(videoId:String,response:@escaping ((DataLoader<[VideoItem]>) -> Void))
 }

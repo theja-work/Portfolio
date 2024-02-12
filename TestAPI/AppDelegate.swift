@@ -46,13 +46,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func setStaringScreen() {
         
+        //UIBarButtonItem.appearance().setBackButtonTitlePositionAdjustment(UIOffset(horizontal: -1000.0, vertical: 0.0), for: .default)
+        
+    }
+    
+    func setLoginScreen() {
         let storyBoard = UIStoryboard(name: "Login", bundle: nil)
         
         let rootVC = storyBoard.instantiateViewController(withIdentifier: "LoginVC") as? LoginViewController
         
         window?.rootViewController = rootVC
-        //UIBarButtonItem.appearance().setBackButtonTitlePositionAdjustment(UIOffset(horizontal: -1000.0, vertical: 0.0), for: .default)
+    }
+    
+    func setHomeScreen() {
         
+        let rootVC = HomeViewController.HomeViewController()
+        
+        window?.rootViewController = rootVC
     }
     
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {

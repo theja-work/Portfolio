@@ -48,10 +48,10 @@
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.75" translatesAutoresizingMaskIntoConstraints="NO" id="nVO-NC-gtO">
-                                                        <rect key="frame" x="73.333333333333329" y="13.666666666666657" width="228.33333333333337" height="4"/>
+                                                        <rect key="frame" x="73.333333333333329" y="13.666666666666657" width="188.33333333333337" height="4"/>
                                                     </progressView>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oZZ-gF-bh1">
-                                                        <rect key="frame" x="306.66666666666669" y="7.9999999999999991" width="63.333333333333314" height="15.666666666666664"/>
+                                                        <rect key="frame" x="266.66666666666669" y="7.9999999999999991" width="63.333333333333314" height="15.666666666666664"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" secondItem="oZZ-gF-bh1" secondAttribute="height" multiplier="4:1" id="Ghj-LS-YAH"/>
                                                         </constraints>
@@ -59,17 +59,30 @@
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P1J-ch-cjq">
+                                                        <rect key="frame" x="330" y="-1.6666666666666856" width="35" height="35"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="35" id="57a-8X-8X2"/>
+                                                            <constraint firstAttribute="width" constant="35" id="f5U-4P-5M9"/>
+                                                        </constraints>
+                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                        <connections>
+                                                            <action selector="fullScreenAction:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="VyP-4R-Wet"/>
+                                                        </connections>
+                                                    </button>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
+                                                    <constraint firstItem="P1J-ch-cjq" firstAttribute="leading" secondItem="oZZ-gF-bh1" secondAttribute="trailing" id="0gn-Wc-lNS"/>
                                                     <constraint firstItem="nVO-NC-gtO" firstAttribute="centerY" secondItem="9oY-ZU-Phh" secondAttribute="centerY" id="6Al-7B-WhN"/>
                                                     <constraint firstItem="nVO-NC-gtO" firstAttribute="trailing" secondItem="oZZ-gF-bh1" secondAttribute="leading" constant="-5" id="CJ1-Uf-FF6"/>
                                                     <constraint firstItem="oZZ-gF-bh1" firstAttribute="centerY" secondItem="9bH-qa-n3C" secondAttribute="centerY" id="FWy-Ih-aNC"/>
                                                     <constraint firstItem="nVO-NC-gtO" firstAttribute="height" secondItem="9oY-ZU-Phh" secondAttribute="height" multiplier="0.25" id="FYb-Ja-cFD"/>
+                                                    <constraint firstAttribute="trailing" secondItem="P1J-ch-cjq" secondAttribute="trailing" constant="10" id="Jud-xn-wOw"/>
                                                     <constraint firstItem="oZZ-gF-bh1" firstAttribute="height" secondItem="9bH-qa-n3C" secondAttribute="height" multiplier="0.5" id="N1Q-eT-Fl8"/>
+                                                    <constraint firstItem="P1J-ch-cjq" firstAttribute="centerY" secondItem="9bH-qa-n3C" secondAttribute="centerY" id="Ss1-uX-LEC"/>
                                                     <constraint firstItem="9oY-ZU-Phh" firstAttribute="height" secondItem="9bH-qa-n3C" secondAttribute="height" multiplier="0.5" id="iIt-GJ-GUI"/>
                                                     <constraint firstItem="9oY-ZU-Phh" firstAttribute="centerY" secondItem="9bH-qa-n3C" secondAttribute="centerY" id="ilD-KD-GGW"/>
-                                                    <constraint firstAttribute="trailing" secondItem="oZZ-gF-bh1" secondAttribute="trailing" constant="5" id="kCm-cV-qGQ"/>
                                                     <constraint firstItem="nVO-NC-gtO" firstAttribute="leading" secondItem="9oY-ZU-Phh" secondAttribute="trailing" constant="5" id="q8T-iZ-nAu"/>
                                                     <constraint firstItem="9oY-ZU-Phh" firstAttribute="leading" secondItem="9bH-qa-n3C" secondAttribute="leading" constant="5" id="qhE-Xt-WhI"/>
                                                 </constraints>
@@ -175,7 +188,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="373" height="518"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="neA-7w-RJv" userLabel="Scroll Content View">
-                                                <rect key="frame" x="0.0" y="0.0" width="373" height="670"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="373" height="1000"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XzG-Gl-gBZ">
                                                         <rect key="frame" x="10" y="10" width="353" height="30"/>
@@ -231,7 +244,7 @@
                                                     <constraint firstAttribute="trailing" secondItem="88z-fm-BNG" secondAttribute="trailing" constant="10" id="fmz-iL-tnz"/>
                                                     <constraint firstItem="XzG-Gl-gBZ" firstAttribute="top" secondItem="neA-7w-RJv" secondAttribute="top" constant="10" id="ho5-JR-XoA"/>
                                                     <constraint firstItem="aNU-zC-Bzn" firstAttribute="centerX" secondItem="neA-7w-RJv" secondAttribute="centerX" id="hyD-oP-6Ym"/>
-                                                    <constraint firstAttribute="height" constant="670" id="t0d-eH-ws1"/>
+                                                    <constraint firstAttribute="height" constant="1000" id="t0d-eH-ws1"/>
                                                     <constraint firstItem="88z-fm-BNG" firstAttribute="top" secondItem="XzG-Gl-gBZ" secondAttribute="bottom" constant="10" id="wqa-ms-W1G"/>
                                                 </constraints>
                                             </view>
@@ -275,7 +288,9 @@
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <connections>
                         <outlet property="backButton" destination="aNU-zC-Bzn" id="nXD-pD-6x3"/>
+                        <outlet property="descriptionHeight" destination="idH-Rw-5bb" id="Xgy-Zk-hmC"/>
                         <outlet property="elapsedTimeLabel" destination="oZZ-gF-bh1" id="kwC-Vq-Lwi"/>
+                        <outlet property="fullScreenbutton" destination="P1J-ch-cjq" id="beV-7G-7YC"/>
                         <outlet property="metaDataHolderView" destination="neA-7w-RJv" id="zzu-PE-nSi"/>
                         <outlet property="metaDataScrollView" destination="6br-SK-SJ9" id="ew9-mS-I1s"/>
                         <outlet property="playButton" destination="B2c-W9-dDe" id="E23-6B-3vg"/>

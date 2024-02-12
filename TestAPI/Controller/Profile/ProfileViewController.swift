@@ -36,6 +36,8 @@ public class ProfileViewController : UIViewController {
     
     @IBOutlet weak var profileDetailsScrollView: UIScrollView!
     
+    @IBOutlet weak var logoutButton: ProfileButtons!
+    
     @IBOutlet weak var scrollViewContentHeightConstaint: NSLayoutConstraint!
     
     let testSDKinstance = TestSDKFrameWork.shared
@@ -156,7 +158,7 @@ public class ProfileViewController : UIViewController {
                     name = value
                 }
 
-                if let value = data.value(forKey: "mobile") as? String {
+                if let value = data.value(forKey: "email_id") as? String {
                     mobile = value
                 }
 
@@ -350,6 +352,16 @@ public class ProfileViewController : UIViewController {
         }
         
     }
+    
+    @IBAction func logoutUser(_ sender: ProfileButtons) {
+        
+        if let user_id = Profile.getUserID() {
+            
+            Profile.logout(userID: user_id)
+        }
+        
+    }
+    
 }
 
 extension ProfileViewController : UITextFieldDelegate {

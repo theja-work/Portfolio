@@ -14,7 +14,7 @@ import NVActivityIndicatorView
 import RxSwift
 import RxCocoa
 
-public class HomeViewController : BaseViewController {
+public class HomeViewController : BaseViewController, UITabBarControllerDelegate {
     
     @IBOutlet weak var buttonHolder: UIView!
     
@@ -27,6 +27,9 @@ public class HomeViewController : BaseViewController {
     @IBOutlet weak var videoButton: HomeButtons!
     
     @IBOutlet weak var videoListTableView: UITableView!
+    
+    var accountButton : UIButton?
+    
     
     var viewModel : VideoViewModel?
     
@@ -44,13 +47,48 @@ public class HomeViewController : BaseViewController {
         super.viewDidLoad()
         
         self.view.backgroundColor = ColorCodes.ButtonBlueLight.color
-        self.navigationController?.navigationBar.backItem?.backButtonTitle = ""
-        self.navigationController?.navigationItem.backBarButtonItem = UIBarButtonItem(image: UIImage(named: ""), style: .done, target: nil, action: nil)
         
+        setupNavigationBar()
         setupButtons()
         self.buttonHolder.isHidden = true
         setupViewModel()
         setupVideoListView()
+    }
+    
+    func setupNavigationBar() {
+        
+        let emptyItem = UIBarButtonItem(image: UIImage(named: ""), style: .plain , target: self, action:  #selector(doNothing))
+        
+        self.navigationItem.leftBarButtonItem = emptyItem
+        
+        accountButton = UIButton(frame: .zero)
+        accountButton?.setImage(UIImage(named: "profile_placeholder"), for: .normal)
+        accountButton?.addTarget(self, action: #selector(loadProfileScreen), for: .touchUpInside)
+        
+        accountButton?.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        
+        accountButton?.clipsToBounds = true
+        accountButton?.layer.masksToBounds = true
+        accountButton?.layer.cornerRadius = 8
+        
+        let rightItem = UIBarButtonItem(customView: accountButton!)
+        
+        rightItem.width = 45.0
+
+        self.navigationItem.rightBarButtonItem = rightItem
+        
+    }
+    
+    @objc func doNothing() {
+        
+    }
+    
+    @objc func loadProfileScreen() {
+        
+        let profileVC = ProfileViewController.viewController()
+        
+        self.navigationController?.pushViewController(profileVC, animated: true)
+        
     }
     
     public override func viewWillAppear(_ animated: Bool) {

@@ -11,6 +11,7 @@ import FirebaseCore
 import FirebaseAuth
 import GoogleSignIn
 import NVActivityIndicatorView
+import CoreData
 
 public class LoginViewController : BaseViewController {
     
@@ -142,9 +143,11 @@ public class LoginViewController : BaseViewController {
             if await googleSignInAction() {
                 loader?.hideLoader()
                 
-                let homeVC = HomeViewController.HomeViewController()
-                
-                self.navigationController?.pushViewController(homeVC, animated: true)
+                DispatchQueue.main.async {
+                    if let sceneDelegate = self.view.window?.windowScene?.delegate as? SceneDelegate {
+                        sceneDelegate.loadHomeScreen()
+                    }
+                }
             }
             else {
                 loader?.hideLoader()
@@ -180,7 +183,8 @@ public class LoginViewController : BaseViewController {
             
             let result = try await Auth.auth().signIn(with: credential)
             let firebaseUser = result.user
-            //print("signInWithGoogle : uid : \(firebaseUser.uid) : email : \(firebaseUser.email)")
+            print("signInWithGoogle : uid : \(firebaseUser.uid) : email : \(firebaseUser.email) ")
+            Profile.login(userID: firebaseUser.uid, email_id: firebaseUser.email ?? "")
             return true
         }
         catch {

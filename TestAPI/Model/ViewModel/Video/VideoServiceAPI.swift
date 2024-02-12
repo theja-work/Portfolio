@@ -25,4 +25,8 @@ public class VideoServiceAPI : VideoServiceProtocol {
         VideoService.getVideoList(responseHandler: response)
     }
     
+    public func getVideosWithId(videoId: String, response: @escaping ((DataLoader<[VideoItem]>) -> Void)) {
+        VideoService.getVideosWithId(id: videoId, responseHandler: response)
+    }
+    
 }

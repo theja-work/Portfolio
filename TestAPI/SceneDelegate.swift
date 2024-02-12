@@ -10,13 +10,61 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-
-
+    var currentScene: UIScene?
+    
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let _ = (scene as? UIWindowScene) else { return }
+        
+        currentScene = scene
+        
+        let loggedInUser = Profile.hasUserLoggedIn()
+        
+        setRootViewController(loggedInUser ? getHomeVC() : getLoginVC())
+        
+    }
+    
+    func setRootViewController(_ viewController: UIViewController){
+        
+        guard let scene = (currentScene as? UIWindowScene) else { return }
+        
+        window = UIWindow(frame: scene.coordinateSpace.bounds)
+        window?.windowScene = scene
+        window?.rootViewController = viewController
+        window?.makeKeyAndVisible()
+        
+    }
+    
+    func getHomeVC() -> HomeViewController {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        let homeVC = storyboard.instantiateViewController(withIdentifier: "HomeViewController") as! HomeViewController
+        
+        return homeVC
+    }
+    
+    func getLoginVC() -> LoginViewController {
+        
+        let storyBoard = UIStoryboard(name: "Login", bundle: nil)
+        
+        let loginVC = storyBoard.instantiateViewController(withIdentifier: "LoginVC") as! LoginViewController
+        return loginVC
+    }
+    
+    func loadHomeScreen() {
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        let homeVC = storyboard.instantiateViewController(withIdentifier: "HomeViewController") as! HomeViewController
+        
+        guard let scene = (currentScene as? UIWindowScene) else { return }
+        
+        window = UIWindow(frame: scene.coordinateSpace.bounds)
+        window?.windowScene = scene
+        window?.rootViewController = homeVC
+        window?.makeKeyAndVisible()
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
