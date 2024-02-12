@@ -74,11 +74,13 @@ public class VideoViewController : BaseViewController {
     
     @IBOutlet weak var elapsedTimeLabel: UILabel!
     
-    
     @IBOutlet weak var descriptionHeight: NSLayoutConstraint!
     
     @IBOutlet weak var fullScreenbutton: UIButton!
     
+    @IBOutlet weak var expandButton: UIButton!
+    
+    var expandTapped : Bool = false
     
     @IBOutlet weak var fullScreenHolderButton: UIButton!
     
@@ -545,7 +547,7 @@ public class VideoViewController : BaseViewController {
         DispatchQueue.main.async {
             self.videoTitleLabel.font = CustomFont.OS_Bold.font
             self.videoDescriptionLabel.font = CustomFont.OS_Semibold.font
-            self.videoDescriptionLabel.numberOfLines = 0
+            self.videoDescriptionLabel.numberOfLines = 4
             self.thumbnailDurationLabel.font = UIFont(name: "OpenSans-Regular", size: 5)
             self.thumbnailDurationLabel.backgroundColor = UIColor.darkGray
             self.thumbnailDurationLabel.textColor = .white
@@ -706,6 +708,9 @@ public class VideoViewController : BaseViewController {
         self.backButton.setTitle("Back", for: .normal)
         
         self.fullScreenbutton.setImage(UIImage(named: "fullscreen"), for: .normal)
+        self.expandButton.setImage(UIImage(named: "dropdown_down"), for: .normal)
+//        self.expandButton.isHidden = true
+//        self.expandButton.isUserInteractionEnabled = false
         
     }
     
@@ -773,6 +778,27 @@ public class VideoViewController : BaseViewController {
         self.playerView.isUserInteractionEnabled = true
         
         //self.playButton.isHidden = true
+    }
+    
+    
+    @IBAction func expandButtonAction(_ sender: UIButton) {
+        
+        if expandTapped {
+            videoDescriptionLabel.numberOfLines = 4
+            descriptionHeight.constant = 50
+            self.expandButton.setImage(UIImage(named: "dropdown_down"), for: .normal)
+            self.metaDataScrollView.setContentOffset(CGPoint.zero, animated: true)
+            //self.scrollableContentHeight.constant = 650
+        }
+        else {
+            videoDescriptionLabel.numberOfLines = 0
+            descriptionHeight.constant = 150
+            self.expandButton.setImage(UIImage(named: "dropdown_up"), for: .normal)
+            //self.scrollableContentHeight.constant = 1000
+        }
+        
+        expandTapped = !expandTapped
+        
     }
     
     @objc func fullScreenButtonAction() {

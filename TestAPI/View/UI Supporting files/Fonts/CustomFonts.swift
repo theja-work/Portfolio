@@ -26,10 +26,20 @@ public enum CustomFont {
     }
     
     var font : UIFont {
-        if let value = UIFont(name: self.name, size: 20) {
+        if let value = UIFont(name: self.name, size: size) {
             return value
         }
         
         return UIFont()
+    }
+    
+    var size : CGFloat {
+        switch self {
+        case .OS_Bold           : return 20.0
+        case .OS_Regular        : return 18.0
+        case .OS_Semibold       : return 16.0
+        case .OS_Bold_Italic    : return 14.0
+        case .OS_Semibold_Italic: return 12.0
+        }
     }
 }
