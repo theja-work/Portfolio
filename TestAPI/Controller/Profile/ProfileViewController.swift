@@ -60,7 +60,7 @@ public class ProfileViewController : UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = ColorCodes.ButtonPurple.color
+        self.view.backgroundColor = ColorCodes.BlueGray.color
         
         initialSetup()
         
@@ -249,7 +249,7 @@ public class ProfileViewController : UIViewController {
         ageLabel.backgroundColor = ColorCodes.ButtonBlueLight.color
         
         nameLabel.text = "Name" ; nameLabel.textAlignment = .center
-        mobileLabel.text = "Mobile" ; mobileLabel.textAlignment = .center
+        mobileLabel.text = "Email" ; mobileLabel.textAlignment = .center
         ageLabel.text = "Age" ; ageLabel.textAlignment = .center
         
         nameLabel.clipsToBounds = true
@@ -266,6 +266,8 @@ public class ProfileViewController : UIViewController {
     public func buttonSetup() {
         editButton.setupStyle(type: .Edit)
         saveButton.setupStyle(type: .Save)
+        logoutButton.setupStyle(type: .Logout)
+        
     }
     
     func showError(message:String) {
@@ -355,11 +357,35 @@ public class ProfileViewController : UIViewController {
     
     @IBAction func logoutUser(_ sender: ProfileButtons) {
         
-        if let user_id = Profile.getUserID() {
+        let alert = UIAlertController(title: "Are you sure", message: "want to logout?", preferredStyle: .alert)
+        
+        let canel = UIAlertAction(title: "Cancel", style: .cancel) { alertAction in
             
-            Profile.logout(userID: user_id)
+            alert.dismiss(animated: true)
         }
         
+        let ok = UIAlertAction(title: "OK", style: .default) {[weak self] okAction in
+            
+            guard let localSelf = self else {return}
+            
+            localSelf.logout(userID: "")
+        }
+        
+        alert.addAction(canel)
+        alert.addAction(ok)
+        
+        self.present(alert, animated: true)
+        
+        
+    }
+    
+    func logout(userID: String) {
+        
+        Profile.logout(userID: userID)
+        
+        if let sceneDelegate = self.view.window?.windowScene?.delegate as? SceneDelegate {
+            sceneDelegate.loadLoginScreen()
+        }
     }
     
 }

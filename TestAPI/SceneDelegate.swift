@@ -22,7 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let loggedInUser = Profile.hasUserLoggedIn()
         
-        setRootViewController(loggedInUser ? getHomeVC() : getLoginVC())
+        setRootViewController(loggedInUser ? HomeViewController.getNavigationController() : LoginViewController.getNavigationController())
         
     }
     
@@ -41,7 +41,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         
         let homeVC = storyboard.instantiateViewController(withIdentifier: "HomeViewController") as! HomeViewController
-        
+        homeVC.navigationController?.isNavigationBarHidden = false
         return homeVC
     }
     
@@ -55,15 +55,26 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func loadHomeScreen() {
         
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        
-        let homeVC = storyboard.instantiateViewController(withIdentifier: "HomeViewController") as! HomeViewController
+        let homeVC = getHomeVC()
+        let loginNC = LoginViewController.getNavigationController()
         
         guard let scene = (currentScene as? UIWindowScene) else { return }
         
         window = UIWindow(frame: scene.coordinateSpace.bounds)
         window?.windowScene = scene
-        window?.rootViewController = homeVC
+        window?.rootViewController = loginNC
+        loginNC.pushViewController(homeVC, animated: true)
+        window?.makeKeyAndVisible()
+    }
+    
+    func loadLoginScreen() {
+        let loginNC = LoginViewController.getNavigationController()
+        
+        guard let scene = (currentScene as? UIWindowScene) else { return }
+        
+        window = UIWindow(frame: scene.coordinateSpace.bounds)
+        window?.windowScene = scene
+        window?.rootViewController = loginNC
         window?.makeKeyAndVisible()
     }
 

@@ -154,4 +154,37 @@ public class Profile: NSManagedObject {
         return nil
     }
     
+    public class func getProfilePic() -> UIImage? {
+        
+        let request = NSFetchRequest<NSFetchRequestResult>.init(entityName: "Profile")
+
+        request.returnsObjectsAsFaults = false
+
+        var profilePic : UIImage?
+        
+        do {
+            guard let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext else {return nil}
+
+            let result = try context.fetch(request)
+
+            for data in result as! [NSManagedObject] {
+
+                if let value = data.value(forKey: "profilePicture") as? Data {
+
+                    if let image = UIImage(data: value) {
+                        profilePic = image
+                    }
+
+                }
+            }
+
+        }
+        catch {
+            print(error)
+        }
+        
+        return profilePic
+        
+    }
+    
 }

@@ -46,10 +46,25 @@ public class LoginViewController : BaseViewController {
         return viewController
     }
     
+    public class func getNavigationController() -> UINavigationController {
+        
+        let storyboard = UIStoryboard(name: "Login", bundle: nil)
+        let navigationController = storyboard.instantiateViewController(withIdentifier: "LoginNC") as! UINavigationController
+        
+        let viewController = navigationController.viewControllers.first as! LoginViewController
+        viewController.initialSetup()
+        
+        return navigationController
+    }
+    
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         AppOrientation.lockOrientation(.portrait)
+    }
+    
+    public func initialSetup() {
+        
     }
     
     func setupUI() {

@@ -40,6 +40,7 @@ public enum HomeButtonType {
     case Image
     case Video
     case Audio
+    case Logout
     
     var buttonColorCode : ColorCodes {
         switch self {
@@ -47,6 +48,7 @@ public enum HomeButtonType {
         case .Image     : return .ButtonOrange
         case .Audio     : return .ButtonPurple
         case .Video     : return .ButtonBlueDark
+        case .Logout    : return .LightGreen
         }
     }
     
@@ -67,6 +69,7 @@ public enum HomeButtonType {
         case .Image     : return "Image"
         case .Audio     : return "Audio"
         case .Video     : return "Video"
+        case .Logout    : return "Logout"
         }
     }
     
@@ -76,6 +79,7 @@ public enum HomeButtonType {
         case .Image     : return "OpenSans-Semibold"
         case .Audio     : return "OpenSans-Regular"
         case .Video     : return "OpenSans-Semibold"
+        default         : return "OpenSans-Semibold"
         }
     }
     

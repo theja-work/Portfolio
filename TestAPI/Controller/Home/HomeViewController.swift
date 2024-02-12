@@ -43,6 +43,18 @@ public class HomeViewController : BaseViewController, UITabBarControllerDelegate
         
     }
     
+    public class func getNavigationController() -> UINavigationController {
+        
+        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+        
+        let navController = storyBoard.instantiateViewController(withIdentifier: "HomeNavController") as! UINavigationController
+        
+        let viewController = navController.viewControllers.first as! HomeViewController
+        viewController.initialSetup()
+        
+        return navController
+    }
+    
     override public func viewDidLoad() {
         super.viewDidLoad()
         
@@ -55,6 +67,10 @@ public class HomeViewController : BaseViewController, UITabBarControllerDelegate
         setupVideoListView()
     }
     
+    public func initialSetup() {
+        
+    }
+    
     func setupNavigationBar() {
         
         let emptyItem = UIBarButtonItem(image: UIImage(named: ""), style: .plain , target: self, action:  #selector(doNothing))
@@ -62,7 +78,14 @@ public class HomeViewController : BaseViewController, UITabBarControllerDelegate
         self.navigationItem.leftBarButtonItem = emptyItem
         
         accountButton = UIButton(frame: .zero)
-        accountButton?.setImage(UIImage(named: "profile_placeholder"), for: .normal)
+        
+        var userImage = UIImage(named: "profile_placeholder")!
+        
+        if let image = Profile.getProfilePic() {
+            userImage = image
+        }
+        
+        accountButton?.setImage(userImage, for: .normal)
         accountButton?.addTarget(self, action: #selector(loadProfileScreen), for: .touchUpInside)
         
         accountButton?.widthAnchor.constraint(equalToConstant: 40).isActive = true
