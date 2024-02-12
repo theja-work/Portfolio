@@ -59,28 +59,28 @@
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P1J-ch-cjq">
-                                                        <rect key="frame" x="330" y="-1.6666666666666856" width="35" height="35"/>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n5l-6P-txP">
+                                                        <rect key="frame" x="330" y="-6.6666666666666856" width="45" height="45"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="height" constant="35" id="57a-8X-8X2"/>
-                                                            <constraint firstAttribute="width" constant="35" id="f5U-4P-5M9"/>
+                                                            <constraint firstAttribute="width" constant="45" id="jkp-Kn-QBX"/>
+                                                            <constraint firstAttribute="height" constant="45" id="xaW-nn-x0N"/>
                                                         </constraints>
-                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                        <inset key="imageEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
                                                         <connections>
-                                                            <action selector="fullScreenAction:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="VyP-4R-Wet"/>
+                                                            <action selector="fullScreenAction:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="IVX-Ap-vGR"/>
                                                         </connections>
                                                     </button>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
-                                                    <constraint firstItem="P1J-ch-cjq" firstAttribute="leading" secondItem="oZZ-gF-bh1" secondAttribute="trailing" id="0gn-Wc-lNS"/>
+                                                    <constraint firstItem="n5l-6P-txP" firstAttribute="leading" secondItem="oZZ-gF-bh1" secondAttribute="trailing" id="5T1-pR-GAt"/>
                                                     <constraint firstItem="nVO-NC-gtO" firstAttribute="centerY" secondItem="9oY-ZU-Phh" secondAttribute="centerY" id="6Al-7B-WhN"/>
                                                     <constraint firstItem="nVO-NC-gtO" firstAttribute="trailing" secondItem="oZZ-gF-bh1" secondAttribute="leading" constant="-5" id="CJ1-Uf-FF6"/>
                                                     <constraint firstItem="oZZ-gF-bh1" firstAttribute="centerY" secondItem="9bH-qa-n3C" secondAttribute="centerY" id="FWy-Ih-aNC"/>
                                                     <constraint firstItem="nVO-NC-gtO" firstAttribute="height" secondItem="9oY-ZU-Phh" secondAttribute="height" multiplier="0.25" id="FYb-Ja-cFD"/>
-                                                    <constraint firstAttribute="trailing" secondItem="P1J-ch-cjq" secondAttribute="trailing" constant="10" id="Jud-xn-wOw"/>
                                                     <constraint firstItem="oZZ-gF-bh1" firstAttribute="height" secondItem="9bH-qa-n3C" secondAttribute="height" multiplier="0.5" id="N1Q-eT-Fl8"/>
-                                                    <constraint firstItem="P1J-ch-cjq" firstAttribute="centerY" secondItem="9bH-qa-n3C" secondAttribute="centerY" id="Ss1-uX-LEC"/>
+                                                    <constraint firstItem="n5l-6P-txP" firstAttribute="centerY" secondItem="9bH-qa-n3C" secondAttribute="centerY" id="fNL-2t-bVf"/>
+                                                    <constraint firstAttribute="trailing" secondItem="n5l-6P-txP" secondAttribute="trailing" id="fWM-FG-JEn"/>
                                                     <constraint firstItem="9oY-ZU-Phh" firstAttribute="height" secondItem="9bH-qa-n3C" secondAttribute="height" multiplier="0.5" id="iIt-GJ-GUI"/>
                                                     <constraint firstItem="9oY-ZU-Phh" firstAttribute="centerY" secondItem="9bH-qa-n3C" secondAttribute="centerY" id="ilD-KD-GGW"/>
                                                     <constraint firstItem="nVO-NC-gtO" firstAttribute="leading" secondItem="9oY-ZU-Phh" secondAttribute="trailing" constant="5" id="q8T-iZ-nAu"/>
@@ -290,7 +290,7 @@
                         <outlet property="backButton" destination="aNU-zC-Bzn" id="nXD-pD-6x3"/>
                         <outlet property="descriptionHeight" destination="idH-Rw-5bb" id="Xgy-Zk-hmC"/>
                         <outlet property="elapsedTimeLabel" destination="oZZ-gF-bh1" id="kwC-Vq-Lwi"/>
-                        <outlet property="fullScreenbutton" destination="P1J-ch-cjq" id="beV-7G-7YC"/>
+                        <outlet property="fullScreenbutton" destination="n5l-6P-txP" id="kc1-bI-nMd"/>
                         <outlet property="metaDataHolderView" destination="neA-7w-RJv" id="zzu-PE-nSi"/>
                         <outlet property="metaDataScrollView" destination="6br-SK-SJ9" id="ew9-mS-I1s"/>
                         <outlet property="playButton" destination="B2c-W9-dDe" id="E23-6B-3vg"/>

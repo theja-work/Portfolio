@@ -80,6 +80,10 @@ public class VideoViewController : BaseViewController {
     @IBOutlet weak var fullScreenbutton: UIButton!
     
     
+    @IBOutlet weak var fullScreenHolderButton: UIButton!
+    
+    var fullScreenTapped : Bool = false
+    
     public var progressUpdateTimer : Timer?
     
     var player : AVPlayer? = nil
@@ -561,6 +565,8 @@ public class VideoViewController : BaseViewController {
     
     public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         
+        if fullScreenTapped { fullScreenTapped = false; return}
+        
         fullScreenTransition()
     }
     
@@ -606,7 +612,7 @@ public class VideoViewController : BaseViewController {
         
         playerViewTopConstraint.constant = topNavBarPlayerOffset//82
         
-        hidePlayerBoundButton()
+        hidePlayerButtons()
     }
     
     public func portraitPlayerUpdates() {
@@ -616,23 +622,29 @@ public class VideoViewController : BaseViewController {
         
         playerViewTopConstraint.constant = 0
         
-        showPlayerBoundButton()
+        showPlayerButtons()
     }
     
-    func landscapePlayerBlock() {
+    func landscapePlayerBlock(onFullScreenTap:Bool = false) {
         let x = 16.0/9.0
         
         playerLandscapeTransition()
-        hideMetaData()
+        
+        if !onFullScreenTap {
+            hideMetaData()
+        }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
             self.playerView.transform = CGAffineTransform(scaleX: x, y: x)
         })
     }
     
-    func portraitPlayerBlock() {
+    func portraitPlayerBlock(onFullScreenTap:Bool = false) {
         playerPortraitTransition()
-        showMetaData()
+        
+        if !onFullScreenTap {
+            showMetaData()
+        }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
             
@@ -694,6 +706,7 @@ public class VideoViewController : BaseViewController {
         self.backButton.setTitle("Back", for: .normal)
         
         self.fullScreenbutton.setImage(UIImage(named: "fullscreen"), for: .normal)
+        
     }
     
     public func getVideoFromServer() {
@@ -741,43 +754,7 @@ public class VideoViewController : BaseViewController {
     
     @IBAction func fullScreenAction(_ sender: UIButton) {
         
-        if UIDevice.current.orientation == .landscapeLeft || UIDevice.current.orientation == .landscapeRight {
-            if #available(iOS 16.0, *) {
-                UIView.performWithoutAnimation {
-                    self.setNeedsUpdateOfSupportedInterfaceOrientations()
-                }
-                let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
-                    windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: .portrait)) { error in
-                        print(error)
-
-                    }
-                })
-            } else {
-                UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
-                UIViewController.attemptRotationToDeviceOrientation()
-            }
-        }
-        else {
-            if #available(iOS 16.0, *) {
-                UIView.performWithoutAnimation {
-                    self.setNeedsUpdateOfSupportedInterfaceOrientations()
-                }
-                let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
-                    windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: .landscapeRight)) { error in
-                        print(error)
-                    }
-                })
-            }else {
-                UIDevice.current.setValue(UIInterfaceOrientation.landscapeRight.rawValue, forKey: "orientation")
-                UIViewController.attemptRotationToDeviceOrientation()
-            }
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
-            self.fullScreenTransition(fullScreenTapped: false)
-        })
+        fullScreenButtonAction()
     }
     
     @IBAction func playButtonAction(_ sender : HomeButtons) {
@@ -796,6 +773,62 @@ public class VideoViewController : BaseViewController {
         self.playerView.isUserInteractionEnabled = true
         
         //self.playButton.isHidden = true
+    }
+    
+    @objc func fullScreenButtonAction() {
+        
+        fullScreenTapped = true
+        
+        let orientation = self.view.window?.windowScene?.interfaceOrientation
+        
+        if orientation == .landscapeLeft || orientation == .landscapeRight {
+            if #available(iOS 16.0, *) {
+                UIView.performWithoutAnimation {
+                    self.setNeedsUpdateOfSupportedInterfaceOrientations()
+                }
+                let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
+                    windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: .portrait)) { error in
+                        print(error)
+
+                    }
+                    
+                    self.portraitPlayerUpdates()
+                    self.portraitPlayerBlock()
+                })
+            } else {
+                UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
+                UIViewController.attemptRotationToDeviceOrientation()
+                portraitPlayerUpdates()
+                portraitPlayerBlock()
+            }
+            
+            
+        }
+        else {
+            if #available(iOS 16.0, *) {
+                UIView.performWithoutAnimation {
+                    self.setNeedsUpdateOfSupportedInterfaceOrientations()
+                }
+                let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
+                    windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: .landscapeRight)) { error in
+                        print(error)
+                    }
+                    
+                    self.landscapePlayerUpdates()
+                    self.landscapePlayerBlock()
+                })
+            }else {
+                UIDevice.current.setValue(UIInterfaceOrientation.landscapeRight.rawValue, forKey: "orientation")
+                UIViewController.attemptRotationToDeviceOrientation()
+                landscapePlayerUpdates()
+                landscapePlayerBlock()
+            }
+            
+            
+        }
+        
     }
     
     public func hideThumbnail() {
@@ -824,14 +857,14 @@ public class VideoViewController : BaseViewController {
         
     }
     
-    @objc func hidePlayerBoundButton() {
+    @objc func hidePlayerButtons() {
         self.playButton.isHidden = true
         self.backButton.isHidden = true
         self.playButton.isUserInteractionEnabled = false
         self.backButton.isUserInteractionEnabled = false
     }
     
-    @objc func showPlayerBoundButton() {
+    @objc func showPlayerButtons() {
         self.playButton.isHidden = false
         self.backButton.isHidden = false
         self.playButton.isUserInteractionEnabled = true
