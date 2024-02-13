@@ -12,6 +12,7 @@ import AVFoundation
 import TestSDK
 import RxSwift
 import RxCocoa
+import NVActivityIndicatorView
 
 public class VideoViewController : BaseViewController {
     
@@ -99,7 +100,7 @@ public class VideoViewController : BaseViewController {
     
     var player : AVPlayer? = nil
     var animationCounter = 0
-    var playerLoader : UIActivityIndicatorView!
+    var playerLoader : NVActivityIndicatorView!
     var topNavBarPlayerOffset = 0.0
     var thumbnailDidTap = false
     var playButtonTap = false
@@ -220,10 +221,10 @@ public class VideoViewController : BaseViewController {
     }
     
     public func setupLoader() {
-        self.playerLoader = UIActivityIndicatorView(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: 60, height: 60)))
+        self.playerLoader = NVActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 40, height: 40),type: .lineScale)
         
-        playerLoader.style = .medium
-        playerLoader.color = ColorCodes.SkyBlue.color
+        
+        playerLoader.color = ColorCodes.turmeric.color
         playerLoader.backgroundColor = .clear
         
         self.playerView.addSubview(playerLoader)
