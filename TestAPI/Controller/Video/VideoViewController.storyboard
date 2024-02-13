@@ -48,7 +48,7 @@
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="WDO-2p-Hxr" customClass="CustomSlider" customModule="TestAPI" customModuleProvider="target">
+                                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="WDO-2p-Hxr" customClass="CustomSlider" customModule="TestAPI" customModuleProvider="target">
                                                         <rect key="frame" x="71.333333333333329" y="0.66666666666665719" width="192.33333333333337" height="31"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="30" id="qaq-bL-H17"/>
