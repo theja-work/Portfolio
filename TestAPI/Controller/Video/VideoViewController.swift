@@ -10,6 +10,8 @@ import UIKit
 import CoreData
 import AVFoundation
 import TestSDK
+import RxSwift
+import RxCocoa
 
 public class VideoViewController : BaseViewController {
     
@@ -68,7 +70,7 @@ public class VideoViewController : BaseViewController {
     
     @IBOutlet weak var playerForwardButtonImageview: UIImageView!
     
-    @IBOutlet weak var playerProgressView: UIProgressView!
+    @IBOutlet weak var playerSeekBar: CustomSlider!
     
     @IBOutlet weak var remainingTimeLabel: UILabel!
     
@@ -80,6 +82,13 @@ public class VideoViewController : BaseViewController {
     
     @IBOutlet weak var expandButton: UIButton!
     
+    @IBOutlet weak var relatedContainerView: UIView!
+    
+    @IBOutlet weak var relatedCollectionView: UICollectionView!
+    
+    @IBOutlet weak var relatedCollectionHeight: NSLayoutConstraint!
+    
+    @IBOutlet weak var relatedCollectionTitle: UILabel!
     var expandTapped : Bool = false
     
     @IBOutlet weak var fullScreenHolderButton: UIButton!
@@ -97,6 +106,10 @@ public class VideoViewController : BaseViewController {
     var backwardButtonTap = false
     var forwardButtonTap = false
     var controlFadeSeconds = 0.9
+    
+    private var playerItemBufferEmptyObserver: NSKeyValueObservation?
+    private var playerItemBufferKeepUpObserver: NSKeyValueObservation?
+    private var playerItemBufferFullObserver: NSKeyValueObservation?
     
     var videoItem : VideoItem?
     var viewModel : VideoViewModel?
@@ -139,12 +152,36 @@ public class VideoViewController : BaseViewController {
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(videoDidEnded), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: player?.currentItem)
     }
     
     public override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.player?.replaceCurrentItem(with: nil)
         self.player?.pause()
-        
         self.player = nil
+    }
+    
+    public override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        if self.player?.timeControlStatus == .playing {
+            self.player?.pause()
+        }
+        
+        self.videoItem = nil
+        self.player = nil
+    }
+    
+    deinit {
+        self.player?.pause()
+        self.player = nil
+    }
+    
+    func resetThumbnail() {
+        
+        playerThumbnailImageview.image = UIImage(named: "")
+        
     }
     
     public func setupViewModel() {
@@ -153,22 +190,32 @@ public class VideoViewController : BaseViewController {
         
         guard let videoId = self.videoItem?.videoID else {return}
         
-        self.viewModel?.getRelatedVideosWithId(videoID: videoId, completionHanlder: { [weak self] videosResponse in
+        self.viewModel?.getRelatedVideos(withId: videoId)
+        
+        setupRelatedVideosObserver()
+        
+    }
+    
+    func setupRelatedVideosObserver() {
+        
+        self.viewModel?.output.relatedVideosDriver.drive(onNext: {[weak self] relatedVideos in
             
-            switch videosResponse {
-            case .success(let videos):
-                
-                for video in videos {
-                    print("VideoViewController : related video ids : \(video.videoID)")
-                }
-                
-            case .serverError(let error, let message):
-                print(error,message)
-                
-            default : break
-            }
+            guard let localSelf = self else {return}
             
-        })
+            localSelf.relatedCollectionView.reloadData()
+            
+            
+        }).disposed(by: bag)
+        
+    }
+    
+    @objc func videoDidEnded() {
+        
+        guard let item = self.viewModel?.relatedVideos?.first else {return}
+        
+        updatePlayerWithItem(item: item)
+        
+        self.playVideo()
         
     }
     
@@ -216,9 +263,24 @@ public class VideoViewController : BaseViewController {
         setupMetaData()
         setupThumbnail()
         
+        setupRelatedCollection()
         setupPlayerControls()
+    }
+    
+    func setupRelatedCollection() {
         
-        addPlayerObservers()
+        relatedCollectionView.register(UINib(nibName: RelatedCollectionCell.getNibName(), bundle: Bundle(for: RelatedCollectionCell.classForCoder())), forCellWithReuseIdentifier: RelatedCollectionCell.getReusableIdentifier())
+        
+        if let layout = relatedCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.scrollDirection = .horizontal
+        }
+        
+        relatedCollectionHeight.constant = 150
+        
+        relatedCollectionTitle.text = "Related Videos"
+        
+        relatedCollectionTitle.font = CustomFont.OS_Semibold.font
+        
     }
     
     func getVideo() {
@@ -281,8 +343,11 @@ public class VideoViewController : BaseViewController {
             self.playerForwardButtonImageview.tintColor = ColorCodes.turmeric.color
             self.playerPlayButtonImageview.tintColor = ColorCodes.turmeric.color
             
-            self.playerProgressView.progressTintColor = ColorCodes.turmeric.color
-            self.playerProgressView.progress = 0.0
+            self.playerSeekBar.minimumTrackTintColor = ColorCodes.turmeric.color
+            self.playerSeekBar.maximumTrackTintColor = ColorCodes.BlueGray.color
+            
+            self.playerSeekBar.isContinuous = true
+            self.playerSeekBar.addTarget(self, action: #selector(self.sliderValueChanged(_:)), for: .valueChanged)
             
             self.playerForewardButtonHolderView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
             self.playerBackwardButtonHolderView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
@@ -291,6 +356,32 @@ public class VideoViewController : BaseViewController {
             
         }
         
+    }
+    
+    @objc func sliderValueChanged(_ playbackSlider: UISlider){
+
+        let seconds : Float = Float(playbackSlider.value)
+        //let targetTime:CMTime = CMTimeMake(value: Int64(seconds), timescale: 1)
+        
+        //self.player?.pause()
+        self.showLoader()
+        if let duration = self.player?.currentItem?.duration {
+            
+            let totalSeconds = CMTimeGetSeconds(duration)
+            
+            let value = Float64(playerSeekBar.value) * totalSeconds
+            
+            let seekTime = CMTime(value: CMTimeValue(value), timescale: 1)
+            
+            self.player?.currentItem?.seek(to: seekTime,completionHandler: {[weak self] (completed) in
+                
+                guard let localSelf = self else {return}
+                
+                //localSelf.player?.play()
+                localSelf.hideLoader()
+            })
+            
+        }
     }
     
     @objc func updateProgressBar() {
@@ -305,9 +396,8 @@ public class VideoViewController : BaseViewController {
             //print("VideoViewController : elapsed time :\(elapsedTimeString) :: remaining time : \(reminingTimeString)")
             
             DispatchQueue.main.async {
-                self.playerProgressView.setProgress(Float(position / duration), animated: true)
-                self.playerProgressView.setNeedsLayout()
-                self.playerProgressView.layoutIfNeeded()
+                
+                self.playerSeekBar.setValue(Float(position / duration), animated: true)
             }
         }
         
@@ -433,6 +523,7 @@ public class VideoViewController : BaseViewController {
         else {
             self.playerPlayButtonImageview.image = UIImage(named: "player_pause_button")
             
+            self.playerView.isUserInteractionEnabled = true
             self.player?.play()
             self.progressUpdateTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateProgressBar), userInfo: nil, repeats: true)
             self.progressUpdateTimer?.fire()
@@ -445,10 +536,9 @@ public class VideoViewController : BaseViewController {
         
         print("VideoViewController : hide player controls")
         
-        UIView.animate(withDuration: controlFadeSeconds,delay: 0.0,options: .transitionCrossDissolve, animations: {
-            
-            [weak self] in
-                guard let strongSelf = self else {return}
+        UIView.animate(withDuration: controlFadeSeconds,delay: 0.0,options: .transitionCrossDissolve, animations: { [weak self] in
+                
+            guard let strongSelf = self else {return}
             
             strongSelf.playerView.alpha = 1.0
                 
@@ -461,6 +551,7 @@ public class VideoViewController : BaseViewController {
         },completion: { isCompleted in
             
             if isCompleted {
+                self.playerView.isUserInteractionEnabled = true
                 self.view.sendSubviewToBack(self.playerView)
                 self.playerView.sendSubviewToBack(self.playerControlsView)
                 self.playerView.sendSubviewToBack(self.playerBackwardButtonHolderView)
@@ -473,9 +564,9 @@ public class VideoViewController : BaseViewController {
     public func setupMetaData() {
         
         DispatchQueue.main.async {
-            self.metaDataHolderView.clipsToBounds = false
-            self.metaDataHolderView.layer.masksToBounds = false
-            self.metaDataHolderView.layer.cornerRadius = 12
+            self.metaDataHolderView.clipsToBounds = true
+            self.metaDataHolderView.layer.masksToBounds = true
+            self.metaDataHolderView.layer.cornerRadius = 10
             self.metaDataHolderView.backgroundColor = ColorCodes.ButtonBlueDark.color
         }
         
@@ -561,7 +652,50 @@ public class VideoViewController : BaseViewController {
     
     public func addPlayerObservers() {
         
+//        playerItemBufferEmptyObserver = player?.currentItem?.observe(\AVPlayerItem.isPlaybackBufferEmpty, options: [.new]) { [weak self] (_, _) in
+//            guard let self = self else { return }
+//            print("player_loading_state : loading")
+//            self.showLoader()
+//        }
+//
+//        playerItemBufferKeepUpObserver = player?.currentItem?.observe(\AVPlayerItem.isPlaybackLikelyToKeepUp, options: [.new]) { [weak self] (_, _) in
+//            guard let self = self else { return }
+//            print("player_loading_state : not loading")
+//            self.hideLoader()
+//        }
+//
+//        playerItemBufferFullObserver = player?.currentItem?.observe(\AVPlayerItem.isPlaybackBufferFull, options: [.new]) { [weak self] (_, _) in
+//            guard let self = self else { return }
+//            print("player_loading_state : not loading")
+//            self.hideLoader()
+//        }
         
+        self.player?.currentItem?.rx.playbackBufferEmpty.subscribe(onNext: {[weak self] (isLoading) in
+            
+            guard let localSelf = self else {return}
+            
+            if isLoading {
+                print("player_loading_state : loading")
+                localSelf.showLoader()
+            }
+            else {
+                print("player_loading_state : not loading")
+                localSelf.hideLoader()
+            }
+            
+        })
+    }
+    
+    public override func removeObserver(_ observer: NSObject, forKeyPath keyPath: String) {
+        
+        playerItemBufferEmptyObserver?.invalidate()
+        playerItemBufferEmptyObserver = nil
+            
+        playerItemBufferKeepUpObserver?.invalidate()
+        playerItemBufferKeepUpObserver = nil
+            
+        playerItemBufferFullObserver?.invalidate()
+        playerItemBufferFullObserver = nil
         
     }
     
@@ -587,7 +721,7 @@ public class VideoViewController : BaseViewController {
         }
         
         if animationCounter == 1 {
-            UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 5) { [weak self] in
+            UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.1, initialSpringVelocity: 5) { [weak self] in
                 guard let strongSelf = self else {return}
                 
                 fullScreenTapped ? strongSelf.portraitPlayerBlock() : strongSelf.landscapePlayerBlock()
@@ -597,7 +731,7 @@ public class VideoViewController : BaseViewController {
         }
         else {
             
-            UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 5) { [weak self] in
+            UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.2, initialSpringVelocity: 5) { [weak self] in
                 guard let strongSelf = self else {return}
                 
                 fullScreenTapped ? strongSelf.landscapePlayerBlock() : strongSelf.portraitPlayerBlock()
@@ -728,6 +862,7 @@ public class VideoViewController : BaseViewController {
         
         if self.player != nil {return}
         
+        self.player?.replaceCurrentItem(with: nil)
         self.player = AVPlayer(playerItem: playerItem)
         
         let playerLayer = AVPlayerLayer(player: self.player)
@@ -742,20 +877,19 @@ public class VideoViewController : BaseViewController {
         self.remainingTimeLabel.textColor = UIColor.white
         self.elapsedTimeLabel.textColor = UIColor.white
         
-        guard let currentItem = self.player?.currentItem else {return}
-
-        let currentTime = CMTimeGetSeconds(currentItem.duration)
-
-        let sec = currentTime.hashValue
-        //let min = Int(currentTime / 60))
-        
-        self.remainingTimeLabel.text = "00 : 00"
-        //self.elapsedTimeLabel.font = UIFont(name: "OpenSans-Regular", size: 4)
-        
-        print("VideoViewController : ela_time : \(sec) : \(currentTime)")
+        self.player?.addObserver(self, forKeyPath: "currentItem.loadedTimeRanges",options: .new ,context: nil)
         
     }
     
+    public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        
+        if keyPath == "currentItem.loadedTimeRanges" {
+            
+            print("\(self.player?.currentItem?.duration.seconds)")
+            
+        }
+        
+    }
     
     @IBAction func fullScreenAction(_ sender: UIButton) {
         
@@ -764,8 +898,19 @@ public class VideoViewController : BaseViewController {
     
     @IBAction func playButtonAction(_ sender : HomeButtons) {
         
+        playerView.isUserInteractionEnabled = true
+        playVideo()
+        
+        addPlayerObservers()
+        
+        //self.playButton.isHidden = true
+    }
+    
+    func playVideo() {
+        
         self.getVideoFromServer()
         
+        self.playerView.isUserInteractionEnabled = true
         DispatchQueue.main.async {
             self.player?.play()
         }
@@ -775,11 +920,8 @@ public class VideoViewController : BaseViewController {
             self.progressUpdateTimer?.fire()
         })
         
-        self.playerView.isUserInteractionEnabled = true
-        
-        //self.playButton.isHidden = true
+        addPlayerObservers()
     }
-    
     
     @IBAction func expandButtonAction(_ sender: UIButton) {
         
@@ -897,4 +1039,76 @@ public class VideoViewController : BaseViewController {
         self.backButton.isUserInteractionEnabled = true
     }
     
+    func updatePlayerWithItem(item:VideoItem) {
+        
+        self.player = nil
+        self.playerView.gestureRecognizers?.forEach(playerView.removeGestureRecognizer)
+        
+        self.videoItem = item
+        self.resetThumbnail()
+        self.setupViewModel()
+        self.buttonSetup()
+        self.playerSetup()
+        
+        thumbnailDidTap = false
+        
+        self.view.setNeedsLayout()
+        self.view.layoutIfNeeded()
+    }
+    
+}
+
+extension VideoViewController : UICollectionViewDelegate , UICollectionViewDataSource , UICollectionViewDelegateFlowLayout {
+    
+    public func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
+        return self.viewModel?.getRelatedVideosCount() ?? 0
+        
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RelatedCollectionCell.getReusableIdentifier(), for: indexPath) as! RelatedCollectionCell
+        
+        if let item = self.viewModel?.relatedVideos?[indexPath.row] {
+            cell.setupCell(item: item)
+        }
+        else {
+            cell.setupCell(item: VideoItem())
+        }
+        
+        return cell
+        
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        let height = collectionView.frame.height
+        
+        let width = height * 4 / 3
+        
+        return CGSize(width: width, height: height)
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        self.player?.replaceCurrentItem(with: nil)
+        self.player = nil
+        guard let item = self.viewModel?.relatedVideos?[indexPath.row] else {return}
+        
+        updatePlayerWithItem(item: item)
+        
+    }
+    
+}
+
+extension Reactive where Base: AVPlayerItem {
+    public var playbackBufferEmpty: Observable<Bool> {
+        return self.observe(Bool.self, #keyPath(AVPlayerItem.isPlaybackBufferEmpty))
+            .map { $0 ?? false }
+    }
 }

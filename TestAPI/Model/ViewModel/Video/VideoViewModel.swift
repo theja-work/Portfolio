@@ -15,6 +15,7 @@ public class VideoViewModel {
     
     fileprivate var api : VideoServiceProtocol?
     var videos:[VideoItem]?
+    var relatedVideos:[VideoItem]?
     
     public init(api: VideoServiceProtocol) {
         self.api = api
@@ -28,6 +29,9 @@ public class VideoViewModel {
         var videoListSubject : BehaviorSubject<[VideoItem]>
         var videoListDriver : Driver<[VideoItem]>
         
+        var relatedVideosSubject : BehaviorSubject<[VideoItem]>
+        var relatedVideosDriver : Driver<[VideoItem]>
+        
         init() {
             
             isLoadingSubject = BehaviorSubject(value: false)
@@ -35,6 +39,9 @@ public class VideoViewModel {
             
             videoListSubject = BehaviorSubject(value: [])
             videoListDriver = videoListSubject.asDriver(onErrorJustReturn: [])
+            
+            relatedVideosSubject = BehaviorSubject(value: [])
+            relatedVideosDriver = relatedVideosSubject.asDriver(onErrorJustReturn: [])
             
         }
         
@@ -91,14 +98,37 @@ public class VideoViewModel {
         
     }
     
-    public func getRelatedVideosWithId(videoID:String,completionHanlder:@escaping ((_ response : DataLoader<[VideoItem]>) -> Void)) {
+    public func getRelatedVideos(withId:String) {
         
         guard let isBusy = try? self.output.isLoadingSubject.value() else {return}
         if isBusy {return}
         
         self.output.isLoadingSubject.onNext(true)
         
-        self.api?.getVideosWithId(videoId: videoID, response: completionHanlder)
+        self.api?.getVideosWithId(videoId: withId, response: {[weak self] relatedVideosResponse in
+            
+            guard let localSelf = self else {return}
+            
+            switch relatedVideosResponse {
+            case .success(let relatedVideos):
+                
+                localSelf.relatedVideos = relatedVideos
+                localSelf.output.relatedVideosSubject.onNext(relatedVideos)
+                
+            case .serverError(let error, let message):
+                print("VideoViewController : Server error with \(error) :: message : \(message)")
+                
+            case .dataNotFound :
+                print("VideoViewController : No data found")
+                
+            case .networkError :
+                print("VideoViewController : network error")
+            }
+        })
+        
+    }
+    
+    public func getRelatedVideosWithId(videoID:String,completionHanlder:@escaping ((_ response : DataLoader<[VideoItem]>) -> Void)) {
         
     }
     
@@ -108,6 +138,13 @@ public class VideoViewModel {
         
         return nil
         
+    }
+    
+    public func getRelatedVideosCount() -> Int? {
+        
+        if let count : Int = relatedVideos?.count {return count}
+        
+        return nil
     }
     
 }

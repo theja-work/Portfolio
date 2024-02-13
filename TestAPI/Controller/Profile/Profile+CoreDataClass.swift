@@ -16,54 +16,59 @@ public class Profile: NSManagedObject {
     public class func logout(userID:String) {
         
         guard let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext else {return}
-        
+
         let user = Profile(context: context)
-        
-        let request = NSFetchRequest<NSFetchRequestResult>.init(entityName: "Profile")
 
-        request.returnsObjectsAsFaults = false
-
-        do {
-            
-            let result = try context.fetch(request)
-
-            for data in result as! [NSManagedObject] {
-                if let user_id = data.value(forKey: "user_id") as? String {
-                    
-                    if let value = AppUserDefaults.getUserID() {
-                        
-                        if user_id == value {
-                            
-                            let user = Profile(context: context)
-                            
-                            user.user_id = ""
-                            user.email_id = ""
-                            
-                            try context.save()
-                            
-                        }
-                        
-                    }
-                    
-                }
-            }
-
-        }
-
-        catch {
-            print(error)
-        }
-        
+//        let request = NSFetchRequest<NSFetchRequestResult>.init(entityName: "Profile")
+//
+//        request.returnsObjectsAsFaults = false
+//
 //        do {
 //
-//            user.email_id = ""
-//            user.user_id = ""
-//            try context.save()
+//            let result = try context.fetch(request)
+//
+//            for data in result as! [NSManagedObject] {
+//                if let user_id = data.value(forKey: "user_id") as? String {
+//
+//                    if let value = AppUserDefaults.getUserID() {
+//
+//                        if user_id == value {
+//
+//                            let user = Profile(context: context)
+//
+//                            user.user_id = ""
+//                            user.email_id = ""
+//
+//                            try context.save()
+//
+//                        }
+//
+//                    }
+//
+//                }
+//            }
 //
 //        }
 //        catch {
 //            print(error)
 //        }
+        
+        
+        
+        do {
+
+            user.age = ""
+            user.mobile = ""
+            user.name = ""
+            user.profilePicture = nil
+            user.email_id = ""
+            user.user_id = ""
+            try context.save()
+
+        }
+        catch {
+            print(error)
+        }
         
     }
     
