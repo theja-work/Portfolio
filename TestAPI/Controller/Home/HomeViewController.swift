@@ -123,6 +123,17 @@ public class HomeViewController : BaseViewController, UITabBarControllerDelegate
         super.viewWillAppear(animated)
         
         AppOrientation.lockOrientation(.portrait)
+        updateUserThumbnail()
+    }
+    
+    func updateUserThumbnail() {
+        var userImage = UIImage(named: "profile_placeholder")!
+        
+        if let uuid = AppUserDefaults.getCurrentUserUUID() , let user = ProfileMangager().getProfileBy(id: uuid) , let imageData = user.profilePicture , let image = UIImage(data: imageData) {
+            userImage = image
+        }
+        
+        accountButton?.setImage(userImage, for: .normal)
     }
     
     func setupViewModel() {

@@ -13,6 +13,9 @@
             <uniquenessConstraint>
                 <constraint value="id"/>
             </uniquenessConstraint>
+            <uniquenessConstraint>
+                <constraint value="user_id"/>
+            </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
 </model>
