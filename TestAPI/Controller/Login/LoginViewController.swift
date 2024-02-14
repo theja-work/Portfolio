@@ -31,6 +31,8 @@ public class LoginViewController : BaseViewController {
     
     @IBOutlet weak var appleSignInButton: UIButton!
     
+    private let profileManager : ProfileMangager = ProfileMangager()
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -199,7 +201,7 @@ public class LoginViewController : BaseViewController {
             let result = try await Auth.auth().signIn(with: credential)
             let firebaseUser = result.user
             print("signInWithGoogle : uid : \(firebaseUser.uid) : email : \(firebaseUser.email) ")
-            Profile.login(userID: firebaseUser.uid, email_id: firebaseUser.email ?? "")
+            self.login(user_id: firebaseUser.uid, email_id: firebaseUser.email)
             return true
         }
         catch {
@@ -207,6 +209,25 @@ public class LoginViewController : BaseViewController {
         }
         
         return false
+    }
+    
+    func login(user_id:String,email_id:String?) {
+        
+        if let user = profileManager.getProfileBy(user_id: user_id) {
+            
+            AppUserDefaults.current_user_uuid.setValue(user.id.uuidString)
+        }
+        else {
+            let user_uuid = UUID()
+            
+            AppUserDefaults.current_user_uuid.setValue(user_uuid.uuidString)
+            
+            let user = UserProfile(email_id: email_id, user_id: user_id , id: user_uuid)
+            
+            profileManager.createProfile(user: user)
+        }
+        
+        
     }
 }
 

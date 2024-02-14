@@ -28,6 +28,8 @@ public class RelatedCollectionCell : UICollectionViewCell {
         
         let thumbnail = item.videoThumbnailUrl
         
+        self.thumbnailImage.image = UIImage(named: "place_holder_4x3")
+        
         if !StringHelper.isNilOrEmpty(string: thumbnail) {
             
             ImagePickerManager.getImageFromUrl(url: thumbnail) {[weak self] imageResponse in

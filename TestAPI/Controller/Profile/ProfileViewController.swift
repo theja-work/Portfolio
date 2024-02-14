@@ -10,6 +10,14 @@ import UIKit
 import CoreData
 import TestSDK
 
+extension Dictionary {
+    mutating func merge(dict: [Key: Value]){
+        for (k, v) in dict {
+            updateValue(v, forKey: k)
+        }
+    }
+}
+
 public class ProfileViewController : UIViewController {
     
     @IBOutlet weak var profileImageView : UIImageView!
@@ -43,8 +51,6 @@ public class ProfileViewController : UIViewController {
     let testSDKinstance = TestSDKFrameWork.shared
     
     var loader : UIActivityIndicatorView!
-    
-    let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext
     
     public class func viewController() -> UIViewController {
         
@@ -91,110 +97,25 @@ public class ProfileViewController : UIViewController {
         var mobile = ""
         var age = ""
         
-        //guard let context = self.context else {return}
+        guard let uuid = AppUserDefaults.getCurrentUserUUID() else {return}
         
-//        DispatchQueue.main.async {
-//            do {
-//                let fetch = try context.fetch(Profile.fetchRequest())
-//
-//                print(fetch)
-//
-//                guard let user = fetch.first else {return}
-//
-//                if let value = user.name , value.count != 0 {
-//                    self.nameField.text = value
-//                }
-//                else {
-//                    self.showError(message: "No name found , \(user.name)")
-//                }
-//
-//                if let value = user.mobile , value.count != 0 {
-//                    self.mobileField.text = value
-//                }
-//                else {
-//                    self.showError(message: "No mobile number found , \(user.mobile)")
-//                }
-//
-//                if let value = user.age , value.count != 0 {
-//                    self.ageField.text = value
-//                }
-//                else {
-//                    self.showError(message: "No age found \(user.age)")
-//                }
-//
-//                if let value = user.profilePicture {
-//                    if self.testSDKinstance.setupImageForView(view: self.profileImageView, from: value) == false {
-//                        if let image = UIImage(data: value) {
-//                            self.profileImageView.image = image
-//                        }
-//                        else {
-//                            self.showError(message: "Erro getting sdk for image setup")
-//                        }
-//                    }
-//                }
-//                else {
-//                    self.showError(message: "No profile picture")
-//                }
-//            }
-//
-//            catch {
-//                print(error)
-//            }
-//        }
+        guard let user = ProfileMangager().getProfileBy(id: uuid) else {return}
         
-        
-        // old method
-        let request = NSFetchRequest<NSFetchRequestResult>.init(entityName: "Profile")
-
-        request.returnsObjectsAsFaults = false
-
-        do {
-            guard let context = self.context else {return}
-
-            let result = try context.fetch(request)
-
-            for data in result as! [NSManagedObject] {
-                if let value = data.value(forKey: "name") as? String {
-                    name = value
-                }
-
-                if let value = data.value(forKey: "email_id") as? String {
-                    mobile = value
-                }
-
-                if let value = data.value(forKey: "age") as? String {
-                    age = value
-                }
-
-                if let value = data.value(forKey: "profilePicture") as? Data {
-
-                    if testSDKinstance.setupImageForView(view: self.profileImageView, from: value) == false {
-
-                        if let image = UIImage(data: value) {
-                            self.profileImageView.image = image
-                        }
-
-                    }
-
-                }
-            }
-
-        }
-
-        catch {
-            print(error)
-        }
-
-        if name.count != 0 {
+        if let name = user.name {
             self.nameField.text = name
         }
-
-        if mobile.count != 0 {
-            self.mobileField.text = mobile
+        
+        if let email = user.email_id {
+            self.mobileField.text = email
         }
 
-        if age.count != 0 {
+        if let age = user.age {
             self.ageField.text = age
+        }
+        
+        if let imageData = user.profilePicture , let image = UIImage(data: imageData) {
+            
+            self.profileImageView.image = image
         }
     }
     
@@ -309,22 +230,13 @@ public class ProfileViewController : UIViewController {
         if let value = nameField.text {
             name = value
         }
-        else {
-            name = "John Doe"
-        }
         
         if let value = mobileField.text {
             mobile = value
         }
-        else {
-            mobile = "0000 000 000"
-        }
         
         if let value = ageField.text {
             age = value
-        }
-        else {
-            age = "000"
         }
         
         if let value = self.profileImageView.image , let data = value.pngData(){
@@ -337,20 +249,29 @@ public class ProfileViewController : UIViewController {
             }
         }
         
-        guard let context = self.context else {return}
+        guard let current_user_uuid = AppUserDefaults.getCurrentUserUUID() else {return}
         
-        let user = Profile(context: context)
+        guard var user = ProfileMangager().getProfileBy(id: current_user_uuid) else {return}
+                
+        if !StringHelper.isNilOrEmpty(string: name) {
+            user.name = name
+        }
         
-        user.name = name
-        user.mobile = mobile
-        user.age = age
+        if !StringHelper.isNilOrEmpty(string: age) {
+            user.age = age
+        }
+        
+        if !StringHelper.isNilOrEmpty(string: mobile) {
+            user.email_id = mobile
+        }
+        
         user.profilePicture = imageData
         
-        do {
-            try context.save()
+        if ProfileMangager().updateProfile(user: user) {
+            print("Profile details updated")
         }
-        catch {
-            print(error)
+        else {
+            print("error saving profile details")
         }
         
     }
@@ -381,7 +302,7 @@ public class ProfileViewController : UIViewController {
     
     func logout(userID: String) {
         
-        Profile.logout(userID: userID)
+        AppUserDefaults.current_user_uuid.remove()
         
         if let sceneDelegate = self.view.window?.windowScene?.delegate as? SceneDelegate {
             sceneDelegate.loadLoginScreen()

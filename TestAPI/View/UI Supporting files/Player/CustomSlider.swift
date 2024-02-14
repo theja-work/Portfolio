@@ -43,13 +43,11 @@ open class CustomSlider : UISlider {
     override open func trackRect(forBounds bounds: CGRect) -> CGRect {
         let customBounds = CGRect(x: 0, y: bounds.midY, width: bounds.width, height: 2)
         
-        print("trackRect : \(customBounds)")
         super.trackRect(forBounds: customBounds)
         
         var newRect = super.trackRect(forBounds: bounds)
         newRect.size.height = trackHeight
         
-        //print("trackRect : \(newRect)")
         return customBounds
     }
     

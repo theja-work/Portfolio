@@ -13,13 +13,16 @@ public enum AppUserDefaults {
     
     case userId
     case current_video_id
-    
+    case current_user_uuid
+    case all_users_uuid
     
     var key: String {
         switch self {
         
         case .userId :                      return "user_id"
         case .current_video_id :            return "current_video_id"
+        case .current_user_uuid:            return "current_user_uuid"
+        case .all_users_uuid :              return "all_users_uuid"
         
         }
     }
@@ -41,6 +44,29 @@ public enum AppUserDefaults {
     public static func getUserID() -> String? {
         
         if let value : String = AppUserDefaults.userId.value as? String {
+            return value
+        }
+        
+        return nil
+    }
+    
+    public static func getCurrentUserUUID() -> UUID? {
+        
+        if let uuid_string = AppUserDefaults.current_user_uuid.value as? String {
+            
+            if let uuid = UUID(uuidString: uuid_string) {
+                return uuid
+            }
+        }
+        
+        return nil
+    }
+    
+    
+    
+    public static func getAllUsersUUID() -> [String]? {
+        
+        if let value:[String] = AppUserDefaults.all_users_uuid.value as? [String] {
             return value
         }
         

@@ -3,9 +3,16 @@
     <entity name="Profile" representedClassName="Profile" syncable="YES">
         <attribute name="age" optional="YES" attributeType="String"/>
         <attribute name="email_id" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="mobile" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <attribute name="profilePicture" optional="YES" attributeType="Binary"/>
+        <attribute name="profilePicture" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="user_id" optional="YES" attributeType="String"/>
+        <attribute name="watch_history_data" optional="YES" attributeType="Binary"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
 </model>

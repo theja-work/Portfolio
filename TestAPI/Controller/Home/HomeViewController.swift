@@ -49,9 +49,6 @@ public class HomeViewController : BaseViewController, UITabBarControllerDelegate
         
         let navController = storyBoard.instantiateViewController(withIdentifier: "HomeNavController") as! UINavigationController
         
-        let viewController = navController.viewControllers.first as! HomeViewController
-        viewController.initialSetup()
-        
         return navController
     }
     
@@ -65,9 +62,17 @@ public class HomeViewController : BaseViewController, UITabBarControllerDelegate
         self.buttonHolder.isHidden = true
         setupViewModel()
         setupVideoListView()
+        printUser()
     }
     
-    public func initialSetup() {
+    func printUser() {
+        
+        if let uuid = AppUserDefaults.getCurrentUserUUID() , let user = ProfileMangager().getProfileBy(id: uuid) {
+            print("\(user.email_id)")
+        }
+        else {
+            print("no users found")
+        }
         
     }
     
@@ -81,7 +86,7 @@ public class HomeViewController : BaseViewController, UITabBarControllerDelegate
         
         var userImage = UIImage(named: "profile_placeholder")!
         
-        if let image = Profile.getProfilePic() {
+        if let uuid = AppUserDefaults.getCurrentUserUUID() , let user = ProfileMangager().getProfileBy(id: uuid) , let imageData = user.profilePicture , let image = UIImage(data: imageData) {
             userImage = image
         }
         
@@ -117,7 +122,7 @@ public class HomeViewController : BaseViewController, UITabBarControllerDelegate
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        
+        AppOrientation.lockOrientation(.portrait)
     }
     
     func setupViewModel() {
