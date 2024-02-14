@@ -394,7 +394,6 @@ public class VideoViewController : BaseViewController {
         let reminingTimeString = formatSecondsToString(duration - position)
         
         if self.player?.timeControlStatus == .playing {
-            //print("VideoViewController : elapsed time :\(elapsedTimeString) :: remaining time : \(reminingTimeString)")
             
             DispatchQueue.main.async {
                 
@@ -404,7 +403,6 @@ public class VideoViewController : BaseViewController {
         
         elapsedTimeLabel.text = reminingTimeString
         remainingTimeLabel.text = elapsedTimeString
-        //self.playerProgressView.progress
         
     }
     
@@ -475,7 +473,6 @@ public class VideoViewController : BaseViewController {
     }
     
     @objc func backwardPlayerAction() {
-        //print("VideoViewController : backward player action")
         
         self.player?.currentItem?.cancelPendingSeeks()
         
@@ -484,7 +481,6 @@ public class VideoViewController : BaseViewController {
         
         let position = CMTimeMakeWithSeconds(currentTime - 10.0, preferredTimescale: Int32(NSEC_PER_SEC))
         
-        //print("VideoViewController : postion = \(currentTime) / \(duration.timescale) = \(position)")
         
         if self.player?.currentItem?.canStepForward == true {
             let myTime = CMTime(seconds: position.seconds, preferredTimescale: duration.timescale)
@@ -493,7 +489,6 @@ public class VideoViewController : BaseViewController {
     }
     
     @objc func forwardPlayerAction() {
-        //print("VideoViewController : foreward player action")
         
         self.player?.currentItem?.cancelPendingSeeks()
         
@@ -502,7 +497,6 @@ public class VideoViewController : BaseViewController {
         
         let position = CMTimeMakeWithSeconds(currentTime + 10.0, preferredTimescale: Int32(NSEC_PER_SEC))
         
-        //print("VideoViewController : postion = \(currentTime) / \(duration.timescale) = \(position)")
         
         if self.player?.currentItem?.canStepBackward == true {
             let myTime = CMTime(seconds: position.seconds, preferredTimescale: duration.timescale)
@@ -598,7 +592,7 @@ public class VideoViewController : BaseViewController {
     public func setupThumbnail() {
         
         DispatchQueue.main.async {
-            self.playerThumbnailImageview.image = UIImage(named: "placeholder_16x9")
+            self.playerThumbnailImageview.image = UIImage(named: "place_holder_4x3")
         }
         
         self.showLoader()
@@ -676,11 +670,9 @@ public class VideoViewController : BaseViewController {
             guard let localSelf = self else {return}
             
             if isLoading {
-                print("player_loading_state : loading")
                 localSelf.showLoader()
             }
             else {
-                print("player_loading_state : not loading")
                 localSelf.hideLoader()
             }
             
@@ -885,8 +877,7 @@ public class VideoViewController : BaseViewController {
     public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         
         if keyPath == "currentItem.loadedTimeRanges" {
-            
-            print("\(self.player?.currentItem?.duration.seconds)")
+            //
             
         }
         

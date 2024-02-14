@@ -28,6 +28,7 @@ public class VideoItemCell : UITableViewCell {
     public func setupCell(item:VideoItem) {
         
         self.selectionStyle = .none
+        
         setupImage(url: item.videoThumbnailUrl)
         
         titleLabel.text = item.videoTitle
@@ -44,6 +45,8 @@ public class VideoItemCell : UITableViewCell {
     }
     
     func setupImage(url:String) {
+        
+        self.videoThumbnailImage.image = UIImage(named: "place_holder_4x3")
         
         guard !StringHelper.isNilOrEmpty(string: url) else {return}
         
