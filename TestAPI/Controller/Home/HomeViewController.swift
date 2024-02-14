@@ -290,7 +290,10 @@ extension HomeViewController : UITableViewDelegate , UITableViewDataSource {
         
         let videoDetailsVC = VideoViewController.viewController(item: item)
         
-        self.navigationController?.pushViewController(videoDetailsVC, animated: true)
+        self.loader?.showLoader()
+        self.navigationController?.pushViewController(videoDetailsVC, animated: true, completion: {
+            self.loader?.hideLoader()
+        })
     }
     
     public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath)
@@ -304,4 +307,36 @@ extension HomeViewController : UITableViewDelegate , UITableViewDataSource {
         cell.layer.mask = maskLayer
     }
     
+}
+
+extension UINavigationController {
+    
+    public func pushViewController(
+        _ viewController: UIViewController,
+        animated: Bool,
+        completion: @escaping () -> Void)
+    {
+        pushViewController(viewController, animated: animated)
+
+        guard animated, let coordinator = transitionCoordinator else {
+            DispatchQueue.main.async { completion() }
+            return
+        }
+
+        coordinator.animate(alongsideTransition: nil) { _ in completion() }
+    }
+
+    func popViewController(
+        animated: Bool,
+        completion: @escaping () -> Void)
+    {
+        popViewController(animated: animated)
+
+        guard animated, let coordinator = transitionCoordinator else {
+            DispatchQueue.main.async { completion() }
+            return
+        }
+
+        coordinator.animate(alongsideTransition: nil) { _ in completion() }
+    }
 }

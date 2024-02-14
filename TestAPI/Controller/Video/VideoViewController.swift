@@ -94,6 +94,14 @@ public class VideoViewController : BaseViewController {
     
     @IBOutlet weak var fullScreenHolderButton: UIButton!
     
+    @IBOutlet weak var watch_history_indicator: UIProgressView!
+    
+    public static let AppKilledNotifier = Notification.Name.init("App_killed_notification")
+    
+    fileprivate var last_position : Double = 0.0
+    
+    var playerLayer : AVPlayerLayer?
+    
     var fullScreenTapped : Bool = false
     
     public var progressUpdateTimer : Timer?
@@ -135,6 +143,7 @@ public class VideoViewController : BaseViewController {
         setupLoader()
         playerSetup()
         
+        
         testSDKmethod()
     }
     
@@ -154,9 +163,62 @@ public class VideoViewController : BaseViewController {
         super.viewWillAppear(animated)
         
         NotificationCenter.default.addObserver(self, selector: #selector(videoDidEnded), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: player?.currentItem)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(saveVideoPosition), name: VideoViewController.AppKilledNotifier, object: nil)
+        
+        
+    }
+    
+    @objc func saveVideoPosition() {
+        
+        guard let uuid = AppUserDefaults.getCurrentUserUUID() else {return}
+        
+        guard var user = ProfileMangager().getProfileBy(id: uuid) else {return}
+        
+        guard let position = self.player?.currentItem?.currentTime().seconds else {return}
+        
+        guard let duration = self.player?.currentItem?.duration.seconds else {return}
+        
+        if duration - position < 5.0 {return}
+        
+        guard let videoID = self.videoItem?.videoID else {return}
+        
+        let newPosition = [videoID:position]
+        var watchHistory = [String:Double]()
+        
+        do {
+            if let previousData = user.watch_history_data {
+                watchHistory = try JSONDecoder().decode([String:Double].self, from: previousData)
+                
+                if !watchHistory.isEmpty && watchHistory.count > 0 {
+                    
+                    watchHistory.merge(dict: newPosition)
+                    
+                    user.watch_history_data = try JSONEncoder().encode(watchHistory)
+                }
+            }
+            else {
+                
+                if !newPosition.isEmpty && newPosition.count > 0 {
+                    watchHistory = newPosition
+
+                    user.watch_history_data = try JSONEncoder().encode(watchHistory)
+                }
+            }
+            
+        }
+        catch {
+            print(error)
+        }
+        
+        if ProfileMangager().updateProfile(user: user) {
+            print("VideoViewController : video position saved")
+        }
+        
     }
     
     public override func viewWillDisappear(_ animated: Bool) {
+        saveVideoPosition()
         super.viewWillDisappear(animated)
         self.player?.replaceCurrentItem(with: nil)
         self.player?.pause()
@@ -175,13 +237,17 @@ public class VideoViewController : BaseViewController {
     }
     
     deinit {
+        self.player?.seek(to: CMTime.zero)
+        self.player?.replaceCurrentItem(with: nil)
         self.player?.pause()
         self.player = nil
     }
     
     func resetThumbnail() {
         
-        playerThumbnailImageview.image = UIImage(named: "")
+        if playerThumbnailImageview != nil {
+            playerThumbnailImageview?.image = UIImage(named: "")
+        }
         
     }
     
@@ -214,10 +280,26 @@ public class VideoViewController : BaseViewController {
         
         guard let item = self.viewModel?.relatedVideos?.first else {return}
         
+        resetPlayer()
+        
         updatePlayerWithItem(item: item)
         
         self.playVideo()
         
+    }
+    
+    func resetPlayer() {
+        
+        playerLayer?.player = nil
+        playerLayer?.removeFromSuperlayer()
+        playerLayer = nil
+        
+        if player != nil {
+            self.player?.pause()
+            self.player?.seek(to: CMTime.zero)
+            self.player?.replaceCurrentItem(with: nil)
+            self.player = AVPlayer(playerItem: nil)
+        }
     }
     
     public func setupLoader() {
@@ -626,6 +708,54 @@ public class VideoViewController : BaseViewController {
             }
             
         })
+        
+        setupWatchHistoryProgress()
+    }
+    
+    func setupWatchHistoryProgress() {
+        
+        guard let uuid = AppUserDefaults.getCurrentUserUUID() else {return}
+        guard let user = ProfileMangager().getProfileBy(id: uuid) else {return}
+        guard let videoID = self.videoItem?.videoID else {return}
+        guard let videoURL = self.videoItem?.videoUrl else {return}
+        
+        let url = URL(string: videoURL)!
+        
+        let asset = AVURLAsset(url: url)
+        
+        let duration = asset.duration.seconds
+        
+        do {
+            if let data = user.watch_history_data {
+                let watch_history = try JSONDecoder().decode([String:Double].self, from: data)
+                
+                if !watch_history.isEmpty && watch_history.count > 0 {
+                    
+                    if let position = watch_history[videoID] {
+                        
+                        guard position > 0 && duration > 0 else {return}
+                        
+                        last_position = position
+                        
+                        watch_history_indicator.isHidden = false
+                        watch_history_indicator.progressTintColor = ColorCodes.turmeric.color
+                        watch_history_indicator.setProgress(Float(position / duration), animated: true)
+                        
+                    }
+                    else {
+                        watch_history_indicator.isHidden = true
+                    }
+                    
+                }
+                
+            }
+            else {
+                watch_history_indicator.isHidden = true
+            }
+        }
+        catch {
+            print(error)
+        }
     }
     
     public func labelUISetup() {
@@ -858,14 +988,14 @@ public class VideoViewController : BaseViewController {
         self.player?.replaceCurrentItem(with: nil)
         self.player = AVPlayer(playerItem: playerItem)
         
-        let playerLayer = AVPlayerLayer(player: self.player)
+        playerLayer = AVPlayerLayer(player: self.player)
         
-        playerLayer.frame = self.playerView.bounds
-        playerLayer.backgroundColor = UIColor.clear.cgColor
+        playerLayer?.frame = self.playerView.bounds
+        playerLayer?.backgroundColor = UIColor.clear.cgColor
         
         
-        playerLayer.videoGravity = .resizeAspect
-        self.playerView.layer.addSublayer(playerLayer)
+        playerLayer?.videoGravity = .resizeAspect
+        self.playerView.layer.addSublayer(playerLayer!)
         
         self.remainingTimeLabel.textColor = UIColor.white
         self.elapsedTimeLabel.textColor = UIColor.white
@@ -904,6 +1034,15 @@ public class VideoViewController : BaseViewController {
         
         self.playerView.isUserInteractionEnabled = true
         DispatchQueue.main.async {
+            
+            if self.last_position > 0 {
+                
+                let seekTime = CMTime(value: CMTimeValue(self.last_position), timescale: 1)
+                
+                self.player?.currentItem?.seek(to: seekTime,completionHandler: nil)
+                self.watch_history_indicator.isHidden = true
+            }
+            
             self.player?.play()
         }
         
@@ -1034,7 +1173,8 @@ public class VideoViewController : BaseViewController {
     func updatePlayerWithItem(item:VideoItem) {
         
         self.player = nil
-        self.playerView.gestureRecognizers?.forEach(playerView.removeGestureRecognizer)
+        self.player?.replaceCurrentItem(with: nil)
+        //self.playerView.gestureRecognizers?.forEach(playerView.removeGestureRecognizer)
         
         self.videoItem = item
         self.resetThumbnail()
@@ -1088,6 +1228,8 @@ extension VideoViewController : UICollectionViewDelegate , UICollectionViewDataS
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
+        saveVideoPosition()
+        resetPlayer()
         self.player?.replaceCurrentItem(with: nil)
         self.player = nil
         guard let item = self.viewModel?.relatedVideos?[indexPath.row] else {return}
