@@ -55,9 +55,9 @@ public class HomeViewController : BaseViewController, UITabBarControllerDelegate
     override public func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = ColorCodes.ButtonBlueLight.color
+        self.view.backgroundColor = .black
         
-        setupNavigationBar()
+        //setupNavigationBar()
         setupButtons()
         self.buttonHolder.isHidden = true
         setupViewModel()
@@ -122,8 +122,15 @@ public class HomeViewController : BaseViewController, UITabBarControllerDelegate
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        self.navigationController?.isNavigationBarHidden = true
         AppOrientation.lockOrientation(.portrait)
         updateUserThumbnail()
+    }
+    
+    public override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        self.navigationController?.isNavigationBarHidden = false
     }
     
     func updateUserThumbnail() {
@@ -180,7 +187,12 @@ public class HomeViewController : BaseViewController, UITabBarControllerDelegate
     func setupVideoListView() {
         
         videoListTableView.register(UINib(nibName: VideoItemCell.nibName(), bundle: Bundle(for: VideoItemCell.classForCoder())), forCellReuseIdentifier: VideoItemCell.cellIdentifier())
-        videoListTableView.backgroundColor = ColorCodes.ButtonBlueLight.color
+        
+        videoListTableView.register(UINib(nibName: TV_BannerCell.getNibName(), bundle: Bundle(for: TV_BannerCell.classForCoder())), forCellReuseIdentifier: TV_BannerCell.getCellIdentifier())
+        
+        videoListTableView.register(UINib(nibName: TV_CatalogCell.getNibName(), bundle: Bundle(for: TV_CatalogCell.classForCoder())), forCellReuseIdentifier: TV_CatalogCell.getCellIdentifier())
+        
+        videoListTableView.backgroundColor = .clear
     }
     
     func setupButtons() {
@@ -271,17 +283,36 @@ extension HomeViewController : UITableViewDelegate , UITableViewDataSource {
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: VideoItemCell.cellIdentifier(), for: indexPath) as? VideoItemCell
-        
         guard let item = self.viewModel?.videos?[indexPath.row] else {return UITableViewCell()}
         
-        cell?.setupCell(item: item)
+        if indexPath.row == 0 {
+            
+            let cell = tableView.dequeueReusableCell(withIdentifier: TV_BannerCell.getCellIdentifier(), for: indexPath) as? TV_BannerCell
+            
+            cell?.selectionStyle = .none
+            cell?.videos = self.viewModel?.videos
+            cell?.setupCell(item: item, indexPath: indexPath, contentSelectionDelegate: self)
+            return cell ?? UITableViewCell()
+        }
+        else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: TV_CatalogCell.getCellIdentifier(), for: indexPath) as? TV_CatalogCell
+            
+            cell?.selectionStyle = .none
+            cell?.videos = self.viewModel?.videos
+            cell?.setupCell(item: item, indexPath: indexPath,contentSelectionDelegate: self)
+            return cell ?? UITableViewCell()
+        }
         
-        return cell ?? UITableViewCell()
+        
     }
     
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 90.0
+        
+        if indexPath.row == 0 {
+            return 250.0
+        }
+        
+        return 220.0
     }
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -338,5 +369,19 @@ extension UINavigationController {
         }
 
         coordinator.animate(alongsideTransition: nil) { _ in completion() }
+    }
+}
+
+extension HomeViewController : ContentSelectionProtocol {
+    
+    func contentSelected(item: VideoItem) {
+        
+        let videoDetailsVC = VideoViewController.viewController(item: item)
+        
+        self.loader?.showLoader()
+        self.navigationController?.pushViewController(videoDetailsVC, animated: true, completion: {
+            self.loader?.hideLoader()
+        })
+        
     }
 }
