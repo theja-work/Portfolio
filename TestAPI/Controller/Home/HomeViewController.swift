@@ -130,7 +130,7 @@ public class HomeViewController : BaseViewController, UITabBarControllerDelegate
     public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        self.navigationController?.isNavigationBarHidden = false
+        //self.navigationController?.isNavigationBarHidden = false
     }
     
     func updateUserThumbnail() {
@@ -379,7 +379,8 @@ extension HomeViewController : ContentSelectionProtocol {
         let videoDetailsVC = VideoViewController.viewController(item: item)
         
         self.loader?.showLoader()
-        self.navigationController?.pushViewController(videoDetailsVC, animated: true, completion: {
+        self.navigationController?.isNavigationBarHidden = true
+        self.navigationController?.pushViewController(videoDetailsVC, animated: false, completion: {
             self.loader?.hideLoader()
         })
         

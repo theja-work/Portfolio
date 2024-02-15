@@ -26,13 +26,19 @@ public class RelatedCollectionCell : UICollectionViewCell {
     public func setupCell(item:VideoItem) {
         self.backgroundColor = ColorCodes.SkyBlue.color
         
-        let thumbnail = item.videoThumbnailUrl
-        
         self.thumbnailImage.image = UIImage(named: "place_holder_4x3")
         
-        if !StringHelper.isNilOrEmpty(string: thumbnail) {
+        //setImageFrom(url: item.videoThumbnailUrl)
+        
+        self.clipsToBounds = true
+        self.layer.masksToBounds = true
+        self.layer.cornerRadius = 10.0
+    }
+    
+    func setImageFrom(url:String) {
+        if !StringHelper.isNilOrEmpty(string: url) {
             
-            ImagePickerManager.getImageFromUrl(url: thumbnail) {[weak self] imageResponse in
+            ImagePickerManager.getImageFromUrl(url: url) {[weak self] imageResponse in
                 
                 guard let localSelf = self else {return}
                 
@@ -55,10 +61,6 @@ public class RelatedCollectionCell : UICollectionViewCell {
             }
             
         }
-        
-        self.clipsToBounds = true
-        self.layer.masksToBounds = true
-        self.layer.cornerRadius = 10.0
     }
     
 }

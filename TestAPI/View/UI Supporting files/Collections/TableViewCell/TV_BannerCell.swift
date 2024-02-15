@@ -104,8 +104,6 @@ extension TV_BannerCell : UICollectionViewDelegate , UICollectionViewDataSource 
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomepageCollectionViewCell.cellIdentifier(), for: indexPath) as? HomepageCollectionViewCell
         
-        guard let selectionDelegate = self.contentSelectionDelegate else {return UICollectionViewCell()}
-        
         cell?.setupCell(item: item, indexPath: indexPath)
         return cell ?? UICollectionViewCell()
         
@@ -116,5 +114,15 @@ extension TV_BannerCell : UICollectionViewDelegate , UICollectionViewDataSource 
         return CGSize(width: 320, height: 186)
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        guard let item = self.videos?[indexPath.row] else {return}
+        
+        contentSelectionDelegate?.contentSelected(item: item)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+    }
     
 }

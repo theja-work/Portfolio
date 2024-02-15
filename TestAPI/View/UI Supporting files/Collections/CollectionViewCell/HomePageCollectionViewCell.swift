@@ -37,9 +37,16 @@ public class HomepageCollectionViewCell : UICollectionViewCell {
         }
         
         playImage.image = UIImage(named: "play_circle_button")
+        imageView.image = UIImage(named: "place_holder_4x3")
+        imageView.contentMode = .scaleToFill
         
-        if !StringHelper.isNilOrEmpty(string: item.videoThumbnailUrl) {
-            ImagePickerManager.getImageFromUrl(url: item.videoThumbnailUrl) {[weak self] imageResponse in
+        //setImageFrom(url: item.videoThumbnailUrl)
+        
+    }
+    
+    func setImageFrom(url:String) {
+        if !StringHelper.isNilOrEmpty(string: url) {
+            ImagePickerManager.getImageFromUrl(url: url) {[weak self] imageResponse in
                 guard let localSelf = self else {return}
                 
                 switch imageResponse {
@@ -53,7 +60,6 @@ public class HomepageCollectionViewCell : UICollectionViewCell {
                 }
             }
         }
-        
     }
     
 }

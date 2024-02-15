@@ -48,11 +48,13 @@ class TV_CatalogCell : UITableViewCell {
         self.contentSelectionDelegate = contentSelectionDelegate
         
         if indexPath.row % 2 == 0 {
-            titleLabel.text = "New Releases"
-        }
-        else {
             titleLabel.text = "Popular"
         }
+        else {
+            titleLabel.text = "New Releases"
+        }
+        
+        titleLabel.font = CustomFont.Roboto_Medium.font
         
     }
     
@@ -99,5 +101,9 @@ extension TV_CatalogCell : UICollectionViewDelegate , UICollectionViewDataSource
         
         return CGSize(width: 101.0, height: 143)
     }
+    
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+//        return UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
+//    }
     
 }

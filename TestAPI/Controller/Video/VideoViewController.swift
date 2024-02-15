@@ -41,15 +41,11 @@ public class VideoViewController : BaseViewController {
     
     @IBOutlet weak var playButton : HomeButtons!
     
-    @IBOutlet weak var backButton : HomeButtons!
-    
     @IBOutlet weak var metaDataScrollView: UIScrollView!
     
     @IBOutlet weak var videoTitleLabel: UILabel!
     
     @IBOutlet weak var videoDescriptionLabel: UILabel!
-    
-    @IBOutlet weak var scrollableContentHeight: NSLayoutConstraint!
     
     @IBOutlet weak var thumbnailDurationLabel: UILabel!
     
@@ -96,6 +92,31 @@ public class VideoViewController : BaseViewController {
     
     @IBOutlet weak var watch_history_indicator: UIProgressView!
     
+    @IBOutlet weak var predataStackView: UIStackView!
+    
+    @IBOutlet weak var durationPredataLabel: UILabel!
+    
+    @IBOutlet weak var actionGenre: UILabel!
+    
+    @IBOutlet weak var dramaGenre: UILabel!
+    
+    @IBOutlet weak var relatedBackgroundWidth: NSLayoutConstraint!
+    
+    @IBOutlet weak var relatedBackgroundView: UIView!
+    
+    @IBOutlet weak var scrollViewContentFrameHeight: NSLayoutConstraint!
+    
+    @IBOutlet weak var back_button_portrait: UIButton!
+    
+    @IBOutlet weak var primary_player_controls_view: UIView!
+    
+    var scrollContentHeight : CGFloat = 0 {
+        didSet {
+            
+            scrollViewContentFrameHeight.constant = scrollContentHeight
+        }
+    }
+    
     public static let AppKilledNotifier = Notification.Name.init("App_killed_notification")
     
     fileprivate var last_position : Double = 0.0
@@ -129,13 +150,12 @@ public class VideoViewController : BaseViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.navigationBar.tintColor = ColorCodes.SkyBlue.color
+        self.navigationController?.navigationBar.tintColor = .white
+        self.navigationController?.navigationItem.backButtonTitle = ""
         
         guard let navHeight = self.navigationController?.navigationBar.frame.size.height else {return}
         
         topNavBarPlayerOffset = (navHeight - 3) * 2
-        
-        self.navigationController?.navigationBar.backItem?.backButtonTitle = ""
         
         setupViewModel()
         
@@ -144,7 +164,7 @@ public class VideoViewController : BaseViewController {
         playerSetup()
         
         
-        testSDKmethod()
+        //testSDKmethod()
     }
     
     public override func viewDidAppear(_ animated: Bool) {
@@ -358,11 +378,13 @@ public class VideoViewController : BaseViewController {
             layout.scrollDirection = .horizontal
         }
         
-        relatedCollectionHeight.constant = 150
+        relatedCollectionHeight.constant = 350
         
-        relatedCollectionTitle.text = "Related Videos"
+        relatedCollectionTitle.text = "Related"
         
-        relatedCollectionTitle.font = CustomFont.OS_Semibold.font
+        relatedCollectionTitle.textColor = .white
+        
+        relatedCollectionTitle.font = CustomFont.Roboto_Regular.font
         
     }
     
@@ -397,6 +419,10 @@ public class VideoViewController : BaseViewController {
         self.playerControlsView.isHidden = true
         //self.playerControlsView.alpha = 0.0
         self.playerControlsView.backgroundColor = .black.withAlphaComponent(0.25)
+        
+        primary_player_controls_view.isUserInteractionEnabled = true
+        primary_player_controls_view.isHidden = false
+        self.view.bringSubviewToFront(primary_player_controls_view)
         
         
         let backwardtap = UITapGestureRecognizer(target: self, action: #selector(backwardPlayerAction))
@@ -594,7 +620,9 @@ public class VideoViewController : BaseViewController {
             
             if self.player?.timeControlStatus == .playing {
                 self.player?.pause()
+                showPrimaryPlayButtons()
                 self.progressUpdateTimer?.invalidate()
+                
             }
         }
         else {
@@ -602,6 +630,7 @@ public class VideoViewController : BaseViewController {
             
             self.playerView.isUserInteractionEnabled = true
             self.player?.play()
+            hidePrimaryPlayButtons()
             self.progressUpdateTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateProgressBar), userInfo: nil, repeats: true)
             self.progressUpdateTimer?.fire()
         }
@@ -644,10 +673,31 @@ public class VideoViewController : BaseViewController {
             self.metaDataHolderView.clipsToBounds = true
             self.metaDataHolderView.layer.masksToBounds = true
             self.metaDataHolderView.layer.cornerRadius = 10
-            self.metaDataHolderView.backgroundColor = ColorCodes.ButtonBlueDark.color
+            self.metaDataHolderView.backgroundColor = .clear
         }
         
         labelUISetup()
+        
+        self.predataStackView.setCustomSpacing(12.0, after: durationPredataLabel)
+        self.predataStackView.setCustomSpacing(8, after: actionGenre)
+        
+        actionGenre.clipsToBounds = true
+        actionGenre.layer.masksToBounds = true
+        actionGenre.layer.borderColor = UIColor.white.cgColor
+        actionGenre.layer.borderWidth = 0.8
+        actionGenre.layer.cornerRadius = actionGenre.frame.height / 2
+        
+        dramaGenre.clipsToBounds = true
+        dramaGenre.layer.masksToBounds = true
+        dramaGenre.layer.borderColor = UIColor.white.cgColor
+        dramaGenre.layer.borderWidth = 0.8
+        dramaGenre.layer.cornerRadius = dramaGenre.frame.height / 2
+        
+        actionGenre.setNeedsLayout()
+        actionGenre.layoutIfNeeded()
+        
+        dramaGenre.setNeedsLayout()
+        dramaGenre.layoutIfNeeded()
         
         guard let title = self.videoItem?.videoTitle , let description = self.videoItem?.videoDescription else {return}
         
@@ -669,6 +719,7 @@ public class VideoViewController : BaseViewController {
             self.thumbnailDurationLabel.layoutSubviews()
         }
         
+        scrollContentHeight = (videoTitleLabel.bounds.size.height + predataStackView.bounds.size.height + descriptionHeight.constant + expandButton.bounds.size.height + relatedContainerView.bounds.size.height) * 1.6
     }
     
     public func setupThumbnail() {
@@ -694,7 +745,7 @@ public class VideoViewController : BaseViewController {
                 DispatchQueue.main.async {
                     strongSelf.playerThumbnailImageview.image = image
                     strongSelf.playerThumbnailImageview.contentMode = .scaleToFill
-                    strongSelf.playerView.isUserInteractionEnabled = false
+                    strongSelf.playerControlsView.isUserInteractionEnabled = false
                 }
                 
             case .dataNotFound :
@@ -761,9 +812,10 @@ public class VideoViewController : BaseViewController {
     public func labelUISetup() {
         
         DispatchQueue.main.async {
-            self.videoTitleLabel.font = CustomFont.OS_Bold.font
-            self.videoDescriptionLabel.font = CustomFont.OS_Semibold.font
+            self.videoTitleLabel.font = CustomFont.Roboto_Medium.font
+            self.videoDescriptionLabel.font = CustomFont.Roboto_Regular.font
             self.videoDescriptionLabel.numberOfLines = 4
+            self.videoDescriptionLabel.textColor = UIColor(hex: "#A3A2A2")
             self.thumbnailDurationLabel.font = UIFont(name: "OpenSans-Regular", size: 5)
             self.thumbnailDurationLabel.backgroundColor = UIColor.darkGray
             self.thumbnailDurationLabel.textColor = .white
@@ -870,18 +922,15 @@ public class VideoViewController : BaseViewController {
         self.animationCounter = 1
         
         playerViewTopConstraint.constant = topNavBarPlayerOffset//82
-        
-        hidePlayerButtons()
     }
     
     public func portraitPlayerUpdates() {
-        self.navigationController?.isNavigationBarHidden = false
+        //self.navigationController?.isNavigationBarHidden = false
 
         self.animationCounter = 0
         
         playerViewTopConstraint.constant = 0
         
-        showPlayerButtons()
     }
     
     func landscapePlayerBlock(onFullScreenTap:Bool = false) {
@@ -958,11 +1007,6 @@ public class VideoViewController : BaseViewController {
     }
     
     public func buttonSetup() {
-        self.playButton.setupStyle(type: .Image)
-        self.playButton.setTitle("Play", for: .normal)
-        
-        self.backButton.setupStyle(type: .Image)
-        self.backButton.setTitle("Back", for: .normal)
         
         self.fullScreenbutton.setImage(UIImage(named: "fullscreen"), for: .normal)
         self.expandButton.setImage(UIImage(named: "dropdown_down"), for: .normal)
@@ -1020,12 +1064,13 @@ public class VideoViewController : BaseViewController {
     
     @IBAction func playButtonAction(_ sender : HomeButtons) {
         
-        playerView.isUserInteractionEnabled = true
-        playVideo()
+        if self.player != nil {
+            playerPlayAction()
+        }
+        else {
+            playVideo()
+        }
         
-        addPlayerObservers()
-        
-        //self.playButton.isHidden = true
     }
     
     func playVideo() {
@@ -1044,6 +1089,7 @@ public class VideoViewController : BaseViewController {
             }
             
             self.player?.play()
+            self.hidePrimaryPlayButtons()
         }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.5, execute: {
@@ -1062,12 +1108,16 @@ public class VideoViewController : BaseViewController {
             self.expandButton.setImage(UIImage(named: "dropdown_down"), for: .normal)
             self.metaDataScrollView.setContentOffset(CGPoint.zero, animated: true)
             //self.scrollableContentHeight.constant = 650
+            
+            scrollContentHeight = (videoTitleLabel.bounds.size.height + predataStackView.bounds.size.height + descriptionHeight.constant + expandButton.bounds.size.height + relatedContainerView.bounds.size.height) * 1.3
         }
         else {
             videoDescriptionLabel.numberOfLines = 0
             descriptionHeight.constant = 150
             self.expandButton.setImage(UIImage(named: "dropdown_up"), for: .normal)
             //self.scrollableContentHeight.constant = 1000
+            
+            scrollContentHeight = (videoTitleLabel.bounds.size.height + predataStackView.bounds.size.height + descriptionHeight.constant + expandButton.bounds.size.height + relatedContainerView.bounds.size.height) * 1.3
         }
         
         expandTapped = !expandTapped
@@ -1146,28 +1196,36 @@ public class VideoViewController : BaseViewController {
         }
     }
     
-    @IBAction func backButtonAction(_ sender : HomeButtons) {
+    @IBAction func exitOnBackButton(_ sender: UIButton) {
         
         self.player?.pause()
         
         self.player = nil
         
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    @objc func hidePrimaryPlayButtons() {
         
+        primary_player_controls_view.isUserInteractionEnabled = false
+        primary_player_controls_view.isHidden = true
+        self.playerView.sendSubviewToBack(primary_player_controls_view)
     }
     
-    @objc func hidePlayerButtons() {
-        self.playButton.isHidden = true
-        self.backButton.isHidden = true
-        self.playButton.isUserInteractionEnabled = false
-        self.backButton.isUserInteractionEnabled = false
-    }
-    
-    @objc func showPlayerButtons() {
+    @objc func showPrimaryPlayButtons() {
+        
+        self.view.bringSubviewToFront(self.playerView)
+        self.playerView.bringSubviewToFront(self.primary_player_controls_view)
+        
+        self.primary_player_controls_view.isUserInteractionEnabled = true
+        self.primary_player_controls_view.isHidden = false
+        self.primary_player_controls_view.bringSubviewToFront(self.back_button_portrait)
+        self.back_button_portrait.isHidden = false
+        self.back_button_portrait.isUserInteractionEnabled = true
+        
+        self.primary_player_controls_view.bringSubviewToFront(self.playButton)
         self.playButton.isHidden = false
-        self.backButton.isHidden = false
         self.playButton.isUserInteractionEnabled = true
-        self.backButton.isUserInteractionEnabled = true
     }
     
     func updatePlayerWithItem(item:VideoItem) {
@@ -1219,9 +1277,11 @@ extension VideoViewController : UICollectionViewDelegate , UICollectionViewDataS
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        let height = collectionView.frame.height
+        let padding: CGFloat = 10
+        let collectionViewSize = collectionView.frame.size.height - padding
         
-        let width = height * 4 / 3
+        let height = collectionViewSize / 2
+        let width = collectionViewSize / 3
         
         return CGSize(width: width, height: height)
     }
@@ -1236,6 +1296,15 @@ extension VideoViewController : UICollectionViewDelegate , UICollectionViewDataS
         
         updatePlayerWithItem(item: item)
         
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        
+        return 10.0
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 16.0
     }
     
 }

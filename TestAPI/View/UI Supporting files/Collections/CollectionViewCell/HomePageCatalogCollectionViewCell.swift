@@ -31,15 +31,18 @@ class HomePageCatalogCollectionViewCell : UICollectionViewCell {
         self.layer.masksToBounds = true
         self.layer.cornerRadius = 4.0
         
-        if indexPath.row == 2 {
-            self.contentCardImage.image = UIImage(named: "place_holder_4x3")
-            self.contentCardImage.contentMode = .scaleToFill
-            return
-        }
+        self.contentCardImage.image = UIImage(named: "place_holder_4x3")
+        self.contentCardImage.contentMode = .scaleToFill
         
-        if !StringHelper.isNilOrEmpty(string: item.videoThumbnailUrl) {
+        //setImageFrom(url: item.videoThumbnailUrl)
+        
+    }
+    
+    func setImageFrom(url:String) {
+        
+        if !StringHelper.isNilOrEmpty(string: url) {
             
-            ImagePickerManager.getImageFromUrl(url: item.videoThumbnailUrl) {[weak self] (imageResponse) in
+            ImagePickerManager.getImageFromUrl(url: url) {[weak self] (imageResponse) in
                 guard let localSelf = self else {return}
                 
                 switch imageResponse {
@@ -56,7 +59,6 @@ class HomePageCatalogCollectionViewCell : UICollectionViewCell {
             }
             
         }
-        
     }
     
 }

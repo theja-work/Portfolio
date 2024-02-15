@@ -23,13 +23,13 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="New Releases" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VSa-PK-0Rf">
-                        <rect key="frame" x="16" y="20" width="325" height="19"/>
+                        <rect key="frame" x="16" y="20" width="335" height="19"/>
                         <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="16"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h7U-kd-4bC">
-                        <rect key="frame" x="351" y="12" width="35" height="35"/>
+                        <rect key="frame" x="361" y="12" width="35" height="35"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="35" id="206-sK-nkW"/>
                             <constraint firstAttribute="height" constant="35" id="pSe-bC-cgh"/>
@@ -52,7 +52,7 @@
                     <constraint firstItem="h7U-kd-4bC" firstAttribute="leading" secondItem="VSa-PK-0Rf" secondAttribute="trailing" constant="10" id="Rue-0U-hiB"/>
                     <constraint firstAttribute="trailing" secondItem="zWe-7B-bUF" secondAttribute="trailing" id="ZqJ-tg-yan"/>
                     <constraint firstItem="VSa-PK-0Rf" firstAttribute="leading" secondItem="iMD-uj-HjS" secondAttribute="leading" constant="16" id="ZzU-ik-XWd"/>
-                    <constraint firstAttribute="trailing" secondItem="h7U-kd-4bC" secondAttribute="trailing" constant="20" id="b5T-cc-DTl"/>
+                    <constraint firstAttribute="trailing" secondItem="h7U-kd-4bC" secondAttribute="trailing" constant="10" id="b5T-cc-DTl"/>
                     <constraint firstItem="zWe-7B-bUF" firstAttribute="top" secondItem="h7U-kd-4bC" secondAttribute="bottom" constant="10" id="bxt-nz-Tx4"/>
                     <constraint firstItem="h7U-kd-4bC" firstAttribute="centerY" secondItem="VSa-PK-0Rf" secondAttribute="centerY" id="f0M-el-3vi"/>
                     <constraint firstItem="zWe-7B-bUF" firstAttribute="leading" secondItem="iMD-uj-HjS" secondAttribute="leading" constant="16" id="njW-kz-nb7"/>
