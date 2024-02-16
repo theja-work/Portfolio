@@ -131,7 +131,7 @@ public class VideoViewController : BaseViewController {
     var animationCounter = 0
     var playerLoader : NVActivityIndicatorView!
     var topNavBarPlayerOffset = 0.0
-    var thumbnailDidTap = false
+    var thumbnailDidTap = true
     var playButtonTap = false
     var backwardButtonTap = false
     var forwardButtonTap = false
@@ -167,12 +167,6 @@ public class VideoViewController : BaseViewController {
         //testSDKmethod()
     }
     
-    public override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        AppOrientation.lockOrientation(.all)
-    }
-    
     func testSDKmethod() {
         testSDK = TestSDKFrameWork()
         
@@ -182,6 +176,7 @@ public class VideoViewController : BaseViewController {
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        AppOrientation.lockOrientation(.all)
         NotificationCenter.default.addObserver(self, selector: #selector(videoDidEnded), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: player?.currentItem)
         
         NotificationCenter.default.addObserver(self, selector: #selector(saveVideoPosition), name: VideoViewController.AppKilledNotifier, object: nil)
@@ -231,14 +226,17 @@ public class VideoViewController : BaseViewController {
             print(error)
         }
         
-        if ProfileMangager().updateProfile(user: user) {
-            print("VideoViewController : video position saved")
+        DispatchQueue.main.async {
+            if ProfileMangager().updateProfile(user: user) {
+                print("VideoViewController : video position saved")
+            }
         }
         
     }
     
     public override func viewWillDisappear(_ animated: Bool) {
         saveVideoPosition()
+        AppOrientation.lockOrientation(.portrait)
         super.viewWillDisappear(animated)
         self.player?.replaceCurrentItem(with: nil)
         self.player?.pause()
@@ -444,16 +442,17 @@ public class VideoViewController : BaseViewController {
         self.playerPlayButtonHolderView.layer.cornerRadius = 8.0
         
         DispatchQueue.main.async {
-            self.playerBackwardButtonImageview.image = UIImage(named: "player_backward_secs")
-            self.playerPlayButtonImageview.image = UIImage(named: "player_pause_button")
-            self.playerForwardButtonImageview.image = UIImage(named: "player_forward_secs")
             
-            self.playerBackwardButtonImageview.tintColor = ColorCodes.turmeric.color
-            self.playerForwardButtonImageview.tintColor = ColorCodes.turmeric.color
-            self.playerPlayButtonImageview.tintColor = ColorCodes.turmeric.color
+            self.playerBackwardButtonImageview.image = UIImage(named: "previous")
+            self.playerPlayButtonImageview.image = UIImage(named: "pause")
+            self.playerForwardButtonImageview.image = UIImage(named: "next")
             
-            self.playerSeekBar.minimumTrackTintColor = ColorCodes.turmeric.color
-            self.playerSeekBar.maximumTrackTintColor = ColorCodes.BlueGray.color
+            self.playerBackwardButtonImageview.tintColor = .white.withAlphaComponent(0.7)
+            self.playerForwardButtonImageview.tintColor = .white.withAlphaComponent(0.7)
+            self.playerPlayButtonImageview.tintColor = .white
+            
+            self.playerSeekBar.minimumTrackTintColor = .white
+            self.playerSeekBar.maximumTrackTintColor = .gray
             
             self.playerSeekBar.isContinuous = true
             self.playerSeekBar.addTarget(self, action: #selector(self.sliderValueChanged(_:)), for: .valueChanged)
@@ -616,17 +615,18 @@ public class VideoViewController : BaseViewController {
         print("VideoViewController : player play action")
         
         if playButtonTap == false {
-            self.playerPlayButtonImageview.image = UIImage(named: "player_play_button")
+            self.playerPlayButtonImageview.image = UIImage(named: "play_circle")
             
             if self.player?.timeControlStatus == .playing {
                 self.player?.pause()
+                saveVideoPosition()
                 showPrimaryPlayButtons()
                 self.progressUpdateTimer?.invalidate()
                 
             }
         }
         else {
-            self.playerPlayButtonImageview.image = UIImage(named: "player_pause_button")
+            self.playerPlayButtonImageview.image = UIImage(named: "pause")
             
             self.playerView.isUserInteractionEnabled = true
             self.player?.play()
@@ -1077,7 +1077,9 @@ public class VideoViewController : BaseViewController {
         
         self.getVideoFromServer()
         
+        thumbnailDidTap = false
         self.playerView.isUserInteractionEnabled = true
+        playerControlsView.isUserInteractionEnabled = true
         DispatchQueue.main.async {
             
             if self.last_position > 0 {

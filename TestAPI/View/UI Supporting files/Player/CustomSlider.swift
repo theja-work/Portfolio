@@ -18,9 +18,9 @@ open class CustomSlider : UISlider {
     
     private lazy var thumbView: UIView = {
         let thumb = UIView()
-        thumb.backgroundColor = ColorCodes.turmeric.color
+        thumb.backgroundColor = .white
         thumb.layer.borderWidth = 0.4
-        thumb.layer.borderColor = ColorCodes.turmeric.color.cgColor
+        thumb.layer.borderColor = UIColor.white.cgColor
         return thumb
     }()
     
