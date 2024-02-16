@@ -25,7 +25,7 @@ class HomePageCatalogCollectionViewCell : UICollectionViewCell {
         
     }
     
-    func setupCell(item:VideoItem,indexPath:IndexPath) {
+    func setupCell(item:VideoItem,indexPath:IndexPath,needsSample:Bool = false) {
         
         self.clipsToBounds = true
         self.layer.masksToBounds = true
@@ -34,7 +34,9 @@ class HomePageCatalogCollectionViewCell : UICollectionViewCell {
         self.contentCardImage.image = UIImage(named: "place_holder_4x3")
         self.contentCardImage.contentMode = .scaleToFill
         
-        //setImageFrom(url: item.videoThumbnailUrl)
+        if needsSample {return}
+        
+        setImageFrom(url: item.videoThumbnailUrl)
         
     }
     

@@ -23,12 +23,14 @@ public class RelatedCollectionCell : UICollectionViewCell {
         return "RelatedCollectionCell"
     }
     
-    public func setupCell(item:VideoItem) {
+    public func setupCell(item:VideoItem,indexPath:IndexPath) {
         self.backgroundColor = ColorCodes.SkyBlue.color
         
         self.thumbnailImage.image = UIImage(named: "place_holder_4x3")
         
-        //setImageFrom(url: item.videoThumbnailUrl)
+        if !StringHelper.isNilOrEmpty(string: item.videoID) && item.videoID != "4" {
+            setImageFrom(url: item.videoThumbnailUrl)
+        }
         
         self.clipsToBounds = true
         self.layer.masksToBounds = true

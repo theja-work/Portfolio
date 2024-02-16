@@ -154,6 +154,10 @@ public class VideoViewController : BaseViewController {
     let playerRotationAnimationKey = "on_rotation_key"
     let playerScaleAnimationKey = "on_scale_key"
     
+    public override var prefersHomeIndicatorAutoHidden: Bool {
+        return true
+    }
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -444,18 +448,36 @@ public class VideoViewController : BaseViewController {
         self.playerBackwardButtonHolderView.layer.masksToBounds = true
         self.playerPlayButtonHolderView.layer.masksToBounds = true
         
-        self.playerForewardButtonHolderView.layer.cornerRadius = 8.0
-        self.playerBackwardButtonHolderView.layer.cornerRadius = 8.0
-        self.playerPlayButtonHolderView.layer.cornerRadius = 8.0
+        self.playerForewardButtonHolderView.layer.cornerRadius = self.playerForewardButtonHolderView.frame.size.height / 2
+        self.playerBackwardButtonHolderView.layer.cornerRadius = self.playerBackwardButtonHolderView.frame.size.height / 2
+        self.playerPlayButtonHolderView.layer.cornerRadius = self.playerPlayButtonHolderView.frame.size.height / 2
+        
+        let blurEffect = UIBlurEffect(style: .systemChromeMaterialDark)
+        let blurr1 = UIVisualEffectView(effect: blurEffect)
+        let blurr2 = UIVisualEffectView(effect: blurEffect)
+        let blurr3 = UIVisualEffectView(effect: blurEffect)
+        
+        blurr1.frame = self.playerBackwardButtonHolderView.bounds
+        self.playerBackwardButtonHolderView.addSubview(blurr1)
+        
+        blurr2.frame = self.playerForewardButtonHolderView.bounds
+        self.playerForewardButtonHolderView.addSubview(blurr2)
+        
+        blurr3.frame = self.playerPlayButtonHolderView.bounds
+        self.playerPlayButtonHolderView.addSubview(blurr3)
         
         DispatchQueue.main.async {
+            
+            self.playerBackwardButtonHolderView.bringSubviewToFront(self.playerBackwardButtonImageview)
+            self.playerPlayButtonHolderView.bringSubviewToFront(self.playerPlayButtonImageview)
+            self.playerForewardButtonHolderView.bringSubviewToFront(self.playerForwardButtonImageview)
             
             self.playerBackwardButtonImageview.image = UIImage(named: "previous")
             self.playerPlayButtonImageview.image = UIImage(named: "pause")
             self.playerForwardButtonImageview.image = UIImage(named: "next")
             
-            self.playerBackwardButtonImageview.tintColor = .white.withAlphaComponent(0.7)
-            self.playerForwardButtonImageview.tintColor = .white.withAlphaComponent(0.7)
+            self.playerBackwardButtonImageview.tintColor = .white
+            self.playerForwardButtonImageview.tintColor = .white
             self.playerPlayButtonImageview.tintColor = .white
             
             self.playerSeekBar.minimumTrackTintColor = .white
@@ -464,9 +486,9 @@ public class VideoViewController : BaseViewController {
             self.playerSeekBar.isContinuous = true
             self.playerSeekBar.addTarget(self, action: #selector(self.sliderValueChanged(_:)), for: .valueChanged)
             
-            self.playerForewardButtonHolderView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-            self.playerBackwardButtonHolderView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-            self.playerPlayButtonHolderView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+//            self.playerForewardButtonHolderView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+//            self.playerBackwardButtonHolderView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+//            self.playerPlayButtonHolderView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
             self.seekbarHolderView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
             
         }
@@ -1310,10 +1332,10 @@ extension VideoViewController : UICollectionViewDelegate , UICollectionViewDataS
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RelatedCollectionCell.getReusableIdentifier(), for: indexPath) as! RelatedCollectionCell
         
         if let item = self.viewModel?.relatedVideos?[indexPath.row] {
-            cell.setupCell(item: item)
+            cell.setupCell(item: item,indexPath: indexPath)
         }
         else {
-            cell.setupCell(item: VideoItem())
+            cell.setupCell(item: VideoItem(),indexPath: IndexPath())
         }
         
         return cell

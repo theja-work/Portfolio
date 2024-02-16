@@ -40,7 +40,9 @@ public class HomepageCollectionViewCell : UICollectionViewCell {
         imageView.image = UIImage(named: "place_holder_4x3")
         imageView.contentMode = .scaleToFill
         
-        //setImageFrom(url: item.videoThumbnailUrl)
+        if indexPath.row != 3 {
+            setImageFrom(url: item.videoThumbnailUrl)
+        }
         
     }
     

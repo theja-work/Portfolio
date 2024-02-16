@@ -26,6 +26,8 @@ class TV_CatalogCell : UITableViewCell {
     
     weak var contentSelectionDelegate : ContentSelectionProtocol?
     
+    var needsSample : Bool = false
+    
     var videos : [VideoItem]? {
         
         didSet {
@@ -42,8 +44,10 @@ class TV_CatalogCell : UITableViewCell {
         
     }
     
-    public func setupCell(item:VideoItem,indexPath:IndexPath,contentSelectionDelegate:ContentSelectionProtocol) {
+    public func setupCell(item:VideoItem,indexPath:IndexPath,contentSelectionDelegate:ContentSelectionProtocol,needsSample:Bool = false) {
         registerCollectionViewCells()
+        
+        self.needsSample = needsSample
         
         self.contentSelectionDelegate = contentSelectionDelegate
         
@@ -83,7 +87,7 @@ extension TV_CatalogCell : UICollectionViewDelegate , UICollectionViewDataSource
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomePageCatalogCollectionViewCell.cellIdentifier(), for: indexPath) as? HomePageCatalogCollectionViewCell
         
-        cell?.setupCell(item: item, indexPath: indexPath)
+        cell?.setupCell(item: item, indexPath: indexPath,needsSample: needsSample)
         
         return cell ?? UICollectionViewCell()
         

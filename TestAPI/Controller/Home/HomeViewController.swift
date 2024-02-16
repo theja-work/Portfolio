@@ -297,9 +297,14 @@ extension HomeViewController : UITableViewDelegate , UITableViewDataSource {
         else {
             let cell = tableView.dequeueReusableCell(withIdentifier: TV_CatalogCell.getCellIdentifier(), for: indexPath) as? TV_CatalogCell
             
+            var needsSample = false
+            if indexPath.row == 3 {
+                needsSample = true
+            }
+            
             cell?.selectionStyle = .none
             cell?.videos = self.viewModel?.videos
-            cell?.setupCell(item: item, indexPath: indexPath,contentSelectionDelegate: self)
+            cell?.setupCell(item: item, indexPath: indexPath,contentSelectionDelegate: self,needsSample: needsSample)
             return cell ?? UITableViewCell()
         }
         
