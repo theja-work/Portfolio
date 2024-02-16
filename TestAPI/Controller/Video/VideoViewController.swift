@@ -110,6 +110,13 @@ public class VideoViewController : BaseViewController {
     
     @IBOutlet weak var primary_player_controls_view: UIView!
     
+    @IBOutlet weak var playerTitleHolder: UIView!
+    
+    @IBOutlet weak var back_button_landscape: UIButton!
+    
+    @IBOutlet weak var player_title_label: UILabel!
+    
+    
     var scrollContentHeight : CGFloat = 0 {
         didSet {
             
@@ -709,6 +716,7 @@ public class VideoViewController : BaseViewController {
         
         DispatchQueue.main.async {
             self.videoTitleLabel.text = title
+            self.player_title_label.text = title
             self.videoDescriptionLabel.text = description
             if !StringHelper.isNilOrEmpty(string: duration) {
                 self.thumbnailDurationLabel.text = duration
@@ -922,6 +930,7 @@ public class VideoViewController : BaseViewController {
         self.animationCounter = 1
         
         playerViewTopConstraint.constant = topNavBarPlayerOffset//82
+        enableLandscapeBackButton()
     }
     
     public func portraitPlayerUpdates() {
@@ -930,6 +939,35 @@ public class VideoViewController : BaseViewController {
         self.animationCounter = 0
         
         playerViewTopConstraint.constant = 0
+        enablePortraitBackButton()
+    }
+    
+    func enableLandscapeBackButton() {
+        
+        DispatchQueue.main.async {
+            
+            self.back_button_landscape.isHidden = false
+            self.back_button_landscape.isUserInteractionEnabled = true
+            self.player_title_label.isHidden = false
+            
+            self.back_button_portrait.isHidden = true
+            self.back_button_portrait.isUserInteractionEnabled = false
+            
+        }
+        
+    }
+    
+    func enablePortraitBackButton() {
+        
+        DispatchQueue.main.async {
+            
+            self.back_button_portrait.isHidden = false
+            self.back_button_portrait.isUserInteractionEnabled = true
+            
+            self.back_button_landscape.isHidden = true
+            self.back_button_landscape.isUserInteractionEnabled = false
+            self.player_title_label.isHidden = true
+        }
         
     }
     
@@ -1076,10 +1114,9 @@ public class VideoViewController : BaseViewController {
     func playVideo() {
         
         self.getVideoFromServer()
-        
+        enablePortraitBackButton()
         thumbnailDidTap = false
         self.playerView.isUserInteractionEnabled = true
-        playerControlsView.isUserInteractionEnabled = true
         DispatchQueue.main.async {
             
             if self.last_position > 0 {
@@ -1205,6 +1242,12 @@ public class VideoViewController : BaseViewController {
         self.player = nil
         
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    
+    @IBAction func exitLandscapeMode(_ sender: UIButton) {
+        
+        fullScreenButtonAction()
     }
     
     @objc func hidePrimaryPlayButtons() {
