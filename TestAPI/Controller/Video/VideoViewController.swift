@@ -429,7 +429,6 @@ public class VideoViewController : BaseViewController {
         self.playerView.bringSubviewToFront(primary_player_controls_view)
         primary_player_controls_view.isUserInteractionEnabled = true
         primary_player_controls_view.isHidden = false
-        self.view.bringSubviewToFront(primary_player_controls_view)
         
         
         let backwardtap = UITapGestureRecognizer(target: self, action: #selector(backwardPlayerAction))
@@ -1362,7 +1361,7 @@ extension VideoViewController : UICollectionViewDelegate , UICollectionViewDataS
         guard let item = self.viewModel?.relatedVideos?[indexPath.row] else {return}
         
         updatePlayerWithItem(item: item)
-        
+        thumbnailDidTap = true
     }
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
