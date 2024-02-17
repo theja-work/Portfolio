@@ -54,7 +54,7 @@ open class CustomSlider : UISlider {
     open override func awakeFromNib() {
         super.awakeFromNib()
         let thumb = thumbImage(radius: thumbRadius)
-        setThumbImage(thumb, for: .normal)
+        //setThumbImage(thumb, for: .normal)
         setThumbImage(thumb, for: .highlighted)
     }
     

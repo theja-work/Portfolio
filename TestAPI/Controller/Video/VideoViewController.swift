@@ -470,12 +470,14 @@ public class VideoViewController : BaseViewController {
             self.playerPlayButtonHolderView.bringSubviewToFront(self.playerPlayButtonImageview)
             self.playerForewardButtonHolderView.bringSubviewToFront(self.playerForwardButtonImageview)
             
-            self.playerBackwardButtonImageview.image = UIImage(named: "previous")
-            self.playerPlayButtonImageview.image = UIImage(named: "pause")
-            self.playerForwardButtonImageview.image = UIImage(named: "next")
+            let margin:CGFloat = 26
+            let playMargin:CGFloat = 8
+            self.playerBackwardButtonImageview.image = UIImage(named: "previous")?.withInset(UIEdgeInsets(top: margin, left: margin, bottom: margin, right: margin))
+            self.playerPlayButtonImageview.image = UIImage(named: "pause")?.withInset(UIEdgeInsets(top: playMargin, left: playMargin, bottom: playMargin, right: playMargin))
+            self.playerForwardButtonImageview.image = UIImage(named: "next")?.withInset(UIEdgeInsets(top: margin, left: margin, bottom: margin, right: margin))
             
-            self.playerBackwardButtonImageview.tintColor = .white
-            self.playerForwardButtonImageview.tintColor = .white
+            self.playerBackwardButtonImageview.tintColor = .white.withAlphaComponent(0.70)
+            self.playerForwardButtonImageview.tintColor = .white.withAlphaComponent(0.70)
             self.playerPlayButtonImageview.tintColor = .white
             
             self.playerSeekBar.minimumTrackTintColor = .white
@@ -1378,5 +1380,21 @@ extension Reactive where Base: AVPlayerItem {
     public var playbackBufferEmpty: Observable<Bool> {
         return self.observe(Bool.self, #keyPath(AVPlayerItem.isPlaybackBufferEmpty))
             .map { $0 ?? false }
+    }
+}
+
+extension UIImage {
+
+    func withInset(_ insets: UIEdgeInsets) -> UIImage? {
+        let cgSize = CGSize(width: self.size.width + insets.left * self.scale + insets.right * self.scale,
+                            height: self.size.height + insets.top * self.scale + insets.bottom * self.scale)
+
+        UIGraphicsBeginImageContextWithOptions(cgSize, false, self.scale)
+        defer { UIGraphicsEndImageContext() }
+
+        let origin = CGPoint(x: insets.left * self.scale, y: insets.top * self.scale)
+        self.draw(at: origin)
+
+        return UIGraphicsGetImageFromCurrentImageContext()?.withRenderingMode(self.renderingMode)
     }
 }
