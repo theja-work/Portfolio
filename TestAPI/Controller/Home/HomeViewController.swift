@@ -347,10 +347,7 @@ extension HomeViewController : UITableViewDelegate , UITableViewDataSource {
 
 extension UINavigationController {
     
-    public func pushViewController(
-        _ viewController: UIViewController,
-        animated: Bool,
-        completion: @escaping () -> Void)
+    public func pushViewController(_ viewController: UIViewController,animated: Bool,completion: @escaping () -> Void)
     {
         pushViewController(viewController, animated: animated)
 
@@ -362,9 +359,7 @@ extension UINavigationController {
         coordinator.animate(alongsideTransition: nil) { _ in completion() }
     }
 
-    func popViewController(
-        animated: Bool,
-        completion: @escaping () -> Void)
+    func popViewController(animated: Bool,completion: @escaping () -> Void)
     {
         popViewController(animated: animated)
 

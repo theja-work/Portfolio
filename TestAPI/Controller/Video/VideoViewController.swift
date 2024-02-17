@@ -126,23 +126,23 @@ public class VideoViewController : BaseViewController {
     
     public static let AppKilledNotifier = Notification.Name.init("App_killed_notification")
     
-    fileprivate var last_position : Double = 0.0
+    fileprivate lazy var last_position : Double = 0.0
     
     var playerLayer : AVPlayerLayer?
     
-    var fullScreenTapped : Bool = false
+    lazy var fullScreenTapped : Bool = false
     
     public var progressUpdateTimer : Timer?
     
     var player : AVPlayer? = nil
-    var animationCounter = 0
+    lazy var animationCounter = 0
     var playerLoader : NVActivityIndicatorView!
-    var topNavBarPlayerOffset = 0.0
-    var thumbnailDidTap = true
-    var playButtonTap = false
-    var backwardButtonTap = false
-    var forwardButtonTap = false
-    var controlFadeSeconds = 0.9
+    lazy var topNavBarPlayerOffset = 0.0
+    lazy var thumbnailDidTap = true
+    lazy var playButtonTap = false
+    lazy var backwardButtonTap = false
+    lazy var forwardButtonTap = false
+    lazy var controlFadeSeconds = 0.9
     
     private var playerItemBufferEmptyObserver: NSKeyValueObservation?
     private var playerItemBufferKeepUpObserver: NSKeyValueObservation?
@@ -169,12 +169,6 @@ public class VideoViewController : BaseViewController {
         topNavBarPlayerOffset = (navHeight - 3) * 2
         
         setupViewModel()
-        
-        buttonSetup()
-        setupLoader()
-        playerSetup()
-        
-        
         //testSDKmethod()
     }
     
@@ -187,6 +181,9 @@ public class VideoViewController : BaseViewController {
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        playerSetup()
+        buttonSetup()
+        setupLoader()
         AppOrientation.lockOrientation(.all)
         NotificationCenter.default.addObserver(self, selector: #selector(videoDidEnded), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: player?.currentItem)
         
@@ -429,6 +426,7 @@ public class VideoViewController : BaseViewController {
         //self.playerControlsView.alpha = 0.0
         self.playerControlsView.backgroundColor = .black.withAlphaComponent(0.25)
         
+        self.playerView.bringSubviewToFront(primary_player_controls_view)
         primary_player_controls_view.isUserInteractionEnabled = true
         primary_player_controls_view.isHidden = false
         self.view.bringSubviewToFront(primary_player_controls_view)
@@ -888,7 +886,7 @@ public class VideoViewController : BaseViewController {
                 localSelf.hideLoader()
             }
             
-        })
+        }).disposed(by: bag)
     }
     
     public override func removeObserver(_ observer: NSObject, forKeyPath keyPath: String) {
