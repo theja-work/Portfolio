@@ -58,24 +58,6 @@ open class CustomSlider : UISlider {
         setThumbImage(thumb, for: .highlighted)
     }
     
-//    override open func thumbRect(forBounds bounds: CGRect, trackRect rect: CGRect, value: Float) -> CGRect {
-//
-//
-//        return CGRect(x: 10, y: 10, width: 50, height: 50)
-//    }
-    
-//    override open func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-//        //   print("Point Inside track \(point)")
-//        var increasedBounds = bounds.insetBy(dx: -40, dy: -40)
-//
-//        //var increasedBounds = bounds
-//
-//        let containsPoint = increasedBounds.contains(point)
-//        print("Point Inside track \(point) \(increasedBounds) \(containsPoint)")
-//        return containsPoint
-//        //return true
-//    }
-    
     override open func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
 
         return true

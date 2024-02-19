@@ -161,6 +161,64 @@
             </objects>
             <point key="canvasLocation" x="2.8985507246376816" y="-5.3571428571428568"/>
         </scene>
+        <!--Login View Controller2-->
+        <scene sceneID="FWU-aV-XP7">
+            <objects>
+                <viewController storyboardIdentifier="LoginVC2" id="um7-oo-4nj" customClass="LoginViewController2" customModule="TestAPI" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="wFt-58-BHz">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HLQ-Qt-TcS">
+                                <rect key="frame" x="117" y="428" width="180" height="40"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="180" id="1G6-Vf-MN6"/>
+                                    <constraint firstAttribute="height" constant="40" id="QGc-5R-MlB"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="Sign in with Google">
+                                    <color key="titleColor" red="0.45882352941176469" green="0.45882352941176469" blue="0.45882352941176469" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="signInAction:" destination="um7-oo-4nj" eventType="touchUpInside" id="ME2-Wi-foT"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="4LP-fS-59L"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="HLQ-Qt-TcS" firstAttribute="centerY" secondItem="wFt-58-BHz" secondAttribute="centerY" id="XAR-Y5-IFQ"/>
+                            <constraint firstItem="HLQ-Qt-TcS" firstAttribute="centerX" secondItem="wFt-58-BHz" secondAttribute="centerX" id="ZSb-9b-jQy"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="vs7-uJ-CGB"/>
+                    <connections>
+                        <outlet property="signInButton" destination="HLQ-Qt-TcS" id="4hT-zj-sMo"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="uPu-DH-qkt" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="913" y="711"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="bUi-oa-3fA">
+            <objects>
+                <navigationController storyboardIdentifier="LoginNC2" automaticallyAdjustsScrollViewInsets="NO" id="DLc-Zf-8uw" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="AfS-p6-o8D">
+                        <rect key="frame" x="0.0" y="48" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="um7-oo-4nj" kind="relationship" relationship="rootViewController" id="kUZ-aG-a8X"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZtI-qX-iCh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3" y="711"/>
+        </scene>
     </scenes>
     <resources>
         <systemColor name="systemBackgroundColor">
