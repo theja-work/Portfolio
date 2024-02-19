@@ -15,6 +15,10 @@ public enum CustomFont {
     case OS_Bold_Italic
     case OS_Semibold_Italic
     
+    case Roboto_Bold
+    case Roboto_Medium
+    case Roboto_Regular
+    
     var name : String {
         switch self {
         case .OS_Bold           : return "OpenSans-Bold"
@@ -22,6 +26,10 @@ public enum CustomFont {
         case .OS_Semibold       : return "OpenSans-Semibold"
         case .OS_Bold_Italic    : return "OpenSans-BoldItalic"
         case .OS_Semibold_Italic: return "OpenSans-SemiboldItalic"
+        
+        case .Roboto_Bold       : return "Roboto-Bold"
+        case .Roboto_Medium     : return "Roboto-Medium"
+        case .Roboto_Regular    : return "Roboto-Regular"
         }
     }
     
@@ -40,6 +48,10 @@ public enum CustomFont {
         case .OS_Semibold       : return 16.0
         case .OS_Bold_Italic    : return 14.0
         case .OS_Semibold_Italic: return 12.0
+            
+        case .Roboto_Bold       : return 20.0
+        case .Roboto_Medium     : return 18.0
+        case .Roboto_Regular    : return 16.0
         }
     }
 }

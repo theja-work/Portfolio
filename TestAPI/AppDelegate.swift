@@ -68,6 +68,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
             return self.orientationLock
     }
+    
+    func applicationWillTerminate(_ application: UIApplication) {
+        
+        NotificationCenter.default.post(Notification(name: VideoViewController.AppKilledNotifier))
+    }
+    
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        
+        print("Application entered background")
+    }
 
     // MARK: UISceneSession Lifecycle
 

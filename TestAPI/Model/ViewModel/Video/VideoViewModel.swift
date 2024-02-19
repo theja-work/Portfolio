@@ -16,6 +16,7 @@ public class VideoViewModel {
     fileprivate var api : VideoServiceProtocol?
     var videos:[VideoItem]?
     var relatedVideos:[VideoItem]?
+    var bannerItemVideos:[VideoItem]?
     
     public init(api: VideoServiceProtocol) {
         self.api = api
@@ -32,6 +33,9 @@ public class VideoViewModel {
         var relatedVideosSubject : BehaviorSubject<[VideoItem]>
         var relatedVideosDriver : Driver<[VideoItem]>
         
+        var bannerVideosSubject : BehaviorSubject<[VideoItem]>
+        var bannerVideosDriver : Driver<[VideoItem]>
+        
         init() {
             
             isLoadingSubject = BehaviorSubject(value: false)
@@ -42,6 +46,9 @@ public class VideoViewModel {
             
             relatedVideosSubject = BehaviorSubject(value: [])
             relatedVideosDriver = relatedVideosSubject.asDriver(onErrorJustReturn: [])
+            
+            bannerVideosSubject = BehaviorSubject(value: [])
+            bannerVideosDriver = bannerVideosSubject.asDriver(onErrorJustReturn: [])
             
         }
         
@@ -81,6 +88,9 @@ public class VideoViewModel {
                 DispatchQueue.main.async {
                     strongSelf.videos = videos
                     strongSelf.output.videoListSubject.onNext(videos)
+                    
+                    strongSelf.bannerItemVideos = videos
+                    strongSelf.output.bannerVideosSubject.onNext(videos)
                 }
                 
             case .serverError(let error, let message):
@@ -140,11 +150,28 @@ public class VideoViewModel {
         
     }
     
+    public func getVideosCountForBannerItems() -> Int? {
+        
+        if let count = videos?.count {return count}
+        
+        return nil
+    }
+    
     public func getRelatedVideosCount() -> Int? {
         
         if let count : Int = relatedVideos?.count {return count}
         
         return nil
+    }
+    
+    func reverseArray<Element:Equatable>(input : [Element])-> [Element]{
+        var count = input.count
+        var result_ = input
+        for index in 0..<input.count{
+            result_.insert(input[count-index-1], at: index)
+            result_.removeLast()
+        }
+        return result_
     }
     
 }

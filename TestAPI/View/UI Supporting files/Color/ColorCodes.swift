@@ -21,6 +21,7 @@ public enum ColorCodes {
     case SkyBlue
     case BlueGray
     case turmeric
+    case SignInTextColor
     
     var code : String {
         switch self {
@@ -35,6 +36,7 @@ public enum ColorCodes {
         case .SkyBlue           : return "#80d4ff"
         case .BlueGray          : return "#50717d"
         case .turmeric          : return "#FFC300"
+        case .SignInTextColor   : return "#757575"
         }
     }
     

@@ -10,14 +10,6 @@ import UIKit
 import CoreData
 import TestSDK
 
-extension Dictionary {
-    mutating func merge(dict: [Key: Value]){
-        for (k, v) in dict {
-            updateValue(v, forKey: k)
-        }
-    }
-}
-
 public class ProfileViewController : UIViewController {
     
     @IBOutlet weak var profileImageView : UIImageView!

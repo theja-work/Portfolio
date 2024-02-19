@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="TV_BannerCell" rowHeight="180" id="ygL-mW-B8I" customClass="TV_BannerCell" customModule="TestAPI" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="350" height="200"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ygL-mW-B8I" id="toE-8a-TCt">
+                <rect key="frame" x="0.0" y="0.0" width="350" height="200"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rM5-hw-8hZ">
+                        <rect key="frame" x="0.0" y="0.0" width="350" height="150"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="uzE-v1-ZRV">
+                                <rect key="frame" x="0.0" y="0.0" width="350" height="150"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="cMH-8Y-iJN">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="uzE-v1-ZRV" secondAttribute="trailing" id="IcT-az-IE3"/>
+                            <constraint firstAttribute="bottom" secondItem="uzE-v1-ZRV" secondAttribute="bottom" id="NAc-yn-hy8"/>
+                            <constraint firstItem="uzE-v1-ZRV" firstAttribute="leading" secondItem="rM5-hw-8hZ" secondAttribute="leading" id="hKt-gG-x9V"/>
+                            <constraint firstItem="uzE-v1-ZRV" firstAttribute="top" secondItem="rM5-hw-8hZ" secondAttribute="top" id="zqW-um-KUh"/>
+                        </constraints>
+                    </view>
+                    <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="9db-oX-PV6">
+                        <rect key="frame" x="26.333333333333343" y="160" width="297.33333333333326" height="30"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="52b-p5-ly4"/>
+                        </constraints>
+                    </pageControl>
+                </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                <constraints>
+                    <constraint firstItem="rM5-hw-8hZ" firstAttribute="leading" secondItem="toE-8a-TCt" secondAttribute="leading" id="DMd-kt-FYL"/>
+                    <constraint firstItem="9db-oX-PV6" firstAttribute="width" secondItem="toE-8a-TCt" secondAttribute="width" multiplier="0.85" id="F0u-eT-ImX"/>
+                    <constraint firstAttribute="bottom" secondItem="9db-oX-PV6" secondAttribute="bottom" constant="10" id="Ikg-PK-ZPl"/>
+                    <constraint firstItem="9db-oX-PV6" firstAttribute="centerX" secondItem="toE-8a-TCt" secondAttribute="centerX" id="JTg-1N-0gL"/>
+                    <constraint firstAttribute="trailing" secondItem="rM5-hw-8hZ" secondAttribute="trailing" id="dFu-bT-UXE"/>
+                    <constraint firstItem="rM5-hw-8hZ" firstAttribute="top" secondItem="toE-8a-TCt" secondAttribute="top" id="nae-NA-QF3"/>
+                    <constraint firstItem="9db-oX-PV6" firstAttribute="top" secondItem="rM5-hw-8hZ" secondAttribute="bottom" constant="10" id="veF-KW-bWq"/>
+                </constraints>
+            </tableViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <connections>
+                <outlet property="carouselCollectionView" destination="uzE-v1-ZRV" id="Cct-lu-gLE"/>
+                <outlet property="carouselHolderView" destination="rM5-hw-8hZ" id="F9h-Vy-d6h"/>
+                <outlet property="pageControlView" destination="9db-oX-PV6" id="Q32-Cu-Yu9"/>
+            </connections>
+            <point key="canvasLocation" x="148" y="-23"/>
+        </tableViewCell>
+    </objects>
+</document>

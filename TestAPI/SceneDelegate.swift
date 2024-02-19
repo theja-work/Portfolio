@@ -22,7 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let loggedInUser = ProfileMangager().hasLoggedInUser()
         
-        setRootViewController(loggedInUser ? HomeViewController.getNavigationController() : LoginViewController.getNavigationController())
+        setRootViewController(loggedInUser ? HomeViewController.getNavigationController() : LoginViewController2.getNavigationController())
         
     }
     
@@ -56,7 +56,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func loadHomeScreen() {
         
         let homeVC = getHomeVC()
-        let loginNC = LoginViewController.getNavigationController()
+        let loginNC = LoginViewController2.getNavigationController()
         
         guard let scene = (currentScene as? UIWindowScene) else { return }
         
@@ -68,7 +68,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     func loadLoginScreen() {
-        let loginNC = LoginViewController.getNavigationController()
+        let loginNC = LoginViewController2.getNavigationController()
         
         guard let scene = (currentScene as? UIWindowScene) else { return }
         

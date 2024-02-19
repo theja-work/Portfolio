@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="HomePageCatalogCollectionViewCell" id="31P-1f-6h8" customClass="HomePageCatalogCollectionViewCell" customModule="TestAPI" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="101" height="143"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="Eod-jy-unp">
+                <rect key="frame" x="0.0" y="0.0" width="101" height="143"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="E4y-hE-j86">
+                        <rect key="frame" x="0.0" y="0.0" width="101" height="143"/>
+                    </imageView>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="E4y-hE-j86" secondAttribute="trailing" id="3j7-qk-CVE"/>
+                    <constraint firstItem="E4y-hE-j86" firstAttribute="top" secondItem="Eod-jy-unp" secondAttribute="top" id="8d2-0n-99m"/>
+                    <constraint firstAttribute="bottom" secondItem="E4y-hE-j86" secondAttribute="bottom" id="N8v-Yc-nMZ"/>
+                    <constraint firstItem="E4y-hE-j86" firstAttribute="leading" secondItem="Eod-jy-unp" secondAttribute="leading" id="xMa-yU-5x5"/>
+                </constraints>
+            </collectionViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <size key="customSize" width="251" height="208"/>
+            <connections>
+                <outlet property="contentCardImage" destination="E4y-hE-j86" id="BwH-ST-BRK"/>
+            </connections>
+            <point key="canvasLocation" x="121.37404580152672" y="26.408450704225352"/>
+        </collectionViewCell>
+    </objects>
+</document>
