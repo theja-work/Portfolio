@@ -40,6 +40,7 @@ struct ProfileMangager {
     func hasLoggedInUser() -> Bool {
         
         if let uuid = AppUserDefaults.getCurrentUserUUID() {
+            print(uuid)
             return true
         }
         
