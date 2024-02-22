@@ -7,7 +7,7 @@ target 'TestAPI' do
 
   # Pods for TestAPI
 
-pod 'FirebaseAnalytics' 
+pod 'FirebaseAnalytics'
 pod 'FirebaseAuth'
 pod 'FirebaseFirestore'
 pod 'RxSwift', '6.5.0'

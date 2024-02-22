@@ -47,6 +47,7 @@
 		B31D20632B77676800B09FC1 /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B31D20622B77676800B09FC1 /* Login.storyboard */; };
 		B31D20672B7776CE00B09FC1 /* TestSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B78FA722A8BB75900346C13 /* TestSDK.xcframework */; };
 		B31D20682B7776CE00B09FC1 /* TestSDK.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6B78FA722A8BB75900346C13 /* TestSDK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B32208502B87CD0E00DBE45D /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = B322084F2B87CD0E00DBE45D /* Podfile */; };
 		B34ADA6C2B84D25C00B4133E /* ContentSelectionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = B34ADA6B2B84D25C00B4133E /* ContentSelectionProtocol.swift */; };
 		B350714D2B7932E8007FBAAF /* AppUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = B350714C2B7932E8007FBAAF /* AppUserDefaults.swift */; };
 		B37103C52B7B7C9A0086FC41 /* CustomSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37103C42B7B7C9A0086FC41 /* CustomSlider.swift */; };
@@ -129,6 +130,7 @@
 		B31D205D2B77604E00B09FC1 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		B31D20602B77638300B09FC1 /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		B31D20622B77676800B09FC1 /* Login.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Login.storyboard; sourceTree = "<group>"; };
+		B322084F2B87CD0E00DBE45D /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
 		B34ADA6B2B84D25C00B4133E /* ContentSelectionProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentSelectionProtocol.swift; sourceTree = "<group>"; };
 		B350714C2B7932E8007FBAAF /* AppUserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUserDefaults.swift; sourceTree = "<group>"; };
 		B37103C42B7B7C9A0086FC41 /* CustomSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSlider.swift; sourceTree = "<group>"; };
@@ -225,6 +227,7 @@
 		6B9D59B52A7FA89D007129CB = {
 			isa = PBXGroup;
 			children = (
+				B322084F2B87CD0E00DBE45D /* Podfile */,
 				6B9D59C02A7FA89D007129CB /* TestAPI */,
 				6B9D59BF2A7FA89D007129CB /* Products */,
 				E89FED94CBD4E89147AC5EB5 /* Pods */,
@@ -576,6 +579,7 @@
 				B37103E72B7DB3790086FC41 /* TV_CatalogCell.xib in Resources */,
 				6B74DFAE2A863FF9008886C7 /* OpenSans-Bold.ttf in Resources */,
 				B37103E22B7D9C0C0086FC41 /* Roboto-Medium.ttf in Resources */,
+				B32208502B87CD0E00DBE45D /* Podfile in Resources */,
 				B31D20502B76DDEA00B09FC1 /* GoogleService-Info.plist in Resources */,
 				B37103D82B7D63E20086FC41 /* TV_BannerCell.xib in Resources */,
 				6B74DFBB2A8646DF008886C7 /* Profile.storyboard in Resources */,
