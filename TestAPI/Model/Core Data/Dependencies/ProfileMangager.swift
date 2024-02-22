@@ -10,7 +10,7 @@ import CoreData
 
 struct ProfileMangager {
     
-    private let _persistentRepository = ProfileDataRepository()
+    private let _persistentRepository = DataRepo()
     
     func createProfile(user:UserProfile) {
         
