@@ -67,8 +67,8 @@
 		B37103EB2B7DBAE40086FC41 /* HomePageCatalogCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B37103EA2B7DBAE40086FC41 /* HomePageCatalogCollectionViewCell.xib */; };
 		B3A2BD862B83272200AA56B1 /* LoginViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A2BD852B83272200AA56B1 /* LoginViewController2.swift */; };
 		B3D85F672A8714480043D43B /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3D85F662A8714480043D43B /* ImagePicker.swift */; };
-		B3FBE1E82B87C349005B9A6D /* PersistenceStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3FBE1E62B87C347005B9A6D /* PersistenceStorage.swift */; };
-		B3FBE1ED2B87C4BB005B9A6D /* TestFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3FBE1EC2B87C4BB005B9A6D /* TestFile.swift */; };
+		B3F67A752B87C8CA00B85037 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3F67A742B87C8CA00B85037 /* Storage.swift */; };
+		B3FBE1F02B87C7FE005B9A6D /* DataRepo.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3FBE1EF2B87C7FE005B9A6D /* DataRepo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -149,8 +149,8 @@
 		B37103EA2B7DBAE40086FC41 /* HomePageCatalogCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HomePageCatalogCollectionViewCell.xib; sourceTree = "<group>"; };
 		B3A2BD852B83272200AA56B1 /* LoginViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController2.swift; sourceTree = "<group>"; };
 		B3D85F662A8714480043D43B /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
-		B3FBE1E62B87C347005B9A6D /* PersistenceStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistenceStorage.swift; sourceTree = "<group>"; };
-		B3FBE1EC2B87C4BB005B9A6D /* TestFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestFile.swift; sourceTree = "<group>"; };
+		B3F67A742B87C8CA00B85037 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
+		B3FBE1EF2B87C7FE005B9A6D /* DataRepo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataRepo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -426,7 +426,6 @@
 		B34ADA6D2B84D96400B4133E /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
-				B3FBE1E62B87C347005B9A6D /* PersistenceStorage.swift */,
 				B37103D32B7CF2B90086FC41 /* ProfileMangager.swift */,
 			);
 			path = Dependencies;
@@ -487,7 +486,8 @@
 		B3FBE1EE2B87C4ED005B9A6D /* Storage */ = {
 			isa = PBXGroup;
 			children = (
-				B3FBE1EC2B87C4BB005B9A6D /* TestFile.swift */,
+				B3FBE1EF2B87C7FE005B9A6D /* DataRepo.swift */,
+				B3F67A742B87C8CA00B85037 /* Storage.swift */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
@@ -639,11 +639,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B3FBE1ED2B87C4BB005B9A6D /* TestFile.swift in Sources */,
 				B37103D62B7D62DD0086FC41 /* TV_BannerCell.swift in Sources */,
 				B31D205B2B775E3D00B09FC1 /* LoginViewController.swift in Sources */,
 				6BA8E1962A929F2000ACBDEB /* Server.swift in Sources */,
-				B3FBE1E82B87C349005B9A6D /* PersistenceStorage.swift in Sources */,
 				6B74DFB92A8646A0008886C7 /* ProfileViewController.swift in Sources */,
 				B37103D42B7CF2B90086FC41 /* ProfileMangager.swift in Sources */,
 				6BF5F8912A9552F5008E2F75 /* VideoServiceAPI.swift in Sources */,
@@ -670,6 +668,7 @@
 				6BF56F062A7FBD7200C4BB41 /* HomeButtons.swift in Sources */,
 				B34ADA6C2B84D25C00B4133E /* ContentSelectionProtocol.swift in Sources */,
 				B31D20582B76FF3300B09FC1 /* Loader.swift in Sources */,
+				B3FBE1F02B87C7FE005B9A6D /* DataRepo.swift in Sources */,
 				6B9D59C42A7FA89D007129CB /* SceneDelegate.swift in Sources */,
 				B3D85F672A8714480043D43B /* ImagePicker.swift in Sources */,
 				B3A2BD862B83272200AA56B1 /* LoginViewController2.swift in Sources */,
@@ -677,6 +676,7 @@
 				B31D20612B77638300B09FC1 /* Toast.swift in Sources */,
 				B37103CA2B7CD47D0086FC41 /* Profile+CoreDataProperties.swift in Sources */,
 				6BF56F022A7FBC5900C4BB41 /* HomeViewController.swift in Sources */,
+				B3F67A752B87C8CA00B85037 /* Storage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
