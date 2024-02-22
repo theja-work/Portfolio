@@ -168,7 +168,6 @@ public class VideoViewController : BaseViewController {
         
         topNavBarPlayerOffset = (navHeight - 3) * 2
         
-        setupViewModel()
         //testSDKmethod()
     }
     
@@ -184,6 +183,7 @@ public class VideoViewController : BaseViewController {
         playerSetup()
         buttonSetup()
         setupLoader()
+        setupViewModel()
         AppOrientation.lockOrientation(.all)
         NotificationCenter.default.addObserver(self, selector: #selector(videoDidEnded), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: player?.currentItem)
         

@@ -50,8 +50,6 @@ public class ProfileViewController : UIViewController {
         
         let viewController = storyboard.instantiateViewController(withIdentifier: "ProfileViewController") as? ProfileViewController
         
-        
-        
         return viewController!
     }
     
@@ -114,8 +112,6 @@ public class ProfileViewController : UIViewController {
     @objc func editImageToggleAction() {
         
         self.view.endEditing(true)
-        
-        
         
         ImagePickerManager.shared.pickImage(self) { [weak self] image in
             guard let strongSelf = self else {return}

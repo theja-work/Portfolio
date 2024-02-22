@@ -48,8 +48,6 @@
 		B31D20672B7776CE00B09FC1 /* TestSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B78FA722A8BB75900346C13 /* TestSDK.xcframework */; };
 		B31D20682B7776CE00B09FC1 /* TestSDK.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6B78FA722A8BB75900346C13 /* TestSDK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B34ADA6C2B84D25C00B4133E /* ContentSelectionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = B34ADA6B2B84D25C00B4133E /* ContentSelectionProtocol.swift */; };
-		B34ADA6F2B84D97400B4133E /* ProfileDataRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B34ADA6E2B84D97400B4133E /* ProfileDataRepository.swift */; };
-		B34ADA712B84DB8E00B4133E /* PersistenceStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B34ADA702B84DB8E00B4133E /* PersistenceStorage.swift */; };
 		B350714D2B7932E8007FBAAF /* AppUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = B350714C2B7932E8007FBAAF /* AppUserDefaults.swift */; };
 		B37103C52B7B7C9A0086FC41 /* CustomSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37103C42B7B7C9A0086FC41 /* CustomSlider.swift */; };
 		B37103C92B7CD47D0086FC41 /* Profile+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37103C72B7CD47D0086FC41 /* Profile+CoreDataClass.swift */; };
@@ -69,6 +67,8 @@
 		B37103EB2B7DBAE40086FC41 /* HomePageCatalogCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B37103EA2B7DBAE40086FC41 /* HomePageCatalogCollectionViewCell.xib */; };
 		B3A2BD862B83272200AA56B1 /* LoginViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A2BD852B83272200AA56B1 /* LoginViewController2.swift */; };
 		B3D85F672A8714480043D43B /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3D85F662A8714480043D43B /* ImagePicker.swift */; };
+		B3FBE1DE2B87BFCA005B9A6D /* ProfileDataRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B34ADA6E2B84D97400B4133E /* ProfileDataRepository.swift */; };
+		B3FBE1DF2B87C111005B9A6D /* PersistenceStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B34ADA702B84DB8E00B4133E /* PersistenceStorage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -426,6 +426,7 @@
 		B34ADA6D2B84D96400B4133E /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
+				B37103D32B7CF2B90086FC41 /* ProfileMangager.swift */,
 				B34ADA6E2B84D97400B4133E /* ProfileDataRepository.swift */,
 				B34ADA702B84DB8E00B4133E /* PersistenceStorage.swift */,
 			);
@@ -463,7 +464,6 @@
 			isa = PBXGroup;
 			children = (
 				B37103D12B7CE7A80086FC41 /* UserProfile.swift */,
-				B37103D32B7CF2B90086FC41 /* ProfileMangager.swift */,
 			);
 			path = "User Model";
 			sourceTree = "<group>";
@@ -631,7 +631,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B34ADA6F2B84D97400B4133E /* ProfileDataRepository.swift in Sources */,
 				B37103D62B7D62DD0086FC41 /* TV_BannerCell.swift in Sources */,
 				B31D205B2B775E3D00B09FC1 /* LoginViewController.swift in Sources */,
 				6BA8E1962A929F2000ACBDEB /* Server.swift in Sources */,
@@ -641,6 +640,7 @@
 				6B74DFC02A86682A008886C7 /* CustomFonts.swift in Sources */,
 				6BF5F88F2A955287008E2F75 /* VideoAPI.swift in Sources */,
 				6BA8E19B2A92B34400ACBDEB /* VideoItem.swift in Sources */,
+				B3FBE1DE2B87BFCA005B9A6D /* ProfileDataRepository.swift in Sources */,
 				B3188B9A2B7A357B006A2EA3 /* RelatedCollectionCell.swift in Sources */,
 				B37103E92B7DBA6E0086FC41 /* HomePageCatalogCollectionViewCell.swift in Sources */,
 				6B9D59C22A7FA89D007129CB /* AppDelegate.swift in Sources */,
@@ -658,7 +658,7 @@
 				6BFF3F1C2A8C15A50094F063 /* VideoViewController.swift in Sources */,
 				B31D205E2B77604E00B09FC1 /* BaseViewController.swift in Sources */,
 				6B9D59CC2A7FA89D007129CB /* TestAPI.xcdatamodeld in Sources */,
-				B34ADA712B84DB8E00B4133E /* PersistenceStorage.swift in Sources */,
+				B3FBE1DF2B87C111005B9A6D /* PersistenceStorage.swift in Sources */,
 				6BF56F062A7FBD7200C4BB41 /* HomeButtons.swift in Sources */,
 				B34ADA6C2B84D25C00B4133E /* ContentSelectionProtocol.swift in Sources */,
 				B31D20582B76FF3300B09FC1 /* Loader.swift in Sources */,
