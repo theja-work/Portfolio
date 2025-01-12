@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="RyJ-wD-4aZ">
+    <device id="retina5_9" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Login View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController storyboardIdentifier="LoginVC" id="BYZ-38-t0r" customClass="LoginViewController" customModule="PlayBox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="play_box" translatesAutoresizingMaskIntoConstraints="NO" id="fRR-bj-fIJ">
+                                <rect key="frame" x="170.66666666666666" y="60" width="33.666666666666657" height="33.666666666666657"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="fRR-bj-fIJ" secondAttribute="height" multiplier="1:1" id="hQ5-FJ-Xqm"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <integer key="value" value="8"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </imageView>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email : johndoe@gmail.com" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9ge-OV-Fre">
+                                <rect key="frame" x="65.666666666666671" y="200" width="243.66666666666663" height="36.333333333333343"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password : •••••••••" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="KRx-xs-GNq">
+                                <rect key="frame" x="65.666666666666671" y="276.33333333333331" width="243.66666666666663" height="36.333333333333314"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" clipsSubviews="YES" alpha="0.75" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MBO-W9-OFb">
+                                <rect key="frame" x="140.66666666666666" y="372.66666666666669" width="93.666666666666657" height="35.333333333333314"/>
+                                <color key="backgroundColor" systemColor="systemBlueColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="MBO-W9-OFb" secondAttribute="height" multiplier="16:6" id="q0d-t8-UB1"/>
+                                </constraints>
+                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Sign in">
+                                    <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </buttonConfiguration>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <integer key="value" value="8"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="signInAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Fvf-OI-UE4"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Or" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="weV-lq-grf">
+                                <rect key="frame" x="150" y="438" width="75" height="37.333333333333314"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="weV-lq-grf" secondAttribute="height" multiplier="2:1" id="6Bf-vd-C5n"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WsU-LS-rZq">
+                                <rect key="frame" x="159.33333333333334" y="495.33333333333331" width="56.333333333333343" height="56.333333333333314"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="WsU-LS-rZq" secondAttribute="height" multiplier="1:1" id="r5q-P6-rUd"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="google">
+                                    <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" scale="default"/>
+                                </buttonConfiguration>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <integer key="value" value="8"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="googleSigninAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="L0o-Pd-lZR"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="fRR-bj-fIJ" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="0Zv-7k-BJP"/>
+                            <constraint firstItem="MBO-W9-OFb" firstAttribute="centerX" secondItem="KRx-xs-GNq" secondAttribute="centerX" id="1gI-EI-N1G"/>
+                            <constraint firstItem="WsU-LS-rZq" firstAttribute="width" secondItem="6Tk-OE-BBY" secondAttribute="width" multiplier="0.15" id="5FX-ht-Jh3"/>
+                            <constraint firstItem="fRR-bj-fIJ" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="9c2-Vp-VH7"/>
+                            <constraint firstItem="9ge-OV-Fre" firstAttribute="height" secondItem="6Tk-OE-BBY" secondAttribute="height" multiplier="0.05" id="D6o-I7-8EC"/>
+                            <constraint firstItem="9ge-OV-Fre" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="KK9-Kt-rIL"/>
+                            <constraint firstItem="MBO-W9-OFb" firstAttribute="width" secondItem="6Tk-OE-BBY" secondAttribute="width" multiplier="0.25" id="MOv-3j-heV"/>
+                            <constraint firstItem="KRx-xs-GNq" firstAttribute="width" secondItem="9ge-OV-Fre" secondAttribute="width" id="PVX-V1-Wm8"/>
+                            <constraint firstItem="weV-lq-grf" firstAttribute="width" secondItem="6Tk-OE-BBY" secondAttribute="width" multiplier="0.2" id="dBO-nE-kdk"/>
+                            <constraint firstItem="KRx-xs-GNq" firstAttribute="top" secondItem="9ge-OV-Fre" secondAttribute="bottom" constant="40" id="f6c-Gx-LzB"/>
+                            <constraint firstItem="9ge-OV-Fre" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="150" id="h7r-kk-p3B"/>
+                            <constraint firstItem="fRR-bj-fIJ" firstAttribute="width" secondItem="6Tk-OE-BBY" secondAttribute="width" multiplier="0.09" id="hTr-iR-k8Q"/>
+                            <constraint firstItem="KRx-xs-GNq" firstAttribute="centerX" secondItem="9ge-OV-Fre" secondAttribute="centerX" id="huh-HD-rga"/>
+                            <constraint firstItem="KRx-xs-GNq" firstAttribute="height" secondItem="9ge-OV-Fre" secondAttribute="height" id="iFX-vM-oqU"/>
+                            <constraint firstItem="WsU-LS-rZq" firstAttribute="top" secondItem="weV-lq-grf" secondAttribute="bottom" constant="20" id="j3N-fz-Hgk"/>
+                            <constraint firstItem="weV-lq-grf" firstAttribute="centerX" secondItem="MBO-W9-OFb" secondAttribute="centerX" id="j7E-D8-VZw"/>
+                            <constraint firstItem="9ge-OV-Fre" firstAttribute="width" secondItem="6Tk-OE-BBY" secondAttribute="width" multiplier="0.65" id="m3E-Ba-Ie4"/>
+                            <constraint firstItem="weV-lq-grf" firstAttribute="top" secondItem="MBO-W9-OFb" secondAttribute="bottom" constant="30" id="sFQ-lE-L69"/>
+                            <constraint firstItem="WsU-LS-rZq" firstAttribute="centerX" secondItem="weV-lq-grf" secondAttribute="centerX" id="tFS-xW-yNK"/>
+                            <constraint firstItem="MBO-W9-OFb" firstAttribute="top" secondItem="KRx-xs-GNq" secondAttribute="bottom" constant="60" id="z68-n2-Ur6"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="19p-ZS-aRj"/>
+                    <connections>
+                        <outlet property="googleSignInButton" destination="WsU-LS-rZq" id="nmj-Ib-tgp"/>
+                        <outlet property="passwordField" destination="KRx-xs-GNq" id="AWM-7a-WdX"/>
+                        <outlet property="signInButton" destination="MBO-W9-OFb" id="UeF-ky-Ksz"/>
+                        <outlet property="userNameField" destination="9ge-OV-Fre" id="rKn-i2-CdK"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1079.2" y="3.6945812807881775"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="NBG-hj-Je6">
+            <objects>
+                <navigationController storyboardIdentifier="LoginNC" automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="RyJ-wD-4aZ" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="rzL-ie-e4R">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="xm6-6a-1ko"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zA8-q1-rPT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="136.80000000000001" y="3.6945812807881775"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="google" width="60" height="60"/>
+        <image name="play_box" width="1024" height="1024"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBlueColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>
