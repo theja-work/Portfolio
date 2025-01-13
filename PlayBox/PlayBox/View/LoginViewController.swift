@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import GoogleSignIn
 
 class LoginViewController: UIViewController {
     
@@ -102,6 +103,31 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func googleSigninAction(_ sender: UIButton) {
+        
+        GIDSignIn.sharedInstance.signIn(withPresenting: self) { [weak self] signInResult, error in
+            guard error == nil else { return }
+            guard let strongSelf = self else {return}
+            
+            if let error = error {
+                print("Error signing in : \(error.localizedDescription)")
+            }
+            
+            if let profile = signInResult?.user.profile {
+                print("Profile : \(profile.email)")
+                
+                strongSelf.redirectToAppCoordinator()
+            }
+        }
+        
+    }
+    
+    func redirectToAppCoordinator() {
+        
+        if let delegate = UIApplication.shared.delegate as? AppDelegate {
+            
+            delegate.loadAppCoordinator()
+            
+        }
         
     }
     

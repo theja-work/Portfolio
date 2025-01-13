@@ -14,13 +14,13 @@ struct PlayBoxTests {
 
     @Test func testBackgroundColor() async throws {
         
-        let viewController = await ViewController()
+        let viewController = await HomeViewController()
         
         await viewController.loadViewIfNeeded()
         
         let bgColor = await viewController.view.backgroundColor
         
-        #expect(bgColor == .systemBlue)
+        #expect(bgColor == UIColor.systemGreen)
         
     }
     
