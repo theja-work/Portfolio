@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23231" systemVersion="23G93" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Profile" representedClassName=".Profile" syncable="YES">
+        <attribute name="age" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="createdOn" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="gender" optional="YES" attributeType="String"/>
+        <attribute name="profilePic" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="status" optional="YES" attributeType="String"/>
+        <relationship name="childUser" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="child" inverseEntity="User"/>
+        <relationship name="mainUser" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="adult" inverseEntity="User"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="createdOn"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="User" representedClassName=".User" syncable="YES">
+        <attribute name="email" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="adult" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Profile" inverseName="mainUser" inverseEntity="Profile"/>
+        <relationship name="child" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Profile" inverseName="childUser" inverseEntity="Profile"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="email"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="Video" representedClassName=".Video" syncable="YES">
+        <attribute name="videoName" optional="YES" attributeType="String"/>
+        <attribute name="videoUrl" optional="YES" attributeType="String"/>
+    </entity>
+</model>

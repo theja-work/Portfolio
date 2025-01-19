@@ -29,6 +29,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var googleSignInButton: UIButton!
     
     var loader : Loader?
+    private let dbManager = DBManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -114,6 +115,8 @@ class LoginViewController: UIViewController {
             
             if let profile = signInResult?.user.profile {
                 print("Profile : \(profile.email)")
+                
+                strongSelf.dbManager.login()
                 
                 strongSelf.redirectToAppCoordinator()
             }
