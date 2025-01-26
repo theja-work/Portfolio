@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import Combine
 
 class HomeViewController : UIViewController {
     
@@ -20,10 +21,113 @@ class HomeViewController : UIViewController {
         
     }
     
+    @IBOutlet weak var catalogTableView: UITableView!
+    
+    var cancellables : Set<AnyCancellable> = []
+    var viewModel : VideoViewModel?
+    var videos : [VideoModel]?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.view.backgroundColor = UIColor.systemGreen
+        
+        registerCells()
+        setupViewModel()
+        setupObservers()
+        getVideoData()
+    }
+    
+    func setupTableView() {
+        
+    }
+    
+    func registerCells() {
+        
+        catalogTableView.register(UINib(nibName: HomeCatalogTableViewCell.getNibName(), bundle: Bundle(for: HomeCatalogTableViewCell.classForCoder())), forCellReuseIdentifier: HomeCatalogTableViewCell.getCellIdentifier())
+        
+    }
+    
+    func setupViewModel() {
+        
+        self.viewModel = VideoViewModel(api: VideoListService())
+        
+    }
+    
+    func getVideoData() {
+        
+        self.viewModel?.getDataFromServer()
+        
+    }
+    
+    func setupObservers() {
+        
+        self.viewModel?.$videoResponse
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] response in
+            
+                guard let strongSelf = self else {return}
+                
+                switch response {
+                    
+                case .success(let videos) :
+                    
+                    strongSelf.printVideos(videos: videos)
+                    strongSelf.videos = videos
+                    strongSelf.catalogTableView?.reloadData()
+                    
+                case .serverError(let code, let message) :
+                    
+                    print("serverError : \(code) : \(message)")
+                    
+                case .parsingError(let code, let message) :
+                    
+                    print("parsingError : \(code) : \(message)")
+                    
+                default : break
+                    
+                }
+            }).store(in: &cancellables)
+        
+    }
+    
+    func printVideos(videos : [VideoModel]) {
+        
+        for video in videos {
+            print("id : \(video.id) :: video url : \(video.videoUrl)")
+        }
+        
+    }
+    
+}
+
+extension HomeViewController : UITableViewDelegate , UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        videos?.count ?? 0
+        
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        guard let cell = catalogTableView.dequeueReusableCell(withIdentifier: HomeCatalogTableViewCell.getCellIdentifier()) as? HomeCatalogTableViewCell else {return UITableViewCell()}
+        
+        DispatchQueue.main.async {
+            if let video = self.videos?[indexPath.row] {
+                cell.setupCell(video: video)
+            }
+        }
+        
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        200.0
     }
     
 }

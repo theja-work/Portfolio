@@ -19,5 +19,7 @@
 	<string>303494541957-2gj7v5hsb9fcbhkeplen528sjpb2nscu.apps.googleusercontent.com</string>
 	<key>UIMainStoryboardFile~iphone</key>
 	<string>Home</string>
+	<key>Endpoint</key>
+	<string>https://</string>
 </dict>
 </plist>

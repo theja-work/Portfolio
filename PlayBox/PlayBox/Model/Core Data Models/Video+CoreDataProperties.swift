@@ -2,7 +2,7 @@
 //  Video+CoreDataProperties.swift
 //  PlayBox
 //
-//  Created by Thejas on 19/01/25.
+//  Created by Thejas on 24/01/25.
 //
 //
 
@@ -18,9 +18,20 @@ extension Video {
 
     @NSManaged public var videoName: String?
     @NSManaged public var videoUrl: String?
+    @NSManaged public var thumbnail: String?
+    @NSManaged public var videoDescription: String?
+    @NSManaged public var lastPosition: Double
+    @NSManaged public var id: String?
 
 }
 
 extension Video : Identifiable {
-
+    
+    func convertToVideoModel() -> VideoModel? {
+        
+        guard let id = self.id , let thumbnail = self.thumbnail , let title = self.videoName , let description = self.videoDescription , let url = self.videoUrl else {return nil}
+        
+        return VideoModel(id:id, thumbnail: thumbnail, title: title, description: description, videoUrl: url)
+        
+    }
 }

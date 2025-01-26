@@ -34,7 +34,9 @@ class ProfileViewController : UIViewController {
     
     @IBOutlet weak var createdOnLabel: UILabel!
     
-    @IBOutlet weak var picUploadButton: UIButton!
+    @IBOutlet weak var selectPhotoButton: UIButton!
+    
+    private var selectProfilePic = false
     
     let dbManager = DBManager()
     
@@ -43,13 +45,38 @@ class ProfileViewController : UIViewController {
         
         self.view.backgroundColor = UIColor.systemMint
         
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         showUserDetails()
+    }
+    
+    @IBAction func addProfilePicAction(_ sender : UIAction) {
+        
+        selectProfilePic = PhotoOptions.getSelection(type: sender.title) != .SelectPhoto
+        
+        print("\(selectProfilePic) : \(sender.title)")
+        
+        selectPhotoButton.setTitle("", for: .normal)
+        
+        if !selectProfilePic {
+            openGallery()
+        }
+        else {
+            showProfilePic()
+        }
+        
+    }
+    
+    func showProfilePic() {
+        
+        if let image = profileImageView?.image {
+            let photoEditorVC = PhotoEditorViewController()
+            present(photoEditorVC, animated: true)
+            photoEditorVC.setupImage(image: image)
+        }
     }
     
     func showUserDetails() {
@@ -72,11 +99,6 @@ class ProfileViewController : UIViewController {
                     self.profileImageView.image = image
                     self.profileImageView.backgroundColor = .clear
                     self.profileImageView.alpha = 1
-                    self.picUploadButton.isHidden = true
-                }
-                else {
-                    self.picUploadButton.isHidden = false
-                    
                 }
                 
                 self.nameLabel.setNeedsLayout()
@@ -85,18 +107,12 @@ class ProfileViewController : UIViewController {
                 self.emailLabel.setNeedsLayout()
                 self.emailLabel.layoutIfNeeded()
                 
-                self.picUploadButton.setNeedsLayout()
-                self.picUploadButton.layoutIfNeeded()
-                
                 self.profileImageView.setNeedsLayout()
                 self.profileImageView.layoutIfNeeded()
                 
                 self.view.setNeedsLayout()
                 self.view.layoutIfNeeded()
             }
-        }
-        else {
-            print("Unable to read user from db")
         }
         
     }
@@ -145,12 +161,6 @@ class ProfileViewController : UIViewController {
         self.present(alert, animated: true)
     }
     
-    @IBAction func uploadPic(_ sender: UIButton) {
-        
-        openGallery()
-        
-    }
-    
     func openGallery() {
         
         var configuaration = PHPickerConfiguration()
@@ -184,12 +194,10 @@ extension ProfileViewController : PHPickerViewControllerDelegate {
                     
                     DispatchQueue.main.async {
                         
-                        localSelf.picUploadButton.isHidden = true
                         localSelf.profileImageView.image = uiImage
                         localSelf.profileImageView.backgroundColor = .clear
                         localSelf.profileImageView.alpha = 1.0
-                        localSelf.profileImageView.contentMode = .scaleAspectFill
-                        
+                        localSelf.selectPhotoButton.setTitle("", for: .normal)
                         localSelf.dbManager.saveProfilePic(image: uiImage)
                         
                     }
@@ -197,6 +205,25 @@ extension ProfileViewController : PHPickerViewControllerDelegate {
             }
         }
         
+    }
+    
+}
+
+enum PhotoOptions {
+    
+    case SelectPhoto
+    case ViewPhoto
+    
+    static func getSelection(type : String) -> PhotoOptions {
+        
+        switch type {
+            
+        case "Select Photo" : return .SelectPhoto
+        case "View Photo" : return .ViewPhoto
+        default : break
+        }
+        
+        return .SelectPhoto
     }
     
 }

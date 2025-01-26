@@ -20,10 +20,27 @@ class SearchViewController : UIViewController {
         
     }
     
+    
+    @IBOutlet weak var optionsButton: UIButton!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.view.backgroundColor = UIColor.systemCyan
+        
+        
+        
+    }
+    
+    @IBAction func selectPhotoAction(_ sender : UIAction) {
+        print("selectPhotoAction")
+        optionsButton.setTitle(sender.title, for: .normal)
+    }
+    
+    @IBAction func viewPhotoAction(_ sender : UIAction) {
+        print("viewPhotoAction")
+        optionsButton.setTitle(sender.title, for: .normal)
     }
     
 }

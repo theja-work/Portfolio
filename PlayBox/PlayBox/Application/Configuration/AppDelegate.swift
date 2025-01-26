@@ -16,8 +16,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var appRoute : AppRoutes?
     let database = DBManager()
     
-    var changesSaved : Bool = false
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         if database.isLoggedinUser(readFromDb: true) {

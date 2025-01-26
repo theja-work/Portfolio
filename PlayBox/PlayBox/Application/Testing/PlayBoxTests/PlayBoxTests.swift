@@ -8,11 +8,15 @@
 import Testing
 import UIKit
 import CoreData
+import GoogleSignIn
 @testable import PlayBox
 
 struct PlayBoxTests {
+    
+    var appDelegate: AppDelegate!
+    var appRoute : AppRoutes!
 
-    @Test func testBackgroundColor() async throws {
+    @Test func testAppDelegate() async throws {
         
         let viewController = await HomeViewController()
         
@@ -21,11 +25,6 @@ struct PlayBoxTests {
         let bgColor = await viewController.view.backgroundColor
         
         #expect(bgColor == UIColor.systemGreen)
-        
-    }
-    
-    @Test func testCoreData() async throws {
-        
         
     }
 
