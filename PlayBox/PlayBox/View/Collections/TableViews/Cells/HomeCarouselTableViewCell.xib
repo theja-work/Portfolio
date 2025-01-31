@@ -3,7 +3,7 @@
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23094"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -18,35 +18,39 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="0bK-tN-SBY">
-                        <rect key="frame" x="37.666666666666657" y="10" width="300.66666666666674" height="169"/>
+                        <rect key="frame" x="0.0" y="0.0" width="376" height="191.33333333333334"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="XGH-vN-Mfb">
+                        <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="XGH-vN-Mfb">
                             <size key="itemSize" width="128" height="128"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
-                        <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                <integer key="value" value="12"/>
-                            </userDefinedRuntimeAttribute>
-                        </userDefinedRuntimeAttributes>
+                        <connections>
+                            <outlet property="dataSource" destination="-1" id="66b-xj-Rkj"/>
+                            <outlet property="delegate" destination="-1" id="G55-US-PR0"/>
+                        </connections>
                     </collectionView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bf5-ai-WCd">
-                        <rect key="frame" x="65.666666666666671" y="184" width="244.66666666666663" height="61.333333333333343"/>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pqh-0D-7zH">
+                        <rect key="frame" x="37.666666666666657" y="161.33333333333334" width="300.66666666666674" height="75"/>
+                        <gestureRecognizers/>
                         <constraints>
-                            <constraint firstAttribute="width" secondItem="bf5-ai-WCd" secondAttribute="height" multiplier="8:2" id="CDj-h6-tPj"/>
+                            <constraint firstAttribute="width" secondItem="pqh-0D-7zH" secondAttribute="height" multiplier="8:2" id="F13-wA-NPg"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <pageControl opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="Gm1-p8-uot">
-                        <rect key="frame" x="131.66666666666666" y="250.33333333333334" width="112.66666666666666" height="18.666666666666657"/>
-                        <color key="backgroundColor" red="0.063365873929999997" green="0.76988975449999997" blue="0.70761074150000003" alpha="0.84705883260000003" colorSpace="custom" customColorSpace="displayP3"/>
+                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
+                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                        <state key="normal" title="Title">
+                            <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </state>
+                    </button>
+                    <pageControl opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="Gm1-p8-uot" customClass="CustomPageControl" customModule="PlayBox" customModuleProvider="target">
+                        <rect key="frame" x="75.333333333333329" y="246.33333333333334" width="225.33333333333337" height="22.666666666666657"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="width" secondItem="Gm1-p8-uot" secondAttribute="height" multiplier="6:1" id="S5O-N0-x7o"/>
+                            <constraint firstAttribute="width" secondItem="Gm1-p8-uot" secondAttribute="height" multiplier="10:1" id="S5O-N0-x7o"/>
                         </constraints>
+                        <color key="pageIndicatorTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="currentPageIndicatorTintColor" red="0.063209362399999997" green="0.76635537139999999" blue="0.76988975449999997" alpha="0.84705883260000003" colorSpace="custom" customColorSpace="displayP3"/>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                 <integer key="value" value="6"/>
@@ -56,17 +60,22 @@
                 </subviews>
                 <constraints>
                     <constraint firstItem="Gm1-p8-uot" firstAttribute="centerX" secondItem="ivF-7A-0ct" secondAttribute="centerX" id="0kn-6R-Jg5"/>
-                    <constraint firstItem="Gm1-p8-uot" firstAttribute="top" secondItem="bf5-ai-WCd" secondAttribute="bottom" constant="5" id="1B3-3F-JbV"/>
-                    <constraint firstItem="bf5-ai-WCd" firstAttribute="top" secondItem="0bK-tN-SBY" secondAttribute="bottom" constant="5" id="1Hc-WO-Wez"/>
-                    <constraint firstItem="0bK-tN-SBY" firstAttribute="top" secondItem="ivF-7A-0ct" secondAttribute="top" constant="10" id="40g-tm-Ncg"/>
-                    <constraint firstItem="0bK-tN-SBY" firstAttribute="width" secondItem="ivF-7A-0ct" secondAttribute="width" multiplier="0.8" id="DFS-Wz-ENV"/>
-                    <constraint firstItem="Gm1-p8-uot" firstAttribute="width" secondItem="ivF-7A-0ct" secondAttribute="width" multiplier="0.3" id="Hxq-ev-8qn"/>
+                    <constraint firstItem="0bK-tN-SBY" firstAttribute="top" secondItem="ivF-7A-0ct" secondAttribute="top" id="40g-tm-Ncg"/>
+                    <constraint firstItem="0bK-tN-SBY" firstAttribute="bottom" secondItem="pqh-0D-7zH" secondAttribute="top" constant="30" id="BQS-og-mYm"/>
+                    <constraint firstItem="0bK-tN-SBY" firstAttribute="width" secondItem="ivF-7A-0ct" secondAttribute="width" id="DFS-Wz-ENV"/>
+                    <constraint firstItem="Gm1-p8-uot" firstAttribute="width" secondItem="ivF-7A-0ct" secondAttribute="width" multiplier="0.6" id="Hxq-ev-8qn"/>
                     <constraint firstItem="0bK-tN-SBY" firstAttribute="centerX" secondItem="ivF-7A-0ct" secondAttribute="centerX" id="Lgx-iT-4tc"/>
-                    <constraint firstItem="bf5-ai-WCd" firstAttribute="centerX" secondItem="ivF-7A-0ct" secondAttribute="centerX" id="OP5-UY-TQ2"/>
-                    <constraint firstItem="bf5-ai-WCd" firstAttribute="width" secondItem="ivF-7A-0ct" secondAttribute="width" multiplier="0.65" id="Wwk-En-ByJ"/>
+                    <constraint firstItem="Gm1-p8-uot" firstAttribute="top" secondItem="pqh-0D-7zH" secondAttribute="bottom" constant="10" id="M5o-3V-36G"/>
+                    <constraint firstItem="pqh-0D-7zH" firstAttribute="centerX" secondItem="ivF-7A-0ct" secondAttribute="centerX" id="U1q-6T-hp5"/>
+                    <constraint firstItem="pqh-0D-7zH" firstAttribute="width" secondItem="ivF-7A-0ct" secondAttribute="width" multiplier="0.8" id="kqD-s6-S8l"/>
                     <constraint firstAttribute="bottom" secondItem="Gm1-p8-uot" secondAttribute="bottom" constant="10" id="sg2-eA-sL2"/>
                 </constraints>
             </tableViewCellContentView>
+            <connections>
+                <outlet property="carouselCollection" destination="0bK-tN-SBY" id="cEF-uM-2Y4"/>
+                <outlet property="itemIndicator" destination="Gm1-p8-uot" id="Myt-SV-4hc"/>
+                <outlet property="titleSwipeButton" destination="pqh-0D-7zH" id="osU-nP-pHA"/>
+            </connections>
             <point key="canvasLocation" x="242.74809160305344" y="58.802816901408455"/>
         </tableViewCell>
     </objects>

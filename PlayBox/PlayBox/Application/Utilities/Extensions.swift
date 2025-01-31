@@ -95,3 +95,19 @@ extension UIImageView {
     }
 }
 
+class CustomPageControl: UIPageControl {
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        
+        // Customize the size of the indicators
+        for (index, subview) in self.subviews.enumerated() {
+            if index == self.currentPage {
+                // Current page indicator
+                subview.transform = CGAffineTransform(scaleX: 0.8, y: 0.8) // Scale up the current page indicator
+            } else {
+                // Remaining page indicators
+                subview.transform = CGAffineTransform(scaleX: 1.0, y: 1.0) // Default size for remaining indicators
+            }
+        }
+    }
+}

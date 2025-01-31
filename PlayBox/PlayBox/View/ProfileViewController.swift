@@ -73,7 +73,7 @@ class ProfileViewController : UIViewController {
     func showProfilePic() {
         
         if let image = profileImageView?.image {
-            let photoEditorVC = PhotoEditorViewController()
+            let photoEditorVC = PhotoEditorViewController(editingDelegate: self)
             present(photoEditorVC, animated: true)
             photoEditorVC.setupImage(image: image)
         }
@@ -84,6 +84,7 @@ class ProfileViewController : UIViewController {
         if let user = dbManager.getUser() , let profile = user.adult {
             
             DispatchQueue.main.async {
+                
                 
                 self.nameLabel.text = user.name
                 self.emailLabel.text = user.email
@@ -100,6 +101,8 @@ class ProfileViewController : UIViewController {
                     self.profileImageView.backgroundColor = .clear
                     self.profileImageView.alpha = 1
                 }
+                
+                self.profileImageView.image == nil ? self.selectPhotoButton.setTitle("Select Photo", for: .normal) : self.selectPhotoButton.setTitle("", for: .normal)
                 
                 self.nameLabel.setNeedsLayout()
                 self.nameLabel.layoutIfNeeded()
@@ -205,6 +208,30 @@ extension ProfileViewController : PHPickerViewControllerDelegate {
             }
         }
         
+    }
+    
+}
+
+extension ProfileViewController : PhotoEditingProtocol {
+    
+    func applyFilter(image: UIImage) {
+        
+        DispatchQueue.main.async {
+            self.profileImageView.image = image
+            
+            self.profileImageView.setNeedsLayout()
+            self.profileImageView.layoutIfNeeded()
+        }
+        
+    }
+    
+    func removeFilter(image: UIImage) {
+        DispatchQueue.main.async {
+            self.profileImageView.image = image
+            
+            self.profileImageView.setNeedsLayout()
+            self.profileImageView.layoutIfNeeded()
+        }
     }
     
 }

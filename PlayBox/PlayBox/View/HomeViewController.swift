@@ -36,6 +36,17 @@ class HomeViewController : UIViewController {
         setupViewModel()
         setupObservers()
         getVideoData()
+        
+        let loader = Loader(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
+        
+        loader.addLoader(view: self.view)
+        
+        loader.showLoader()
+        
+        Timer.scheduledTimer(withTimeInterval: 10, repeats: false) { timer in
+            loader.stopAnimating()
+        }
+        
     }
     
     func setupTableView() {
@@ -44,7 +55,9 @@ class HomeViewController : UIViewController {
     
     func registerCells() {
         
-        catalogTableView.register(UINib(nibName: HomeCatalogTableViewCell.getNibName(), bundle: Bundle(for: HomeCatalogTableViewCell.classForCoder())), forCellReuseIdentifier: HomeCatalogTableViewCell.getCellIdentifier())
+        catalogTableView.showsVerticalScrollIndicator = false
+        catalogTableView?.register(UINib(nibName: HomeCarouselTableViewCell.getNibName(), bundle: Bundle(for: HomeCarouselTableViewCell.classForCoder())), forCellReuseIdentifier: HomeCarouselTableViewCell.getCellIdentifier())
+        catalogTableView?.register(UINib(nibName: HomeCatalogTableViewCell.getNibName(), bundle: Bundle(for: HomeCatalogTableViewCell.classForCoder())), forCellReuseIdentifier: HomeCatalogTableViewCell.getCellIdentifier())
         
     }
     
@@ -94,7 +107,7 @@ class HomeViewController : UIViewController {
     func printVideos(videos : [VideoModel]) {
         
         for video in videos {
-            print("id : \(video.id) :: video url : \(video.videoUrl)")
+            print("id : \(video.id) :: video url : \(video.title)")
         }
         
     }
@@ -115,6 +128,18 @@ extension HomeViewController : UITableViewDelegate , UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
+        if indexPath.row == 0 {
+            
+            guard let cell = catalogTableView.dequeueReusableCell(withIdentifier: HomeCarouselTableViewCell.getCellIdentifier()) as? HomeCarouselTableViewCell else {return UITableViewCell()}
+            
+            if let videos = self.videos {
+                cell.setupCell(items: videos)
+            }
+            
+            return cell
+            
+        }
+        
         guard let cell = catalogTableView.dequeueReusableCell(withIdentifier: HomeCatalogTableViewCell.getCellIdentifier()) as? HomeCatalogTableViewCell else {return UITableViewCell()}
         
         DispatchQueue.main.async {
@@ -127,7 +152,11 @@ extension HomeViewController : UITableViewDelegate , UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        200.0
+        if indexPath.row == 0 {
+            return 300.00
+        }
+        
+        return 200.00
     }
     
 }
