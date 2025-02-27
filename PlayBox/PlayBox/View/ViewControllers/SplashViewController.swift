@@ -49,7 +49,7 @@ class SplashViewController : UIViewController {
         gradientLayer.startPoint = CGPoint(x: 0, y: 0)
         gradientLayer.endPoint = CGPoint(x: 1, y: 1)
         gradientLayer.frame = self.view.bounds
-        
+        gradientLayer.type = .radial
         gradientLayer.opacity = 0.85
         
         DispatchQueue.main.async {

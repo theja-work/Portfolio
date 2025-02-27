@@ -92,28 +92,24 @@ class CustomSlider: UISlider {
     
     override func thumbRect(forBounds bounds: CGRect, trackRect rect: CGRect, value: Float) -> CGRect {
         
-        let hiddenOffset: CGFloat = 10
+        let buttonRadius = bounds.width / 2  // Radius of the circular button
+        let adjustedRadius = buttonRadius - (thumbSize / 2) + 12 // Stay within button edges
         
-        let centerX = bounds.midX // X-coordinate of arc center
-        let centerY = bounds.midY // Y-coordinate of arc center
-
+        let centerX = bounds.midX
+        let centerY = bounds.midY
+        
         // Calculate the normalized value (0 to 1)
         let percent = CGFloat(value - minimumValue) / CGFloat(maximumValue - minimumValue)
-
-        // **Convert percent into an angle from -π/2 (bottom) to π/2 (top)**
-        let angle = (-CGFloat.pi / 2) + (CGFloat.pi * percent)
-
-        // **Convert angle into actual x and y coordinates**
-        var x = centerX + curveRadius * cos(angle) // `cos(angle)` controls horizontal motion
-        let y = centerY + curveRadius * sin(angle) // `sin(angle)` controls vertical motion
         
-        if value == minimumValue && isSliding {
-            x -= hiddenOffset
-        }
-
-        // Adjust thumb position
-        let thumbX = x - thumbSize / 2
-        let thumbY = y - thumbSize / 2
+        // Convert percent into an angle (-π to π)
+        let angle = -CGFloat.pi + (2 * CGFloat.pi * percent)
+        
+        // Compute new x, y positions along the edge of the button
+        let x = centerX + adjustedRadius * cos(angle)
+        let y = centerY + adjustedRadius * sin(angle)
+        
+        let thumbX = x - (thumbSize / 2) + 2
+        let thumbY = y - (thumbSize / 2)
         
         let thumbRect = CGRect(x: thumbX, y: thumbY, width: thumbSize, height: thumbSize)
         rotateThumbRect(imageRect: thumbRect, angle: angle)
@@ -172,6 +168,8 @@ class CustomSlider: UISlider {
     override func continueTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
         
         let location = touch.location(in: self)
+        let centerX = bounds.midX
+        let centerY = bounds.midY
         
         if let initialLocation = initialTouchLocation {
             let distance = initialLocation.distance(to: location)
@@ -184,8 +182,14 @@ class CustomSlider: UISlider {
         
         // Update the value normally if it's a slide
         if !isTapped {
-            let percent = (location.y - thumbSize / 2) / (bounds.height - thumbSize)
-            let newValue = Float(percent) * (maximumValue - minimumValue) + minimumValue
+            
+            //let percent = (location.y - thumbSize / 2) / (bounds.height - thumbSize) // for half circle
+            let rawPercent = (atan2(location.y - centerY, location.x - centerX) + CGFloat.pi) / (2 * CGFloat.pi) // for full circle
+
+            // Apply a sensitivity factor
+            let sensitivityFactor: CGFloat = 2.0 // Increase movement speed
+            let adjustedPercent = pow(rawPercent, sensitivityFactor) // Non-linear scaling
+            let newValue = Float(adjustedPercent) * (maximumValue - minimumValue) + minimumValue
             
             if shouldTriggerHapticFeedback(for: newValue) {
                 if newValue != lastHapticValue { // Prevent triggering haptic feedback repeatedly for the same value
@@ -204,7 +208,7 @@ class CustomSlider: UISlider {
     
     private func shouldTriggerHapticFeedback(for value: Float) -> Bool {
         
-        return Int(value) % 1 == 0 // Example condition (every 1 units)
+        return Int(value) % Int(1.5) == 0 // Example condition (every 1 units)
     }
     
     func addTapHandling() {
@@ -230,7 +234,8 @@ class CustomSlider: UISlider {
         let tapAngle = atan2(dy, dx) // Radians (-π to π)
 
         // Map angle to normalized slider range [0,1]
-        let normalizedValue = (tapAngle + CGFloat.pi / 2) / CGFloat.pi
+        //let normalizedValue = (tapAngle + CGFloat.pi / 2) / CGFloat.pi // for half circle
+        let normalizedValue = (tapAngle + CGFloat.pi) / (2 * CGFloat.pi) // Normalize for full range
         let clampedValue = max(0, min(1, normalizedValue))
         
         // Convert to slider value range
