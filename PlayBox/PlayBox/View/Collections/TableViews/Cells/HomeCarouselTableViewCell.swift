@@ -28,7 +28,7 @@ class HomeCarouselTableViewCell : UITableViewCell {
     private var rightSwipe : UISwipeGestureRecognizer?
     private var leftSwipe : UISwipeGestureRecognizer?
     
-    var items : [VideoModel]? {
+    var items : [VideoItem]? {
         
         didSet {
             carouselCollection?.reloadData()
@@ -52,7 +52,7 @@ class HomeCarouselTableViewCell : UITableViewCell {
         
     }
     
-    func setupCell(items:[VideoModel]) {
+    func setupCell(items:[VideoItem]) {
         
         if self.items == nil {
             self.items = items
@@ -178,7 +178,7 @@ class HomeCarouselTableViewCell : UITableViewCell {
         
         if direction == .right {
             
-            UIView.animate(withDuration: 0.3, animations: {
+            UIView.animate(withDuration: 0.2, animations: {
                 button.alpha = 0
                 button.transform = CGAffineTransform(translationX: button.bounds.width, y: 0)
                 
@@ -198,7 +198,7 @@ class HomeCarouselTableViewCell : UITableViewCell {
         }
         else {
             
-            UIView.animate(withDuration: 0.3, animations: {
+            UIView.animate(withDuration: 0.2, animations: {
                 button.alpha = 0
                 button.transform = CGAffineTransform(translationX: 0 - button.bounds.width, y: 0)
                 
@@ -208,7 +208,7 @@ class HomeCarouselTableViewCell : UITableViewCell {
                 
                 button.transform = .identity
                 
-                UIView.animate(withDuration: 0.2) {
+                UIView.animate(withDuration: 0.1) {
                     
                     button.alpha = 1
                     let font = FontSelector.shared.getFontFor(index: self.itemIndicator.currentPage)
@@ -263,7 +263,7 @@ extension HomeCarouselTableViewCell : UICollectionViewDelegate , UICollectionVie
         
         cell.alpha = 0
         
-        UIView.animate(withDuration: 1.0, delay: 0.0, options: .curveEaseInOut, animations: {
+        UIView.animate(withDuration: 0.6, delay: 0.0, options: .curveEaseInOut, animations: {
             cell.alpha = 1
         }, completion: nil)
     }

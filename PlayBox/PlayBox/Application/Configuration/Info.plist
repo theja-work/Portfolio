@@ -2,18 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>UIAppFonts</key>
-	<array>
-		<string>BungeeShade-Regular.ttf</string>
-		<string>BungeeTint-Regular.ttf</string>
-		<string>FasterOne-Regular.ttf</string>
-		<string>KeaniaOne-Regular.ttf</string>
-		<string>Monofett-Regular.ttf</string>
-		<string>PublicSans-VariableFont_wght.ttf</string>
-		<string>RubikMaze-Regular.ttf</string>
-	</array>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>We need access to your photo library to upload pictures.</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -25,11 +13,26 @@
 			</array>
 		</dict>
 	</array>
-	<key>GIDClientID</key>
-	<string>303494541957-2gj7v5hsb9fcbhkeplen528sjpb2nscu.apps.googleusercontent.com</string>
-	<key>UIMainStoryboardFile~iphone</key>
-	<string>Home</string>
 	<key>Endpoint</key>
 	<string>https://</string>
+	<key>GIDClientID</key>
+	<string>303494541957-2gj7v5hsb9fcbhkeplen528sjpb2nscu.apps.googleusercontent.com</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>BungeeShade-Regular.ttf</string>
+		<string>BungeeTint-Regular.ttf</string>
+		<string>FasterOne-Regular.ttf</string>
+		<string>KeaniaOne-Regular.ttf</string>
+		<string>Monofett-Regular.ttf</string>
+		<string>PublicSans-VariableFont_wght.ttf</string>
+		<string>RubikMaze-Regular.ttf</string>
+	</array>
+	<key>UIMainStoryboardFile~iphone</key>
+	<string>Home</string>
 </dict>
 </plist>

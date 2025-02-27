@@ -14,31 +14,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var appRoute : AppRoutes?
-    let database = DBManager()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
-        if database.isLoggedinUser(readFromDb: true) {
-            
-            GIDSignIn.sharedInstance.restorePreviousSignIn { [weak self] user, error in
-                
-                guard let strongSelf = self else {return}
-                
-                if error == nil || user != nil {
-                    // Show the app's signed-out state.
-                    DispatchQueue.main.async {
-                        strongSelf.routeApp(route: .Home)
-                    }
-                    
-                }
-            }
-            
-        }
-        else {
-            DispatchQueue.main.async {
-                self.routeApp(route: .Login)
-            }
-        }
         
         return true
     }
@@ -61,7 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             window = UIWindow(frame: UIScreen.main.bounds)
         }
         
-        window?.rootViewController = AppCoordinator.tabController()
+        setRootViewController(rootViewController: AppCoordinator.tabController(), animated: true)
         
         window?.makeKeyAndVisible()
         
@@ -73,9 +50,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             window = UIWindow(frame: UIScreen.main.bounds)
         }
         
-        window?.rootViewController = LoginViewController.navigationController()
+        setRootViewController(rootViewController: LoginViewController.navigationController(), animated: true)
         
         window?.makeKeyAndVisible()
+        
+    }
+    
+    func setRootViewController(rootViewController : UIViewController? , animated : Bool = false) {
+        
+        guard let window = window else {
+            self.window = UIWindow(frame: UIScreen.main.bounds)
+            self.window?.rootViewController = rootViewController
+            self.window?.makeKeyAndVisible()
+            return
+        }
+        
+        if animated {
+            let animationOptions: UIView.AnimationOptions = .transitionCrossDissolve
+            
+            rootViewController?.view.alpha = 0.0
+            UIView.transition(with: window, duration: 0.2, options: animationOptions, animations: {
+                window.rootViewController = rootViewController
+                rootViewController?.view.alpha = 1.0
+            })
+        } else {
+            window.rootViewController = rootViewController
+        }
         
     }
 

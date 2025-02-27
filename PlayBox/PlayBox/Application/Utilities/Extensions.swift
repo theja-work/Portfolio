@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import Combine
 
 extension UIImage {
     
@@ -31,22 +32,40 @@ extension UIImage {
 //            
 //        }
         
-        DispatchQueue.global().async {
+        let task = URLSession.shared.dataTask(with: URLRequest(url: URL(string: url)!)) { imageData, response, error in
             
-            let task = URLSession.shared.dataTask(with: URLRequest(url: URL(string: url)!)) { imageData, response, error in
-                
-                if error == nil , let data = imageData {
-                    image = UIImage(data: data)
-                }
-                
+            if error == nil , let data = imageData {
+                image = UIImage(data: data)
             }
-            
-            task.resume()
             
         }
         
+        task.resume()
+        
         return image
     }
+    
+    func imageRotated(by angle: CGFloat) -> UIImage? {
+            // Calculate the new size for the rotated image
+            let rotatedSize = CGSize(width: self.size.width * abs(cos(angle)) + self.size.height * abs(sin(angle)),
+                                     height: self.size.height * abs(cos(angle)) + self.size.width * abs(sin(angle)))
+            
+            UIGraphicsBeginImageContextWithOptions(rotatedSize, false, self.scale)
+            let context = UIGraphicsGetCurrentContext()
+            
+            // Move the origin to the center of the image to rotate
+            context?.translateBy(x: rotatedSize.width / 2, y: rotatedSize.height / 2)
+            context?.rotate(by: angle)
+            
+            // Draw the rotated image
+            self.draw(in: CGRect(x: -self.size.width / 2, y: -self.size.height / 2, width: self.size.width, height: self.size.height))
+            
+            // Get the new image
+            let rotatedImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            
+            return rotatedImage
+        }
     
 }
 
@@ -93,6 +112,8 @@ extension UIImageView {
             }
         }.resume()
     }
+    
+    
 }
 
 class CustomPageControl: UIPageControl {
@@ -109,5 +130,14 @@ class CustomPageControl: UIPageControl {
                 subview.transform = CGAffineTransform(scaleX: 1.0, y: 1.0) // Default size for remaining indicators
             }
         }
+    }
+}
+
+// Extension to calculate distance between two points
+extension CGPoint {
+    func distance(to point: CGPoint) -> CGFloat {
+        let dx = self.x - point.x
+        let dy = self.y - point.y
+        return sqrt(dx * dx + dy * dy)
     }
 }

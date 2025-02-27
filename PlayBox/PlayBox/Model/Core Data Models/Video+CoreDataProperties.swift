@@ -27,11 +27,11 @@ extension Video {
 
 extension Video : Identifiable {
     
-    func convertToVideoModel() -> VideoModel? {
+    func convertToVideoModel() -> VideoItem? {
         
         guard let id = self.id , let thumbnail = self.thumbnail , let title = self.videoName , let description = self.videoDescription , let url = self.videoUrl else {return nil}
         
-        return VideoModel(id:id, thumbnail: thumbnail, title: title, description: description, videoUrl: url)
+        return VideoItem(id:id, thumbnail: thumbnail, title: title, description: description, videoUrl: url)
         
     }
 }

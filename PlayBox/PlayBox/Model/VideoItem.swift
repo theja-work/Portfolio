@@ -1,5 +1,5 @@
 //
-//  VideoModel.swift
+//  VideoItem.swift
 //  PlayBox
 //
 //  Created by Thejas on 24/01/25.
@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class VideoModel : Codable {
+class VideoItem : Codable {
     
     var id : String
     var thumbnail : String

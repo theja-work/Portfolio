@@ -10,6 +10,8 @@ import Foundation
 protocol VideoViewModelDependency : AnyObject {
     
     var api : VideoServiceProtocol? { get }
+    var carouselItems : [VideoItem]? { get set }
+    var catalogItems : [VideoItem]? { get set }
     
     func getDataFromServer()
     
@@ -17,6 +19,6 @@ protocol VideoViewModelDependency : AnyObject {
 
 protocol VideoServiceProtocol : AnyObject {
     
-    func getVideos(completion : @escaping (Dataloader<Data>) -> Void)
-    func getCarousel(completion : @escaping (Dataloader<Data>) -> Void)
+    func getVideos(completion : @escaping (Dataloader<[VideoItem]>) -> Void)
+    func getCarousel(completion : @escaping (Dataloader<[VideoItem]>) -> Void)
 }

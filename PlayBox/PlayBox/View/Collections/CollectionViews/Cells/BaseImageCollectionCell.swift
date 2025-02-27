@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import Combine
 
 class BaseImageCollectionCell : UICollectionViewCell {
     
@@ -22,7 +23,7 @@ class BaseImageCollectionCell : UICollectionViewCell {
     
     var imageGradient : CAGradientLayer?
     
-    var item : VideoModel?
+    var item : VideoItem?
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -33,22 +34,10 @@ class BaseImageCollectionCell : UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        guard imageGradient == nil else {return}
-        
-        imageGradient = CAGradientLayer()
-        imageGradient?.colors = [UIColor.black.cgColor , UIColor.clear.cgColor]
-        imageGradient?.startPoint = CGPoint(x: 0.6, y: 1)
-        imageGradient?.endPoint = CGPoint(x: 0.6, y: 0)
-        imageGradient?.locations = [0.15 , 0.6]
-        imageGradient?.frame = imageView.bounds
-        
-        DispatchQueue.main.async {
-            self.imageView.layer.addSublayer(self.imageGradient!)
-        }
-
+        setupGradient()
     }
     
-    func setupCell(item:VideoModel) {
+    func setupCell(item:VideoItem) {
         
         DispatchQueue.main.async {
             
@@ -64,6 +53,22 @@ class BaseImageCollectionCell : UICollectionViewCell {
             
         }
         
+    }
+    
+    func setupGradient() {
+        
+        guard imageGradient == nil else {return}
+        
+        imageGradient = CAGradientLayer()
+        imageGradient?.colors = [UIColor.black.cgColor , UIColor.clear.cgColor]
+        imageGradient?.startPoint = CGPoint(x: 0.6, y: 1)
+        imageGradient?.endPoint = CGPoint(x: 0.6, y: 0)
+        imageGradient?.locations = [0.15 , 0.6]
+        imageGradient?.frame = imageView.bounds
+        
+        DispatchQueue.main.async {
+            self.imageView.layer.addSublayer(self.imageGradient!)
+        }
     }
     
 }

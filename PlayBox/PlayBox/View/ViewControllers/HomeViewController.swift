@@ -7,7 +7,6 @@
 
 import Foundation
 import UIKit
-import Combine
 
 class HomeViewController : UIViewController {
     
@@ -23,39 +22,36 @@ class HomeViewController : UIViewController {
     
     @IBOutlet weak var catalogTableView: UITableView!
     
-    var cancellables : Set<AnyCancellable> = []
-    var viewModel : VideoViewModel?
-    var videos : [VideoModel]?
+    private var viewModel : VideoViewModel?
+    private var loader : Loader?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = UIColor.systemGreen
-        
-        registerCells()
+        setupTableView()
         setupViewModel()
-        setupObservers()
-        getVideoData()
-        
-        let loader = Loader(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
-        
-        loader.addLoader(view: self.view)
-        
-        loader.showLoader()
-        
-        Timer.scheduledTimer(withTimeInterval: 10, repeats: false) { timer in
-            loader.stopAnimating()
-        }
         
     }
     
-    func setupTableView() {
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
+        getVideoData()
+    }
+    
+    func setupLoader() {
+        loader = Loader(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
+        loader?.addLoader(view: self.view)
+    }
+    
+    func setupTableView() {
+        registerCells()
+        setupLoader()
     }
     
     func registerCells() {
         
-        catalogTableView.showsVerticalScrollIndicator = false
+        catalogTableView?.showsVerticalScrollIndicator = false
         catalogTableView?.register(UINib(nibName: HomeCarouselTableViewCell.getNibName(), bundle: Bundle(for: HomeCarouselTableViewCell.classForCoder())), forCellReuseIdentifier: HomeCarouselTableViewCell.getCellIdentifier())
         catalogTableView?.register(UINib(nibName: HomeCatalogTableViewCell.getNibName(), bundle: Bundle(for: HomeCatalogTableViewCell.classForCoder())), forCellReuseIdentifier: HomeCatalogTableViewCell.getCellIdentifier())
         
@@ -63,7 +59,7 @@ class HomeViewController : UIViewController {
     
     func setupViewModel() {
         
-        self.viewModel = VideoViewModel(api: VideoListService())
+        self.viewModel = VideoViewModel(api: VideoListService(), videoUpdatesDelegate: self)
         
     }
     
@@ -73,38 +69,7 @@ class HomeViewController : UIViewController {
         
     }
     
-    func setupObservers() {
-        
-        self.viewModel?.$videoResponse
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] response in
-            
-                guard let strongSelf = self else {return}
-                
-                switch response {
-                    
-                case .success(let videos) :
-                    
-                    strongSelf.printVideos(videos: videos)
-                    strongSelf.videos = videos
-                    strongSelf.catalogTableView?.reloadData()
-                    
-                case .serverError(let code, let message) :
-                    
-                    print("serverError : \(code) : \(message)")
-                    
-                case .parsingError(let code, let message) :
-                    
-                    print("parsingError : \(code) : \(message)")
-                    
-                default : break
-                    
-                }
-            }).store(in: &cancellables)
-        
-    }
-    
-    func printVideos(videos : [VideoModel]) {
+    func printVideos(videos : [VideoItem]) {
         
         for video in videos {
             print("id : \(video.id) :: video url : \(video.title)")
@@ -122,7 +87,7 @@ extension HomeViewController : UITableViewDelegate , UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        videos?.count ?? 0
+        viewModel?.carouselItems?.count ?? 0
         
     }
     
@@ -132,8 +97,10 @@ extension HomeViewController : UITableViewDelegate , UITableViewDataSource {
             
             guard let cell = catalogTableView.dequeueReusableCell(withIdentifier: HomeCarouselTableViewCell.getCellIdentifier()) as? HomeCarouselTableViewCell else {return UITableViewCell()}
             
-            if let videos = self.videos {
-                cell.setupCell(items: videos)
+            DispatchQueue.main.async {
+                if let videos = self.viewModel?.carouselItems {
+                    cell.setupCell(items: videos)
+                }
             }
             
             return cell
@@ -143,8 +110,9 @@ extension HomeViewController : UITableViewDelegate , UITableViewDataSource {
         guard let cell = catalogTableView.dequeueReusableCell(withIdentifier: HomeCatalogTableViewCell.getCellIdentifier()) as? HomeCatalogTableViewCell else {return UITableViewCell()}
         
         DispatchQueue.main.async {
-            if let video = self.videos?[indexPath.row] {
-                cell.setupCell(video: video)
+            
+            if let videos = self.viewModel?.catalogItems {
+                cell.setupCell(videos: videos, catalogName: "Sample titles")
             }
         }
         
@@ -157,6 +125,53 @@ extension HomeViewController : UITableViewDelegate , UITableViewDataSource {
         }
         
         return 200.00
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        
+        //AppUtilities.shared.log("Add pagination logic")
+    }
+    
+    
+    
+}
+
+extension HomeViewController : VideoUpdatesProtocol {
+    
+    func updateUI(listType: VideoListType, response: Dataloader<[VideoItem]>) {
+        
+        switch response {
+            
+        case .success(let result):
+            printVideos(videos: result)
+        case .serverError(let code, let message):
+            AppUtilities.shared.log("Server error with code : \(code) : message : \(message)")
+        case .parsingError(let code, let message):
+            AppUtilities.shared.log("Parsing error with code : \(code) : message : \(message)")
+        case .dataNotFound:
+            AppUtilities.shared.log("dataNotFound")
+        case .networkError:
+            AppUtilities.shared.log("networkError")
+        case .unkownError:
+            AppUtilities.shared.log("unkownError")
+        }
+        
+    }
+    
+    func reloadList() {
+        
+        DispatchQueue.main.async {
+            self.catalogTableView.reloadData()
+        }
+        
+    }
+    
+    func updateLoader(isLoading: Bool) {
+        
+        DispatchQueue.main.async {
+            isLoading ? self.loader?.showLoader() : self.loader?.hideLoader()
+        }
+        
     }
     
 }

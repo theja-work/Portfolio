@@ -72,7 +72,7 @@ class LoginViewController: UIViewController {
         
         gradientLayer.startPoint = CGPoint(x: 0, y: 0)
         gradientLayer.endPoint = CGPoint(x: 1, y: 1)
-        gradientLayer.opacity = 0.75
+        gradientLayer.opacity = 0.85
         
         gradientLayer.frame = self.view.bounds
         
@@ -98,8 +98,6 @@ class LoginViewController: UIViewController {
                 self.loader?.isHidden = false
             }
         }
-        
-        loader?.isAnimating == true ? loader?.stopAnimating() : loader?.startAnimating()
         
     }
     
