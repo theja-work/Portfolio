@@ -23,6 +23,10 @@ class HomeCatalogTableViewCell : UITableViewCell {
     
     @IBOutlet weak var catalogCollection: CustomCollectionView!
     
+    weak var redirectionDelegate : ContentDetailsProtocol?
+    
+    private var catalogId : Int = 0
+    
     private var items : [VideoItem]? {
         
         didSet {
@@ -34,10 +38,9 @@ class HomeCatalogTableViewCell : UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        
-        
         catalogCollection?.delegate = self
         catalogCollection?.dataSource = self
+        catalogCollection?.backgroundColor = .clear
         
         catalogCollection?.register(UINib(nibName: CatalogImageCVCell.getNibName(), bundle: Bundle(for: CatalogImageCVCell.classForCoder())), forCellWithReuseIdentifier: CatalogImageCVCell.getCellIdentifier())
         
@@ -55,11 +58,17 @@ class HomeCatalogTableViewCell : UITableViewCell {
         self.titleButton.setTitle("", for: .normal)
     }
     
-    func setupCell(videos : [VideoItem] , catalogName : String) {
+    func setupCell(videos : [VideoItem] , catalogName : String , catalogId : Int , redirectionDelegate : ContentDetailsProtocol) {
         
         if items == nil {
             items = videos
         }
+        
+        if self.redirectionDelegate == nil {
+            self.redirectionDelegate = redirectionDelegate
+        }
+        
+        self.catalogId = catalogId
         
         DispatchQueue.main.async {
             
@@ -102,16 +111,36 @@ extension HomeCatalogTableViewCell : UICollectionViewDelegate , UICollectionView
             
         }
         
+        cell.backgroundColor = .clear
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        guard let item = items?[indexPath.row] else {return}
+        
+        redirectionDelegate?.redirectToDetailsOf(item: item)
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         2
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        4
+    }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        return CGSize(width: self.contentView.bounds.width * 0.3, height: self.bounds.height - titleButton.bounds.height)
+        var size = CGSize(width: self.contentView.bounds.width * 0.3, height: self.bounds.height - titleButton.bounds.height)
+        
+        if catalogId % 2 == 0 {
+            size.width = size.width * 2.5
+            size.height = size.width * 9 / 16
+        }
+        
+        return size
         
     }
 }

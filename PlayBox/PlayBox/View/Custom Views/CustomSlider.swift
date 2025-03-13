@@ -34,9 +34,34 @@ class CustomSlider: UISlider {
     private func setupSlider() {
         self.isContinuous = true // Ensure continuous
         
+        let thumbView = createThumbView(with: "•")
+        let thumbImage = imageFromView(thumbView)
+        
         self.setThumbImage(thumbImage, for: .normal)
         
         addTapHandling()
+    }
+    
+    // Create a custom view (UILabel) with text for the slider thumb
+    func createThumbView(with text: String) -> UIView {
+        let thumbSize = CGSize(width: 20, height: 20) // Customize size
+        let label = UILabel(frame: CGRect(origin: .zero, size: thumbSize))
+        label.backgroundColor = UIColor.clear
+        label.textColor = .red
+        label.font = UIFont.boldSystemFont(ofSize: 32)
+        label.textAlignment = .center
+        label.layer.cornerRadius = thumbSize.width / 2
+        label.layer.masksToBounds = true
+        label.text = text
+        return label
+    }
+    
+    // Convert UIView to UIImage
+    func imageFromView(_ view: UIView) -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: view.bounds.size)
+        return renderer.image { context in
+            view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
+        }
     }
     
     override func trackRect(forBounds bounds: CGRect) -> CGRect {
@@ -108,7 +133,7 @@ class CustomSlider: UISlider {
         let x = centerX + adjustedRadius * cos(angle)
         let y = centerY + adjustedRadius * sin(angle)
         
-        let thumbX = x - (thumbSize / 2) + 2
+        let thumbX = x - (thumbSize / 2)
         let thumbY = y - (thumbSize / 2)
         
         let thumbRect = CGRect(x: thumbX, y: thumbY, width: thumbSize, height: thumbSize)
@@ -118,7 +143,7 @@ class CustomSlider: UISlider {
         
         // Set the rotated thumb image to the slider
         DispatchQueue.main.async {
-            self.setThumbImage(thumbImageRotated, for: .normal)
+            //self.setThumbImage(thumbImageRotated, for: .normal)
         }
 
         return CGRect(x: thumbX, y: thumbY, width: thumbSize, height: thumbSize)
@@ -227,6 +252,8 @@ class CustomSlider: UISlider {
         let location = gesture.location(in: self)
         let centerX = bounds.midX
         let centerY = bounds.midY
+        
+        impactFeedbackGenerator.impactOccurred()
 
         // Compute angle relative to center
         let dx = location.x - centerX

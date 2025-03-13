@@ -10,6 +10,16 @@ import UIKit
 
 class HomeViewController : UIViewController {
     
+    class func navigationController() -> UINavigationController? {
+        
+        let storyBoard = UIStoryboard(name: "Home", bundle: nil)
+        
+        guard let navigationController = storyBoard.instantiateViewController(withIdentifier: "HomeNC") as? UINavigationController else {return nil}
+        
+        return navigationController
+        
+    }
+    
     class func viewController() -> UIViewController? {
         
         let storyBoard = UIStoryboard(name: "Home", bundle: nil)
@@ -28,6 +38,7 @@ class HomeViewController : UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setBackgroundColor()
         setupTableView()
         setupViewModel()
         
@@ -36,15 +47,36 @@ class HomeViewController : UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        self.navigationController?.isNavigationBarHidden = true
         getVideoData()
+    }
+    
+    func setBackgroundColor() {
+        
+        self.navigationItem.backButtonTitle = ""
+        
+        let gradient = CAGradientLayer()
+        
+        gradient.colors = [UIColor.systemBlue.cgColor , UIColor.white.cgColor]
+        gradient.startPoint = CGPoint(x: 1, y: 0)
+        gradient.endPoint = CGPoint(x: 1, y: 1)
+        gradient.type = .axial
+        gradient.frame = self.view.bounds
+        gradient.masksToBounds = true
+        gradient.cornerRadius = 12
+        DispatchQueue.main.async {
+            self.view.layer.insertSublayer(gradient, at: 0)
+        }
     }
     
     func setupLoader() {
         loader = Loader(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
-        loader?.addLoader(view: self.view)
+        loader?.addLoader(to: self.view)
+        loader?.shadeAffect = true
     }
     
     func setupTableView() {
+        catalogTableView?.backgroundColor = .clear
         registerCells()
         setupLoader()
     }
@@ -99,10 +131,12 @@ extension HomeViewController : UITableViewDelegate , UITableViewDataSource {
             
             DispatchQueue.main.async {
                 if let videos = self.viewModel?.carouselItems {
-                    cell.setupCell(items: videos)
+                    cell.setupCell(items: videos, redirectionDelegate: self)
                 }
             }
             
+            cell.selectionStyle = .none
+            cell.backgroundColor = .black
             return cell
             
         }
@@ -111,15 +145,18 @@ extension HomeViewController : UITableViewDelegate , UITableViewDataSource {
         
         DispatchQueue.main.async {
             
-            if let videos = self.viewModel?.catalogItems {
-                cell.setupCell(videos: videos, catalogName: "Sample titles")
+            if let videos = self.viewModel?.catalogItems , let listName = self.viewModel?.catalogNames[indexPath.row] {
+                cell.setupCell(videos: videos.shuffled(), catalogName: listName, catalogId: indexPath.row, redirectionDelegate: self)
             }
         }
         
+        cell.selectionStyle = .none
+        cell.backgroundColor = .clear
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        
         if indexPath.row == 0 {
             return 300.00
         }
@@ -171,6 +208,20 @@ extension HomeViewController : VideoUpdatesProtocol {
         DispatchQueue.main.async {
             isLoading ? self.loader?.showLoader() : self.loader?.hideLoader()
         }
+        
+    }
+    
+}
+
+extension HomeViewController : ContentDetailsProtocol {
+    
+    func redirectToDetailsOf(item: VideoItem) {
+        
+        Logger.log(item.title)
+        
+        guard let detailsVC = ContentDetailsViewController.viewController(item: item) else {return}
+        
+        self.navigationController?.pushViewController(detailsVC, animated: true)
         
     }
     

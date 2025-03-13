@@ -24,6 +24,8 @@ class HomeCarouselTableViewCell : UITableViewCell {
     
     @IBOutlet weak var itemIndicator: CustomPageControl!
     
+    weak var redirectionDelegate : ContentDetailsProtocol?
+    
     private var timer : Timer?
     private var rightSwipe : UISwipeGestureRecognizer?
     private var leftSwipe : UISwipeGestureRecognizer?
@@ -52,10 +54,14 @@ class HomeCarouselTableViewCell : UITableViewCell {
         
     }
     
-    func setupCell(items:[VideoItem]) {
+    func setupCell(items:[VideoItem] , redirectionDelegate : ContentDetailsProtocol) {
         
         if self.items == nil {
             self.items = items
+        }
+        
+        if self.redirectionDelegate == nil {
+            self.redirectionDelegate = redirectionDelegate
         }
         
         setupItems()
@@ -252,6 +258,14 @@ extension HomeCarouselTableViewCell : UICollectionViewDelegate , UICollectionVie
         
         
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        guard let item = items?[indexPath.row] else {return}
+        
+        redirectionDelegate?.redirectToDetailsOf(item: item)
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

@@ -32,7 +32,7 @@ class GraphViewController : UIViewController {
         
         self.view.backgroundColor = UIColor.systemTeal
         
-        loader.addLoader(view: self.view)
+        loader.addLoader(to: self.view)
         transferProgress.isHidden = true
     }
     
@@ -140,7 +140,7 @@ extension GraphViewController : PHPickerViewControllerDelegate , URLSessionDeleg
             }
         }
         
-        AppUtilities.shared.log("Upload progress : \((progress * 100).rounded() / 100 * 100) %")
+        //AppUtilities.shared.log("Upload progress : \((progress * 100).rounded() / 100 * 100) %")
         
         DispatchQueue.main.async {
             self.transferProgress.setProgress(progress, animated: true)
@@ -152,7 +152,7 @@ extension GraphViewController : PHPickerViewControllerDelegate , URLSessionDeleg
            let responseDict = jsonResponse as? [String: Any],
            let secureURL = responseDict["secure_url"] as? String {
             //completionHandler?(.success(secureURL))
-            AppUtilities.shared.log("Upload succeed : \(secureURL)")
+            //AppUtilities.shared.log("Upload succeed : \(secureURL)")
             
             DispatchQueue.main.async {
                 self.transferProgress.setProgress(0, animated: false)

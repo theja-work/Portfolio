@@ -26,6 +26,8 @@ class VideoViewModel : VideoViewModelDependency {
         
     }
     
+    var catalogNames : [String] = []
+    
     var isLoading : Bool = false {
         
         didSet {
@@ -61,11 +63,14 @@ class VideoViewModel : VideoViewModelDependency {
                 return
             }
             
-            strongSelf.isLoading = false
+            DispatchQueue.main.asyncAfter(deadline: .now() + 6, execute: {
+                strongSelf.isLoading = false
+            })
             
             switch response {
             case .success(let videoData):
                 DispatchQueue.main.async {
+                    strongSelf.catalogNames = strongSelf.generateListName(upto: videoData.count)
                     strongSelf.catalogItems = videoData
                     strongSelf.videoUpdatesDelegate?.updateUI(listType: .Catalog, response: response)
                 }
@@ -75,7 +80,6 @@ class VideoViewModel : VideoViewModelDependency {
             strongSelf.group.leave()
         })
     }
-
     
     func getCarousel() {
         
@@ -109,6 +113,27 @@ class VideoViewModel : VideoViewModelDependency {
         })
         
     }
+    
+    func generateListName(upto: Int) -> [String] {
+        // Create a mutable copy of the list names
+        var availableNames = VideoListType.Catalog.listNames
+        
+        // Ensure we don't request more names than available
+        let count = min(upto, availableNames.count)
+        
+        for _ in 0..<count {
+            // Get a random index
+            let randomIndex = Int.random(in: 0..<availableNames.count)
+            
+            // Append the name at the random index
+            catalogNames.append(availableNames[randomIndex])
+            
+            // Remove the selected name from the available names
+            availableNames.remove(at: randomIndex)
+        }
+        
+        return catalogNames
+    }
 }
 
 protocol VideoUpdatesProtocol : AnyObject {
@@ -122,4 +147,29 @@ protocol VideoUpdatesProtocol : AnyObject {
 enum VideoListType : String {
     case Catalog = "catalog"
     case Carousel = "carousel"
+    
+    var listNames : [String] {
+        switch self {
+        case .Carousel : return ["Trending"]
+            
+        case .Catalog : return [
+            "Rom Com" ,
+            "Sci-Fi & Mystery",
+            "Political Drama" ,
+            "Action Adventures" ,
+            "Spy Ops" ,
+            "Young Adult" ,
+            "Musical Hits" ,
+            "Bollywood blockbusters" ,
+            "Horror & Suspense" ,
+            "Documentaries" ,
+            "Health & Fitness" ,
+            "TV Shows" ,
+            "Master Cheff" ,
+            "Animie" ,
+            "Technological Breakthroghs" ,
+            "Buissness & Sensex"
+        ]
+        }
+    }
 }

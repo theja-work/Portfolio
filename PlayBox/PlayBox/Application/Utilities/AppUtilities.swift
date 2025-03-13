@@ -22,3 +22,15 @@ final class AppUtilities {
     }
     
 }
+
+class Logger {
+    
+    class func log(_ message: String,
+             file: String = #file,
+             function: String = #function,
+             line: Int = #line) {
+        let fileName = (file as NSString).lastPathComponent
+        print("[\(fileName):\(function)] \(line) - \(message)")
+    }
+    
+}

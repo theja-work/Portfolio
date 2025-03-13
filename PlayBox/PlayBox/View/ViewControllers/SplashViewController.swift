@@ -21,15 +21,13 @@ class SplashViewController : UIViewController {
         
     }
     
-    private var loader: Loader!
+    @IBOutlet weak var loader: Loader!
     private let database = DBManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setBackground()
-        loader = Loader(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
-        loader.addLoader(view: self.view)
         loader.showLoader()
         
     }
@@ -44,7 +42,7 @@ class SplashViewController : UIViewController {
         
         let gradientLayer = CAGradientLayer()
         
-        gradientLayer.colors = [UIColor.systemYellow.cgColor , UIColor.systemOrange.cgColor]
+        gradientLayer.colors = [UIColor.systemBlue.cgColor , UIColor.white.cgColor]
         
         gradientLayer.startPoint = CGPoint(x: 0, y: 0)
         gradientLayer.endPoint = CGPoint(x: 1, y: 1)

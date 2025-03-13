@@ -32,7 +32,7 @@
                         </connections>
                     </button>
                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="KcF-Cn-2Wc" customClass="CustomCollectionView" customModule="PlayBox" customModuleProvider="target">
-                        <rect key="frame" x="0.0" y="45.333333333333329" width="393" height="181.66666666666669"/>
+                        <rect key="frame" x="4" y="45.333333333333329" width="389" height="181.66666666666669"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="mBD-o5-IES">
                             <size key="itemSize" width="128" height="128"/>
@@ -49,7 +49,7 @@
                     <constraint firstItem="tJc-c7-ATP" firstAttribute="height" secondItem="Op5-sC-nVu" secondAttribute="height" multiplier="0.2" id="cBx-eZ-UUR"/>
                     <constraint firstItem="tJc-c7-ATP" firstAttribute="leading" secondItem="Op5-sC-nVu" secondAttribute="leading" constant="10" id="hbY-Df-K5c"/>
                     <constraint firstItem="KcF-Cn-2Wc" firstAttribute="top" secondItem="tJc-c7-ATP" secondAttribute="bottom" id="jBb-oY-HxC"/>
-                    <constraint firstItem="KcF-Cn-2Wc" firstAttribute="leading" secondItem="Op5-sC-nVu" secondAttribute="leading" id="mrX-Iv-oVV"/>
+                    <constraint firstItem="KcF-Cn-2Wc" firstAttribute="leading" secondItem="Op5-sC-nVu" secondAttribute="leading" constant="4" id="mrX-Iv-oVV"/>
                     <constraint firstAttribute="bottom" secondItem="KcF-Cn-2Wc" secondAttribute="bottom" id="ogb-TU-loF"/>
                 </constraints>
             </tableViewCellContentView>

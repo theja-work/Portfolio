@@ -2,121 +2,162 @@
 //  Loader.swift
 //  PlayBox
 //
-//  Created by Thejas on 12/01/25.
+//  Created by Thejas on 04/03/25.
 //
 
-import Foundation
 import UIKit
 
-class Loader : UIView {
-    
+class Loader: UIView {
+
     private var shapeLayers: [CAShapeLayer] = []
-    
-    private var timer : Timer?
-    
+    private var timer: Timer?
+    internal var shadeAffect: Bool = false
+    private var blurEffectView: UIVisualEffectView?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
-        clipsToBounds = true
-        layer.cornerRadius = self.bounds.width * 0.25
-        //backgroundColor = UIColor(red: 1.0, green: 0.6, blue: 0.2, alpha: 1.0)
-        addPaths()
+        commonInit()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        commonInit()
+    }
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        commonInit()
+    }
+
+    private func commonInit() {
         clipsToBounds = true
         layer.cornerRadius = self.bounds.width * 0.25
-        //backgroundColor = UIColor(red: 1.0, green: 0.6, blue: 0.2, alpha: 1.0)
         addPaths()
+        
+        // Ensure blur is added in the parent view (if exists)
+        DispatchQueue.main.async {
+            if let superview = self.superview , self.shadeAffect {
+                self.setupBlurEffectView(in: superview)
+            }
+        }
     }
     
-    func addLoader(view:UIView) {
+    private func setupView() {
+        clipsToBounds = true
+        layer.cornerRadius = bounds.width * 0.25
+        addPaths()
+    }
+
+    func addLoader(to view: UIView) {
         self.center = view.center
         view.addSubview(self)
         self.isHidden = true
+        setupBlurEffectView(in: view)
     }
-    
-    // Add paths to be animated
+
     private func addPaths() {
-        
-        let circlePos = self.bounds.width * 0.2
-        let circleSize = self.bounds.width * 0.6
+        let circlePos = bounds.width * 0.2
+        let circleSize = bounds.width * 0.6
         let circlePath = UIBezierPath(ovalIn: CGRect(x: circlePos, y: circlePos, width: circleSize, height: circleSize))
-        
+
         let trianglePath = UIBezierPath()
-        let topX = self.bounds.width * 0.4
-        let topY = self.bounds.width * 0.35
-        let midY = self.bounds.width * 0.65
-        let botY = self.bounds.width * 0.5
-        
+        let topX = bounds.width * 0.4
+        let topY = bounds.width * 0.35
+        let midY = bounds.width * 0.65
+        let botY = bounds.width * 0.5
+
         trianglePath.move(to: CGPoint(x: topX, y: topY)) // Top vertex
         trianglePath.addLine(to: CGPoint(x: topX, y: midY)) // Bottom-left vertex
         trianglePath.addLine(to: CGPoint(x: midY, y: botY)) // Bottom-right vertex
-        trianglePath.close() // Close the triangle
-        
+        trianglePath.close()
+
         let paths = [circlePath, trianglePath]
-        
+
         for path in paths {
             let shapeLayer = CAShapeLayer()
             shapeLayer.path = path.cgPath
             shapeLayer.strokeColor = UIColor.black.cgColor
             shapeLayer.fillColor = UIColor.clear.cgColor
             shapeLayer.lineWidth = 1.8
-            shapeLayer.strokeEnd = 1.0 // Start with no stroke visible
+            shapeLayer.strokeEnd = 1.0
             layer.addSublayer(shapeLayer)
             shapeLayers.append(shapeLayer)
         }
-        
+
         setBackground()
     }
-    
+
     private func setBackground() {
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = bounds
         gradientLayer.colors = [
-            UIColor.systemTeal.cgColor,
-            UIColor.systemOrange.cgColor
+            UIColor.systemBlue.cgColor,
+            UIColor.white.cgColor
         ]
         gradientLayer.startPoint = CGPoint(x: 0, y: 0)
         gradientLayer.endPoint = CGPoint(x: 1, y: 1)
-        gradientLayer.type = .axial
-
         layer.insertSublayer(gradientLayer, at: 0)
     }
 
-    
     func showLoader() {
-        
-        guard timer == nil else {return}
+        guard timer == nil else { return }
         
         DispatchQueue.main.async {
+            if let superview = self.superview {
+                self.setupBlurEffectView(in: superview) // Ensure blur effect is ready
+            }
+            self.updateShadeAffect(isVisible: true) // Show blur instantly
             self.isHidden = false
         }
-        
+
         animate()
-        timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { [weak self] timer in
-            
-            guard let strongSelf = self else {return}
-            
-            strongSelf.animate()
+        timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { [weak self] _ in
+            self?.animate()
         }
-        
     }
-    
+
     func hideLoader() {
-        
         DispatchQueue.main.async {
             self.isHidden = true
+            self.updateShadeAffect(isVisible: false) // Hide blur instantly
         }
-        
+
         timer?.invalidate()
-        timer = nil 
+        timer = nil
     }
-    
-    private func animate() {
+
+    private func setupBlurEffectView(in superView: UIView) {
         
+        guard shadeAffect else {return}
+        
+        if blurEffectView == nil {
+            let blurEffect = UIBlurEffect(style: .systemUltraThinMaterialLight)
+            blurEffectView = UIVisualEffectView(effect: blurEffect)
+            blurEffectView?.backgroundColor = .clear
+            blurEffectView?.frame = superView.bounds
+            blurEffectView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            //blurEffectView?.isHidden = true // Keep hidden initially
+            blurEffectView?.isUserInteractionEnabled = false
+            superView.insertSubview(blurEffectView!, belowSubview: self)
+            Logger.log("blur affect added")
+        }
+    }
+
+    private func updateShadeAffect(isVisible: Bool) {
         DispatchQueue.main.async {
-            
+            guard let blurEffectView = self.blurEffectView else { return }
+
+            if isVisible, self.shadeAffect {
+                blurEffectView.effect = UIBlurEffect(style: .dark)
+                //blurEffectView.alpha = 0.6
+            } else {
+                blurEffectView.effect = nil
+            }
+        }
+    }
+
+    private func animate() {
+        DispatchQueue.main.async {
             for (index, shapeLayer) in self.shapeLayers.enumerated() {
                 let animation = index == 0 ? CABasicAnimation(keyPath: "strokeEnd") : CABasicAnimation(keyPath: "strokeStart")
                 animation.fromValue = 0
@@ -125,18 +166,16 @@ class Loader : UIView {
                 animation.beginTime = CACurrentMediaTime() + Double(index) * animation.duration
                 animation.fillMode = .forwards
                 animation.autoreverses = true
-                animation.isRemovedOnCompletion = index == 0 ? true : false
+                animation.isRemovedOnCompletion = false
                 animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-                animation.repeatCount = Float.infinity
+                animation.repeatCount = .infinity
                 shapeLayer.add(animation, forKey: "drawLine")
             }
         }
-        
     }
-    
+
     deinit {
         timer?.invalidate()
-        timer = nil 
+        blurEffectView = nil
     }
-    
 }
