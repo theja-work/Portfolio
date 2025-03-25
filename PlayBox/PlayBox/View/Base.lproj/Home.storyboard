@@ -14,7 +14,7 @@
         <!--Login View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController storyboardIdentifier="LoginVC" id="BYZ-38-t0r" customClass="LoginViewController" customModule="PlayBox" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="BYZ-38-t0r" customClass="LoginViewController" customModule="PlayBox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -128,7 +128,7 @@
         <!--App Coordinator-->
         <scene sceneID="9aT-nf-h9U">
             <objects>
-                <tabBarController storyboardIdentifier="appTBC" id="Hrg-c8-W0d" customClass="AppCoordinator" customModule="PlayBox" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="appTBC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Hrg-c8-W0d" customClass="AppCoordinator" customModule="PlayBox" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="JRH-hr-raO">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -149,7 +149,7 @@
         <!--Home View Controller-->
         <scene sceneID="xm3-NS-FC9">
             <objects>
-                <viewController storyboardIdentifier="HomeVC" id="Eoa-Yy-v4K" customClass="HomeViewController" customModule="PlayBox" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="HomeVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Eoa-Yy-v4K" customClass="HomeViewController" customModule="PlayBox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Wtv-Dq-e6e">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -184,7 +184,7 @@
         <!--Search View Controller-->
         <scene sceneID="pGF-dr-7IN">
             <objects>
-                <viewController storyboardIdentifier="SearchVC" id="meI-ge-hnX" customClass="SearchViewController" customModule="PlayBox" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SearchVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="meI-ge-hnX" customClass="SearchViewController" customModule="PlayBox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="fEF-iP-yJe">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -234,29 +234,30 @@
         <!--Content Details View Controller-->
         <scene sceneID="Crx-Xo-Eu6">
             <objects>
-                <viewController storyboardIdentifier="CDVC" id="Z1Y-hb-4YY" customClass="ContentDetailsViewController" customModule="PlayBox" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CDVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Z1Y-hb-4YY" customClass="ContentDetailsViewController" customModule="PlayBox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="w4w-nh-aiw">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="zGr-Xj-SPT">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="22e-9X-VF5" customClass="PlayerHolderView" customModule="PlayBox" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="94" width="375" height="211"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="zGr-Xj-SPT" secondAttribute="height" multiplier="16:9" id="16y-Sq-tiW"/>
+                                    <constraint firstAttribute="width" secondItem="22e-9X-VF5" secondAttribute="height" multiplier="16:9" id="WQ7-xL-yJ0"/>
                                 </constraints>
-                            </imageView>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="dQo-BC-N8M"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="dQo-BC-N8M" firstAttribute="top" secondItem="zGr-Xj-SPT" secondAttribute="top" id="cTE-r0-wvR"/>
-                            <constraint firstItem="zGr-Xj-SPT" firstAttribute="width" secondItem="dQo-BC-N8M" secondAttribute="width" id="qiL-Co-mBp"/>
-                            <constraint firstItem="zGr-Xj-SPT" firstAttribute="centerX" secondItem="w4w-nh-aiw" secondAttribute="centerX" id="wmW-bd-aqo"/>
+                            <constraint firstAttribute="trailing" secondItem="22e-9X-VF5" secondAttribute="trailing" id="3s8-0k-6Ua"/>
+                            <constraint firstItem="22e-9X-VF5" firstAttribute="leading" secondItem="w4w-nh-aiw" secondAttribute="leading" id="Ha4-up-o7Z"/>
+                            <constraint firstItem="dQo-BC-N8M" firstAttribute="top" secondItem="22e-9X-VF5" secondAttribute="top" id="otl-Fp-InY"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="mUD-2w-vYG"/>
                     <connections>
-                        <outlet property="contentDetailsImageView" destination="zGr-Xj-SPT" id="ZWt-Ud-6j0"/>
+                        <outlet property="playerView" destination="22e-9X-VF5" id="8zx-75-2TH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sgY-Md-mxj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -266,7 +267,7 @@
         <!--Downloads View Controller-->
         <scene sceneID="Rlk-Cl-NK0">
             <objects>
-                <viewController storyboardIdentifier="DownloadsVC" id="D12-IZ-GyR" customClass="DownloadsViewController" customModule="PlayBox" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="DownloadsVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="D12-IZ-GyR" customClass="DownloadsViewController" customModule="PlayBox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="qiV-cd-wHE">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -282,7 +283,7 @@
         <!--Profile View Controller-->
         <scene sceneID="rlv-Rh-4L2">
             <objects>
-                <viewController storyboardIdentifier="ProfileVC" id="fAy-ea-0Rg" customClass="ProfileViewController" customModule="PlayBox" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ProfileVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="fAy-ea-0Rg" customClass="ProfileViewController" customModule="PlayBox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="wto-jW-DZ7">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -445,7 +446,7 @@
         <!--Graph View Controller-->
         <scene sceneID="1YA-Ra-EWs">
             <objects>
-                <viewController storyboardIdentifier="GraphVC" id="uJL-Wx-7FN" customClass="GraphViewController" customModule="PlayBox" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="GraphVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="uJL-Wx-7FN" customClass="GraphViewController" customModule="PlayBox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="JxI-7O-V4s">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -504,7 +505,7 @@
         <!--Navigation Controller-->
         <scene sceneID="NBG-hj-Je6">
             <objects>
-                <navigationController storyboardIdentifier="LoginNC" automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="RyJ-wD-4aZ" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="LoginNC" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" navigationBarHidden="YES" id="RyJ-wD-4aZ" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="rzL-ie-e4R">
                         <autoresizingMask key="autoresizingMask"/>
@@ -521,7 +522,7 @@
         <!--Navigation Controller-->
         <scene sceneID="qJ3-LG-w25">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="bdW-ed-o79" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="bdW-ed-o79" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="" image="globe.desk" catalog="system" id="pga-Hi-dRH"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="GW2-LL-YDZ">
@@ -540,7 +541,7 @@
         <!--Splash View Controller-->
         <scene sceneID="R7D-Rq-X8K">
             <objects>
-                <viewController storyboardIdentifier="SplashViewController" id="qtz-gR-qUK" customClass="SplashViewController" customModule="PlayBox" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SplashViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="qtz-gR-qUK" customClass="SplashViewController" customModule="PlayBox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="9Ld-b2-U7S">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -575,7 +576,7 @@
         <!--Navigation Controller-->
         <scene sceneID="4zP-2t-PbG">
             <objects>
-                <navigationController storyboardIdentifier="CDNC" automaticallyAdjustsScrollViewInsets="NO" id="kHQ-CM-gVd" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="CDNC" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="kHQ-CM-gVd" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="U40-Vp-RiA">
                         <rect key="frame" x="0.0" y="50" width="375" height="44"/>
@@ -593,7 +594,7 @@
         <!--Navigation Controller-->
         <scene sceneID="mnJ-9I-NZo">
             <objects>
-                <navigationController storyboardIdentifier="HomeNC" automaticallyAdjustsScrollViewInsets="NO" id="5cU-p9-3hs" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="HomeNC" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="5cU-p9-3hs" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="" id="bgh-Av-4kK">
                         <imageReference key="image" image="house" catalog="system" symbolScale="large"/>
                     </tabBarItem>
@@ -625,7 +626,7 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

@@ -17,5 +17,6 @@ protocol ContentDetailsViewModelDependency : AnyObject {
 protocol ContentDetailsViewUpdateDelegate : AnyObject {
     
     func updateImage(image : UIImage?)
+    func updateLoader(isLoading : Bool)
     
 }

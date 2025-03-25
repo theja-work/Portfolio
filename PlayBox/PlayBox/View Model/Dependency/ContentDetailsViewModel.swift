@@ -12,6 +12,14 @@ class ContentDetailsViewModel : ContentDetailsViewModelDependency {
     
     var dataDelegate : ContentDetailsViewUpdateDelegate?
     
+    private var isLoading : Bool = false {
+        
+        didSet {
+            dataDelegate?.updateLoader(isLoading: isLoading)
+        }
+        
+    }
+    
     private var image : UIImage? {
         
         didSet {
@@ -31,8 +39,17 @@ class ContentDetailsViewModel : ContentDetailsViewModelDependency {
         
         guard let imageUrl = video?.thumbnail else {return}
         
-        Service.getImageFrom(url: imageUrl) { image in
-            self.image = image
+        isLoading = true
+        
+        Service.getImageFrom(url: imageUrl) { [weak self] image in
+            
+            guard let localSelf = self else {return}
+                
+            DispatchQueue.main.asyncAfter(deadline: .now() + 6, execute: {
+                localSelf.isLoading = false
+            })
+            
+            localSelf.image = image
         }
         
     }

@@ -141,3 +141,11 @@ extension CGPoint {
         return sqrt(dx * dx + dy * dy)
     }
 }
+
+extension UIView {
+    
+    func getToThePoint() -> CGPoint {
+        return self.center
+    }
+    
+}

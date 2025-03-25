@@ -31,12 +31,12 @@ class Loader: UIView {
 
     private func commonInit() {
         clipsToBounds = true
-        layer.cornerRadius = self.bounds.width * 0.25
+        layer.cornerRadius = self.bounds.width * 0.2
         addPaths()
         
         // Ensure blur is added in the parent view (if exists)
         DispatchQueue.main.async {
-            if let superview = self.superview , self.shadeAffect {
+            if let superview = self.superview {
                 self.setupBlurEffectView(in: superview)
             }
         }
@@ -44,7 +44,7 @@ class Loader: UIView {
     
     private func setupView() {
         clipsToBounds = true
-        layer.cornerRadius = bounds.width * 0.25
+        layer.cornerRadius = bounds.width * 0.2
         addPaths()
     }
 
@@ -56,7 +56,7 @@ class Loader: UIView {
     }
 
     private func addPaths() {
-        let circlePos = bounds.width * 0.2
+        let circlePos = bounds.width / 2 * 0.4
         let circleSize = bounds.width * 0.6
         let circlePath = UIBezierPath(ovalIn: CGRect(x: circlePos, y: circlePos, width: circleSize, height: circleSize))
 
@@ -78,7 +78,7 @@ class Loader: UIView {
             shapeLayer.path = path.cgPath
             shapeLayer.strokeColor = UIColor.black.cgColor
             shapeLayer.fillColor = UIColor.clear.cgColor
-            shapeLayer.lineWidth = 1.8
+            shapeLayer.lineWidth = bounds.width / 32
             shapeLayer.strokeEnd = 1.0
             layer.addSublayer(shapeLayer)
             shapeLayers.append(shapeLayer)
@@ -139,7 +139,6 @@ class Loader: UIView {
             //blurEffectView?.isHidden = true // Keep hidden initially
             blurEffectView?.isUserInteractionEnabled = false
             superView.insertSubview(blurEffectView!, belowSubview: self)
-            Logger.log("blur affect added")
         }
     }
 
@@ -163,12 +162,13 @@ class Loader: UIView {
                 animation.fromValue = 0
                 animation.toValue = 1
                 animation.duration = index == 0 ? 1.0 : 0.64
-                animation.beginTime = CACurrentMediaTime() + Double(index) * animation.duration
+                animation.beginTime = CACurrentMediaTime()
                 animation.fillMode = .forwards
                 animation.autoreverses = true
                 animation.isRemovedOnCompletion = false
                 animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
                 animation.repeatCount = .infinity
+                
                 shapeLayer.add(animation, forKey: "drawLine")
             }
         }

@@ -118,7 +118,7 @@ class CustomSlider: UISlider {
     override func thumbRect(forBounds bounds: CGRect, trackRect rect: CGRect, value: Float) -> CGRect {
         
         let buttonRadius = bounds.width / 2  // Radius of the circular button
-        let adjustedRadius = buttonRadius - (thumbSize / 2) + 12 // Stay within button edges
+        let adjustedRadius = buttonRadius - (thumbSize / 2) + 10 // Stay within button edges
         
         let centerX = bounds.midX
         let centerY = bounds.midY
@@ -134,7 +134,7 @@ class CustomSlider: UISlider {
         let y = centerY + adjustedRadius * sin(angle)
         
         let thumbX = x - (thumbSize / 2)
-        let thumbY = y - (thumbSize / 2)
+        let thumbY = y - (thumbSize / 2) - 3
         
         let thumbRect = CGRect(x: thumbX, y: thumbY, width: thumbSize, height: thumbSize)
         rotateThumbRect(imageRect: thumbRect, angle: angle)

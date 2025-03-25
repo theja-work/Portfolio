@@ -20,6 +20,14 @@ class AppCoordinator : UITabBarController {
         
     }
     
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        .portrait
+    }
+    
+    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        .portrait
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

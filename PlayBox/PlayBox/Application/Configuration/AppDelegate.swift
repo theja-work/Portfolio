@@ -13,7 +13,8 @@ import GoogleSignIn
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    var appRoute : AppRoutes?
+    
+    private var orientation : UIInterfaceOrientationMask = .all
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
@@ -79,18 +80,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
     }
 
-    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-        
-      var handled: Bool
-
-      handled = GIDSignIn.sharedInstance.handle(url)
-      if handled {
-        return true
-      }
-
-      return false
-    }
-    
     func logout() {
         
         routeApp(route: .Login)

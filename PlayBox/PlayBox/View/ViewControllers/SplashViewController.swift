@@ -21,6 +21,10 @@ class SplashViewController : UIViewController {
         
     }
     
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        .portrait
+    }
+    
     @IBOutlet weak var loader: Loader!
     private let database = DBManager()
     
@@ -60,14 +64,13 @@ class SplashViewController : UIViewController {
         
         guard let delegate = UIApplication.shared.delegate as? AppDelegate else {return}
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+        if self.database.isLoggedinUser(readFromDb: true) {
             
-            if self.database.isLoggedinUser(readFromDb: true) {
+            GIDSignIn.sharedInstance.restorePreviousSignIn { [weak self] user , error in
                 
-                GIDSignIn.sharedInstance.restorePreviousSignIn { [weak self] user , error in
-                    
-                    guard let strongSelf = self else {return}
-                    
+                guard let strongSelf = self else {return}
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
                     
                     strongSelf.loader.hideLoader()
                     
@@ -80,18 +83,22 @@ class SplashViewController : UIViewController {
                         delegate.routeApp(route: .Login)
                     }
                     
-                }
+                })
                 
             }
-            else {
+            
+        }
+        else {
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
                 
                 self.loader.hideLoader()
                 
                 delegate.routeApp(route: .Login)
                 
-            }
+            })
             
-        })
+        }
     }
     
 }

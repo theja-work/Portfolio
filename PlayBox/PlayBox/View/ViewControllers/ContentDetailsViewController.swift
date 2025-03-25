@@ -33,19 +33,29 @@ class ContentDetailsViewController : UIViewController {
         return viewController
     }
     
-    @IBOutlet weak var contentDetailsImageView: UIImageView!
+    @IBOutlet weak var playerView: PlayerHolderView!
     
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        .landscape
+    }
+    
+    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        .portrait
+    }
     
     private var video : VideoItem?
     
     private var viewModel : ContentDetailsViewModel?
     
+    private let playerRotationAnimationKey = "on_rotation_key"
+    private let playerScaleAnimationKey = "on_scale_key"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.isNavigationBarHidden = false
-        
+        setNeedsUpdateOfSupportedInterfaceOrientations()
         setupViewModel()
+        setupPlayerView()
         viewModel?.loadImage()
     }
     
@@ -54,6 +64,85 @@ class ContentDetailsViewController : UIViewController {
         guard let item = video else {return}
         
         viewModel = ContentDetailsViewModel(dataDelegate: self, video: item)
+    }
+    
+    func setupPlayerView() {
+        playerView?.setupPlayerDelegate(delegate: self)
+        playerView?.loader.shadeAffect = true
+        playerView?.loader.setNeedsLayout()
+        playerView?.loader.layoutIfNeeded()
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        
+        if UIDevice.current.orientation.isLandscape {
+            landScapeTransition()
+            Logger.log("\(UIDevice.current.orientation.isLandscape)")
+        }
+        else {
+            Logger.log("\(UIDevice.current.orientation.isLandscape)")
+            portraitTransition()
+        }
+    }
+    
+    
+    
+    private func landScapeTransition() {
+        let x = 16.0/9.0
+        
+        playerLandscapeTransition()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
+            self.playerView.transform = CGAffineTransform(scaleX: x, y: x)
+        })
+    }
+    
+    private func portraitTransition() {
+        
+        playerPortraitTransition()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
+            
+            self.playerView.transform = .identity
+        })
+        
+    }
+    
+    private func playerLandscapeTransition() {
+        if self.playerView.layer.animation(forKey: playerRotationAnimationKey) == nil {
+            let animation = CABasicAnimation(keyPath: "transform.rotation.z")
+            animation.fromValue = 0
+            animation.toValue = CGFloat.pi / 30
+            animation.duration = 0.1
+            self.playerView.layer.add(animation, forKey: playerRotationAnimationKey)
+        }
+        
+        if self.playerView.layer.animation(forKey: playerScaleAnimationKey) == nil {
+            let animation = CABasicAnimation(keyPath: "transform.scale")
+            animation.fromValue = 1
+            animation.toValue = 2
+            animation.duration = 0.2
+            self.playerView.layer.add(animation, forKey: playerScaleAnimationKey)
+        }
+    }
+    
+    private func playerPortraitTransition() {
+        if self.playerView.layer.animation(forKey: playerRotationAnimationKey) == nil {
+            let animation = CABasicAnimation(keyPath: "transform.rotation.z")
+            animation.fromValue = 0
+            animation.toValue = -CGFloat.pi / 30
+            animation.duration = 0.2
+            self.playerView.layer.add(animation, forKey: playerRotationAnimationKey)
+        }
+        
+        if self.playerView.layer.animation(forKey: playerScaleAnimationKey) == nil {
+            let animation = CABasicAnimation(keyPath: "transform.scale")
+            animation.fromValue = 2
+            animation.toValue = 1
+            animation.duration = 0.3
+            self.playerView.layer.add(animation, forKey: playerScaleAnimationKey)
+        }
     }
 }
 
@@ -68,12 +157,39 @@ extension ContentDetailsViewController : ContentDetailsViewUpdateDelegate {
         
         DispatchQueue.main.async {
             
-            self.contentDetailsImageView.image = image
-            self.contentDetailsImageView.contentMode = .scaleToFill
-            self.contentDetailsImageView.setNeedsLayout()
-            self.contentDetailsImageView.layoutIfNeeded()
+            self.playerView?.thumbnailImageView?.image = AppUtilities.shared.removeBlackPadding(from: image)
+            self.playerView?.thumbnailImageView?.contentMode = .scaleToFill
+            self.playerView?.thumbnailImageView?.setNeedsLayout()
+            self.playerView?.thumbnailImageView?.layoutIfNeeded()
             
         }
+        
+    }
+    
+    func updateLoader(isLoading: Bool) {
+        isLoading ? playerView?.loader.showLoader() : playerView?.loader.hideLoader()
+        
+        playerView?.loader.setNeedsLayout()
+        playerView?.loader.layoutIfNeeded()
+    }
+    
+}
+
+extension ContentDetailsViewController : PlayerHolderDelegate {
+    
+    func showThumbnail() {
+        
+    }
+    
+    func closePlayer() {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    func loadNext() {
+        
+    }
+    
+    func loadPrevious() {
         
     }
     

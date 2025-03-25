@@ -53,7 +53,7 @@
 			membershipExceptions = (
 				Application/Configuration/Info.plist,
 				Application/Configuration/SceneDelegate.swift,
-				Application/Testing/PlayBoxTests/PlayBoxTests.swift,
+				Application/Testing/PlayBoxTests/AppDelegateTests.swift,
 				Application/Testing/PlayBoxUITests/PlayBoxUITests.swift,
 				Application/Testing/PlayBoxUITests/PlayBoxUITestsLaunchTests.swift,
 			);
@@ -62,7 +62,7 @@
 		43B05A052D30716C009A3D8F /* Exceptions for "PlayBox" folder in "PlayBoxTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Application/Testing/PlayBoxTests/PlayBoxTests.swift,
+				Application/Testing/PlayBoxTests/AppDelegateTests.swift,
 			);
 			target = 43B059D92D306662009A3D8F /* PlayBoxTests */;
 		};
@@ -318,8 +318,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Home;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -350,8 +349,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Home;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

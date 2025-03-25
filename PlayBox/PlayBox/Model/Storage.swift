@@ -150,15 +150,26 @@ final class Storage {
                 
                 let createdOn = Date()
                 
-                let predicate = NSPredicate(format: "createdOn == %@", createdOn as CVarArg)
+                let adultPredicate = NSPredicate(format: "createdOn == %@", createdOn as CVarArg)
                 
-                if let adult = create(Profile.self , predicate: predicate) {
+                if let adult = create(Profile.self , predicate: adultPredicate) {
                     
                     adult.age = 30
                     adult.gender = "Male"
                     adult.createdOn = createdOn
                     
                     user.adult = adult
+                }
+                
+                let childPredicate = NSPredicate(format: "createdOn == %@", createdOn + 10 as CVarArg)
+                
+                if let child = create(Profile.self , predicate: childPredicate) {
+                    
+                    child.age = 63
+                    child.gender = "Female"
+                    child.createdOn = createdOn + 10
+                    
+                    user.child = child
                 }
                 
                 print("User created successfully")
@@ -179,13 +190,6 @@ final class Storage {
             if let user = read(User.self, predicate: predicate) , !user.isEmpty {
                 
                 do {
-                    
-                    if let createdOn = user.first?.adult?.createdOn {
-                        
-                        let predicate = NSPredicate(format: "createdOn == %@", createdOn as CVarArg)
-                        
-                        try delete(Profile.self, predicate: predicate)
-                    }
                     
                     try delete(User.self, predicate: predicate)
                     

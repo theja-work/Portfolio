@@ -32,6 +32,10 @@ class HomeViewController : UIViewController {
     
     @IBOutlet weak var catalogTableView: UITableView!
     
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        .portrait
+    }
+    
     private var viewModel : VideoViewModel?
     private var loader : Loader?
     
@@ -220,6 +224,8 @@ extension HomeViewController : ContentDetailsProtocol {
         Logger.log(item.title)
         
         guard let detailsVC = ContentDetailsViewController.viewController(item: item) else {return}
+        
+        detailsVC.navigationController?.isNavigationBarHidden = true
         
         self.navigationController?.pushViewController(detailsVC, animated: true)
         

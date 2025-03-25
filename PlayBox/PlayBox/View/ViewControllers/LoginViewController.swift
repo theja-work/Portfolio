@@ -103,6 +103,8 @@ class LoginViewController: UIViewController {
     
     @IBAction func googleSigninAction(_ sender: UIButton) {
         
+        
+        
         GIDSignIn.sharedInstance.signIn(withPresenting: self) { [weak self] signInResult, error in
             guard error == nil else { return }
             guard let strongSelf = self else {return}
