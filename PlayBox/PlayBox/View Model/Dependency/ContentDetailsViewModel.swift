@@ -45,7 +45,7 @@ class ContentDetailsViewModel : ContentDetailsViewModelDependency {
             
             guard let localSelf = self else {return}
                 
-            DispatchQueue.main.asyncAfter(deadline: .now() + 6, execute: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0, execute: {
                 localSelf.isLoading = false
             })
             

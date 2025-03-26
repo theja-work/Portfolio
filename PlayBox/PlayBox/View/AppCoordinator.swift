@@ -34,6 +34,14 @@ class AppCoordinator : UITabBarController {
         configureTabs()
     }
     
+    override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        
+        DispatchQueue.main.async {
+            self.tabBar.isHidden = UIDevice.current.orientation.isLandscape
+        }
+    }
+    
     func configureTabs() {
         
         self.tabBar.backgroundColor = .white

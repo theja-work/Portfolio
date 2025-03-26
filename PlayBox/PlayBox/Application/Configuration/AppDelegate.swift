@@ -14,7 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
-    private var orientation : UIInterfaceOrientationMask = .all
+    var orientation : UIInterfaceOrientationMask = .portrait
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
@@ -84,6 +84,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         routeApp(route: .Login)
         
+    }
+    
+    //MARK: - Orientation Management
+    
+    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+        orientation
     }
 
 }

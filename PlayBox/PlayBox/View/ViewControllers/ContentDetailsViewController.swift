@@ -35,6 +35,8 @@ class ContentDetailsViewController : UIViewController {
     
     @IBOutlet weak var playerView: PlayerHolderView!
     
+    @IBOutlet weak var loader: Loader!
+    
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         .landscape
     }
@@ -59,6 +61,14 @@ class ContentDetailsViewController : UIViewController {
         viewModel?.loadImage()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if let delegate = UIApplication.shared.delegate as? AppDelegate {
+            delegate.orientation = .landscape
+        }
+    }
+    
     func setupViewModel() {
         
         guard let item = video else {return}
@@ -78,24 +88,23 @@ class ContentDetailsViewController : UIViewController {
         
         if UIDevice.current.orientation.isLandscape {
             landScapeTransition()
-            Logger.log("\(UIDevice.current.orientation.isLandscape)")
         }
         else {
-            Logger.log("\(UIDevice.current.orientation.isLandscape)")
             portraitTransition()
         }
     }
     
-    
-    
     private func landScapeTransition() {
-        let x = 16.0/9.0
+        
+        let height = self.view.bounds.width
+        let width = self.view.bounds.height
         
         playerLandscapeTransition()
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
-            self.playerView.transform = CGAffineTransform(scaleX: x, y: x)
-        })
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            self.playerView.frame = CGRect(x: 0, y: 0, width: width, height: height)
+        }
+        
     }
     
     private func portraitTransition() {
@@ -113,37 +122,25 @@ class ContentDetailsViewController : UIViewController {
         if self.playerView.layer.animation(forKey: playerRotationAnimationKey) == nil {
             let animation = CABasicAnimation(keyPath: "transform.rotation.z")
             animation.fromValue = 0
-            animation.toValue = CGFloat.pi / 30
+            
+            Logger.log(UIDevice.current.orientation == .landscapeLeft)
+            animation.toValue = UIDevice.current.orientation == .landscapeRight ? -CGFloat.pi / 2 : CGFloat.pi / 2
             animation.duration = 0.1
             self.playerView.layer.add(animation, forKey: playerRotationAnimationKey)
-        }
-        
-        if self.playerView.layer.animation(forKey: playerScaleAnimationKey) == nil {
-            let animation = CABasicAnimation(keyPath: "transform.scale")
-            animation.fromValue = 1
-            animation.toValue = 2
-            animation.duration = 0.2
-            self.playerView.layer.add(animation, forKey: playerScaleAnimationKey)
         }
     }
     
     private func playerPortraitTransition() {
-        if self.playerView.layer.animation(forKey: playerRotationAnimationKey) == nil {
-            let animation = CABasicAnimation(keyPath: "transform.rotation.z")
-            animation.fromValue = 0
-            animation.toValue = -CGFloat.pi / 30
-            animation.duration = 0.2
-            self.playerView.layer.add(animation, forKey: playerRotationAnimationKey)
-        }
+        let isLandscapeRight = UIDevice.current.orientation == .landscapeRight
         
-        if self.playerView.layer.animation(forKey: playerScaleAnimationKey) == nil {
-            let animation = CABasicAnimation(keyPath: "transform.scale")
-            animation.fromValue = 2
-            animation.toValue = 1
-            animation.duration = 0.3
-            self.playerView.layer.add(animation, forKey: playerScaleAnimationKey)
+        UIView.animate(withDuration: 0.2, animations: {
+            self.playerView.transform = isLandscapeRight ? CGAffineTransform(rotationAngle: CGFloat.pi) : CGAffineTransform(rotationAngle: -CGFloat.pi)
+        }) { _ in
+            // Reset transform after animation to ensure proper positioning
+            self.playerView.transform = .identity
         }
     }
+
 }
 
 extension ContentDetailsViewController : ContentDetailsViewUpdateDelegate {

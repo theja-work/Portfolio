@@ -107,7 +107,7 @@ final class AppUtilities {
 
 class Logger {
     
-    class func log(_ message: String,
+    class func log(_ message: Any...,
              file: String = #file,
              function: String = #function,
              line: Int = #line) {

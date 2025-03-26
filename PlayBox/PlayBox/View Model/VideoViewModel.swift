@@ -63,9 +63,7 @@ class VideoViewModel : VideoViewModelDependency {
                 return
             }
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 6, execute: {
-                strongSelf.isLoading = false
-            })
+            strongSelf.isLoading = false
             
             switch response {
             case .success(let videoData):
