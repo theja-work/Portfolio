@@ -37,6 +37,8 @@ class ContentDetailsViewController : UIViewController {
     
     @IBOutlet weak var loader: Loader!
     
+    @IBOutlet weak var detailsHolderView: DetailsHolderView!
+    
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         .landscape
     }
@@ -59,6 +61,7 @@ class ContentDetailsViewController : UIViewController {
         setupViewModel()
         setupPlayerView()
         viewModel?.loadImage()
+        setupDetails()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -83,6 +86,22 @@ class ContentDetailsViewController : UIViewController {
         playerView?.loader.layoutIfNeeded()
     }
     
+    func setupDetails() {
+        
+        detailsHolderView?.detailHolderDelegate = self
+        
+        guard let item = self.video else {return}
+        
+        detailsHolderView?.setupBuilder(builder: DetailsHolderComponentBuilder())
+        
+        viewModel?.getRelatedItems()
+        
+        detailsHolderView?.setupItem(item: item)
+        
+        detailsHolderView?.setNeedsLayout()
+        detailsHolderView?.layoutIfNeeded()
+    }
+    
     override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         
@@ -102,6 +121,7 @@ class ContentDetailsViewController : UIViewController {
         playerLandscapeTransition()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            self.playerView.translatesAutoresizingMaskIntoConstraints = true
             self.playerView.frame = CGRect(x: 0, y: 0, width: width, height: height)
         }
         
@@ -112,7 +132,7 @@ class ContentDetailsViewController : UIViewController {
         playerPortraitTransition()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
-            
+            self.playerView.translatesAutoresizingMaskIntoConstraints = false
             self.playerView.transform = .identity
         })
         
@@ -123,7 +143,6 @@ class ContentDetailsViewController : UIViewController {
             let animation = CABasicAnimation(keyPath: "transform.rotation.z")
             animation.fromValue = 0
             
-            Logger.log(UIDevice.current.orientation == .landscapeLeft)
             animation.toValue = UIDevice.current.orientation == .landscapeRight ? -CGFloat.pi / 2 : CGFloat.pi / 2
             animation.duration = 0.1
             self.playerView.layer.add(animation, forKey: playerRotationAnimationKey)
@@ -164,10 +183,13 @@ extension ContentDetailsViewController : ContentDetailsViewUpdateDelegate {
     }
     
     func updateLoader(isLoading: Bool) {
-        isLoading ? playerView?.loader.showLoader() : playerView?.loader.hideLoader()
-        
-        playerView?.loader.setNeedsLayout()
-        playerView?.loader.layoutIfNeeded()
+        DispatchQueue.main.async {
+            isLoading ? self.playerView?.loader.showLoader() : self.playerView?.loader.hideLoader()
+        }
+    }
+    
+    func updateRelated(items: [VideoItem]) {
+        detailsHolderView?.setupRelatedItems(items: items)
     }
     
 }
@@ -187,6 +209,42 @@ extension ContentDetailsViewController : PlayerHolderDelegate {
     }
     
     func loadPrevious() {
+        
+    }
+    
+}
+
+extension ContentDetailsViewController : DetailsHolderDelegate {
+    
+    func didSelect(item: VideoItem) {
+        Logger.log(item.title)
+    }
+    
+    func scrollType() -> UICollectionView.ScrollDirection {
+        .horizontal
+    }
+    
+    func cellSize() -> CGSize {
+        CGSize(width: 120, height: 180)
+    }
+    
+    func play() {
+        
+    }
+    
+    func pause() {
+        
+    }
+    
+    func startDownload() {
+        
+    }
+    
+    func pauseDownload() {
+        
+    }
+    
+    func deleteDownload() {
         
     }
     

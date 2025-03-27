@@ -50,6 +50,7 @@ class HomeCarouselTableViewCell : UITableViewCell {
         carouselCollection.showsHorizontalScrollIndicator = false
         carouselCollection.isScrollEnabled = false
         
+        
         setupTitleSwipeButton()
         
     }
@@ -270,7 +271,7 @@ extension HomeCarouselTableViewCell : UICollectionViewDelegate , UICollectionVie
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        return CGSize(width: self.contentView.bounds.width, height: self.contentView.bounds.height)
+        CGSize(width: self.contentView.bounds.width, height: self.contentView.bounds.height)
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {

@@ -12,6 +12,7 @@ class VideoAPI {
     enum API {
         case Carousel
         case VideoList
+        case Related
     }
     
     private var api : API
@@ -23,12 +24,22 @@ class VideoAPI {
         self.cache = cache
     }
     
+    var _api : API {
+        
+        get {
+            api
+        }
+        
+    }
+    
     private var url : String {
         switch self.api {
             
         case .Carousel : return "gist.githubusercontent.com/poudyalanil/ca84582cbeb4fc123a13290a586da925/raw/14a27bd0bcd0cd323b35ad79cf3b493dddf6216b/videos.json"
             
         case .VideoList : return "interview-e18de.firebaseio.com/media.json"
+            
+        case .Related : return "gist.githubusercontent.com/poudyalanil/ca84582cbeb4fc123a13290a586da925/raw/14a27bd0bcd0cd323b35ad79cf3b493dddf6216b/videos.json"
             
         }
     }
@@ -40,6 +51,8 @@ class VideoAPI {
             return .GET
         case .VideoList:
             return .GET
+            
+        default : return .GET
         }
         
     }
