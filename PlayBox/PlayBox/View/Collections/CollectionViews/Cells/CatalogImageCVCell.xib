@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -20,10 +21,20 @@
                     <imageView clipsSubviews="YES" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="7O7-cM-dgs">
                         <rect key="frame" x="0.0" y="0.0" width="221" height="156"/>
                     </imageView>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ggb-Ly-zjY" customClass="Loader" customModule="PlayBox" customModuleProvider="target">
+                        <rect key="frame" x="88" y="55.666666666666657" width="45" height="45"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="45" id="U3X-kj-pM0"/>
+                            <constraint firstAttribute="width" secondItem="ggb-Ly-zjY" secondAttribute="height" multiplier="1:1" id="g8H-1v-0te"/>
+                        </constraints>
+                    </view>
                 </subviews>
                 <constraints>
                     <constraint firstItem="7O7-cM-dgs" firstAttribute="top" secondItem="BN8-Fs-BZ4" secondAttribute="top" id="4u4-mD-Nmd"/>
                     <constraint firstAttribute="bottom" secondItem="7O7-cM-dgs" secondAttribute="bottom" id="5Qe-cg-lDE"/>
+                    <constraint firstItem="ggb-Ly-zjY" firstAttribute="centerX" secondItem="BN8-Fs-BZ4" secondAttribute="centerX" id="Msy-l9-9B7"/>
+                    <constraint firstItem="ggb-Ly-zjY" firstAttribute="centerY" secondItem="BN8-Fs-BZ4" secondAttribute="centerY" id="QVx-K9-4fY"/>
                     <constraint firstAttribute="trailing" secondItem="7O7-cM-dgs" secondAttribute="trailing" id="VLK-3k-YYQ"/>
                     <constraint firstItem="7O7-cM-dgs" firstAttribute="leading" secondItem="BN8-Fs-BZ4" secondAttribute="leading" id="xri-iK-eHp"/>
                 </constraints>
@@ -31,8 +42,14 @@
             <size key="customSize" width="221" height="156"/>
             <connections>
                 <outlet property="imageView" destination="7O7-cM-dgs" id="0Ms-hA-9Jc"/>
+                <outlet property="loader" destination="ggb-Ly-zjY" id="c4l-X8-lqs"/>
             </connections>
             <point key="canvasLocation" x="192" y="17"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>

@@ -30,20 +30,42 @@ class CatalogImageCVCell : BaseImageCollectionCell {
         //self.layer.cornerRadius = 32
     }
     
-    override func setupCell(item: VideoItem) {
-        //super.setupCell(item: item)
+    private static let imageCache : NSCache<NSString,UIImage> = {
         
-        Service.getImageFrom(url: item.thumbnail) { [weak self] image in
-            guard let strongSelf = self else {return}
+        let cache = NSCache<NSString,UIImage>()
+        cache.countLimit = 100
+        cache.totalCostLimit = 200 * 1024 * 1024
+        
+        return cache
+    }()
+    
+    override func setupCell(item: VideoItem) {
+        
+        let key = NSString(string: item.thumbnail)
+        
+        self.imageView.image = nil
+        
+        loader.showLoader()
+        if let image = CatalogImageCVCell.imageCache.object(forKey: key) {
             
-            DispatchQueue.main.async {
+            loader.hideLoader()
+            
+            Logger.log("Using cache for setting image")
+            setupImage(image: image)
+            
+        }
+        else {
+            
+            Service.getImageFrom(url: item.thumbnail) { [weak self] image in
+                guard let strongSelf = self else {return}
                 
                 if let cropped = AppUtilities.shared.removeBlackPadding(from: image) {
                     
-                    strongSelf.imageView.image = cropped
-                    strongSelf.imageView.clipsToBounds = true
-                    strongSelf.imageView.layer.masksToBounds = true
-                    strongSelf.imageView.layer.cornerRadius = 12
+                    CatalogImageCVCell.imageCache.setObject(cropped, forKey: key)
+                    
+                    strongSelf.loader.hideLoader()
+                    
+                    strongSelf.setupImage(image: cropped)
                 }
                 
             }
@@ -51,6 +73,25 @@ class CatalogImageCVCell : BaseImageCollectionCell {
         }
     }
     
-    
+    override func setupImage(image:UIImage) {
+        
+        DispatchQueue.main.async {
+            
+            self.imageView.image = image
+            self.imageView.clipsToBounds = true
+            self.imageView.layer.masksToBounds = true
+            self.imageView.layer.cornerRadius = 12
+            
+            self.imageView.contentMode = .scaleToFill
+            
+            self.imageView.setNeedsLayout()
+            self.imageView.layoutIfNeeded()
+            
+            self.setNeedsLayout()
+            self.layoutIfNeeded()
+            
+        }
+        
+    }
 
 }

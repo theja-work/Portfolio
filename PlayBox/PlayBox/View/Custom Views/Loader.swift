@@ -7,12 +7,31 @@
 
 import UIKit
 
-class Loader: UIView {
+final class Loader: UIView {
 
     private var shapeLayers: [CAShapeLayer] = []
     private var timer: Timer?
     internal var shadeAffect: Bool = false
     private var blurEffectView: UIVisualEffectView?
+    
+    private var gradientLayer : CAGradientLayer {
+        
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = bounds
+        gradientLayer.colors = skin.gradients
+        gradientLayer.startPoint = CGPoint(x: 0, y: 0)
+        gradientLayer.endPoint = CGPoint(x: 1, y: 1)
+        
+        return gradientLayer
+    }
+    
+    var skin : LoaderSkin = .App {
+        
+        didSet {
+            setBackground()
+        }
+        
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -56,15 +75,18 @@ class Loader: UIView {
     }
 
     private func addPaths() {
-        let circlePos = bounds.width / 2 * 0.4
-        let circleSize = bounds.width * 0.6
+        
+        let width = bounds.width.rounded()
+        
+        let circlePos = width / 2 * 0.4
+        let circleSize = width * 0.6
         let circlePath = UIBezierPath(ovalIn: CGRect(x: circlePos, y: circlePos, width: circleSize, height: circleSize))
 
         let trianglePath = UIBezierPath()
-        let topX = bounds.width * 0.4
-        let topY = bounds.width * 0.35
-        let midY = bounds.width * 0.65
-        let botY = bounds.width * 0.5
+        let topX = width * 0.4
+        let topY = width * 0.35
+        let midY = width * 0.65
+        let botY = width * 0.5
 
         trianglePath.move(to: CGPoint(x: topX, y: topY)) // Top vertex
         trianglePath.addLine(to: CGPoint(x: topX, y: midY)) // Bottom-left vertex
@@ -76,8 +98,8 @@ class Loader: UIView {
         for path in paths {
             let shapeLayer = CAShapeLayer()
             shapeLayer.path = path.cgPath
-            shapeLayer.strokeColor = UIColor.black.cgColor
-            shapeLayer.fillColor = UIColor.clear.cgColor
+            shapeLayer.strokeColor = skin.strokeColor
+            shapeLayer.fillColor = skin.fillColor
             shapeLayer.lineWidth = bounds.width / 32
             shapeLayer.strokeEnd = 1.0
             layer.addSublayer(shapeLayer)
@@ -88,15 +110,14 @@ class Loader: UIView {
     }
 
     private func setBackground() {
-        let gradientLayer = CAGradientLayer()
-        gradientLayer.frame = bounds
-        gradientLayer.colors = [
-            UIColor.systemBlue.cgColor,
-            UIColor.white.cgColor
-        ]
-        gradientLayer.startPoint = CGPoint(x: 0, y: 0)
-        gradientLayer.endPoint = CGPoint(x: 1, y: 1)
-        layer.insertSublayer(gradientLayer, at: 0)
+        DispatchQueue.main.async {
+            self.gradientLayer.colors = self.skin.gradients
+            
+            if self.layer.sublayers?.first != self.gradientLayer {
+                self.layer.insertSublayer(self.gradientLayer, at: 0)
+            }
+            
+        }
     }
 
     func showLoader() {
@@ -169,7 +190,7 @@ class Loader: UIView {
                 animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
                 animation.repeatCount = .infinity
                 
-                shapeLayer.add(animation, forKey: "drawLine")
+                shapeLayer.add(animation, forKey: "draw")
             }
         }
     }
@@ -178,4 +199,45 @@ class Loader: UIView {
         timer?.invalidate()
         blurEffectView = nil
     }
+}
+
+enum LoaderSkin {
+    
+    case App
+    case CellImage
+    case PlayerView
+    case AppLaunch
+    
+    var gradients : [CGColor] {
+        
+        switch self {
+        case .App : return [UIColor.systemBlue.cgColor , UIColor.white.cgColor]
+        case .AppLaunch : return [UIColor.systemYellow.cgColor , UIColor.systemBlue.withAlphaComponent(0.6).cgColor]
+        case .CellImage : return [UIColor.systemBlue.withAlphaComponent(0.6).cgColor , UIColor.systemOrange.withAlphaComponent(0.6).cgColor]
+        case .PlayerView : return [UIColor.blue.withAlphaComponent(0.6).cgColor , UIColor.systemOrange.withAlphaComponent(0.6).cgColor]
+        }
+        
+    }
+    
+    var strokeColor : CGColor {
+        switch self {
+        case .App , .AppLaunch:
+            return UIColor.black.cgColor
+        case .CellImage:
+            return UIColor.systemYellow.cgColor
+        case .PlayerView:
+            return UIColor.black.cgColor
+        }
+    }
+    
+    var fillColor : CGColor {
+        switch self {
+        case .App , .AppLaunch , .CellImage:
+            return UIColor.clear.cgColor
+        case .PlayerView:
+            return UIColor.white.cgColor
+        }
+    }
+    
+    
 }

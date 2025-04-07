@@ -28,4 +28,33 @@ enum DetailsPageUIComponents {
     case DownloadButton((any ButtonStylingDependency)?)
     case ExpandButton((any ButtonStylingDependency)?)
     
+    var height : CGFloat {
+        
+        get {
+            return 0
+        }
+        
+        set {
+            Logger.log(newValue)
+        }
+    }
+    
+    var name : String {
+        
+        switch self {
+            
+        case .Collection : return "Collection"
+        case .CollectionTitle : return "Collection Title"
+        case .Title : return "Title"
+        case .MaturityRating : return "Maturity Rating"
+        case .Duration : return "Duration"
+        case .ContentDescription : return "Content Description"
+        case .ExpandButton : return "Expand Button"
+        case .PlayButton : return "Play Button"
+        case .DownloadButton : return "Download"
+            
+        }
+        
+    }
+    
 }

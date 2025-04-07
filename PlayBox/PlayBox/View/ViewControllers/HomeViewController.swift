@@ -38,6 +38,7 @@ class HomeViewController : UIViewController {
     
     private var viewModel : VideoViewModel?
     private var loader : Loader?
+    private var refreshData : UIRefreshControl?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,8 +82,28 @@ class HomeViewController : UIViewController {
     
     func setupTableView() {
         catalogTableView?.backgroundColor = .clear
+        //catalogTableView.decelerationRate = .fast
         registerCells()
         setupLoader()
+        setupRefreshMechanism()
+    }
+    
+    func setupRefreshMechanism() {
+        
+        refreshData = UIRefreshControl()
+        
+        refreshData?.addTarget(self, action: #selector(refreshList), for: .valueChanged)
+        
+        catalogTableView.refreshControl = refreshData
+        
+    }
+    
+    @objc func refreshList() {
+        getVideoData()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            self.refreshData?.endRefreshing()
+        }
     }
     
     func registerCells() {
@@ -172,8 +193,6 @@ extension HomeViewController : UITableViewDelegate , UITableViewDataSource {
         
         //AppUtilities.shared.log("Add pagination logic")
     }
-    
-    
     
 }
 

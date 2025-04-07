@@ -32,6 +32,7 @@ class SplashViewController : UIViewController {
         super.viewDidLoad()
         
         setBackground()
+        loader.skin = .AppLaunch
         loader.showLoader()
         
     }

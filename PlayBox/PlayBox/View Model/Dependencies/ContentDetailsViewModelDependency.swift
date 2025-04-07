@@ -10,14 +10,12 @@ import UIKit
 
 protocol ContentDetailsViewModelDependency : AnyObject {
     
-    func loadImage()
-    func getRelatedItems() 
+    func getRelatedItems()
     
 }
 
 protocol ContentDetailsViewUpdateDelegate : AnyObject {
     
-    func updateImage(image : UIImage?)
     func updateLoader(isLoading : Bool)
     func updateRelated(items : [VideoItem])
     

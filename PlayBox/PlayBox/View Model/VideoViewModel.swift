@@ -143,6 +143,7 @@ protocol VideoUpdatesProtocol : AnyObject {
 }
 
 enum VideoListType : String {
+    
     case Catalog = "catalog"
     case Carousel = "carousel"
     

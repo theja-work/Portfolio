@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -21,11 +22,21 @@
                         <rect key="frame" x="0.0" y="0.0" width="206" height="185"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </imageView>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hbi-Fy-daL" customClass="Loader" customModule="PlayBox" customModuleProvider="target">
+                        <rect key="frame" x="80.666666666666671" y="70" width="45" height="45"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="hbi-Fy-daL" secondAttribute="height" id="Enm-kY-k9v"/>
+                            <constraint firstAttribute="height" constant="45" id="yTH-9d-gGH"/>
+                        </constraints>
+                    </view>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="3Mj-Ua-GBM" secondAttribute="trailing" id="6aH-Li-nna"/>
                     <constraint firstAttribute="bottom" secondItem="3Mj-Ua-GBM" secondAttribute="bottom" id="MPt-Ut-AdU"/>
                     <constraint firstItem="3Mj-Ua-GBM" firstAttribute="top" secondItem="xKv-sr-VSm" secondAttribute="top" id="NvX-kN-hBW"/>
+                    <constraint firstItem="hbi-Fy-daL" firstAttribute="centerX" secondItem="xKv-sr-VSm" secondAttribute="centerX" id="Tmv-L4-p3V"/>
+                    <constraint firstItem="hbi-Fy-daL" firstAttribute="centerY" secondItem="xKv-sr-VSm" secondAttribute="centerY" id="gln-Uw-dVu"/>
                     <constraint firstItem="3Mj-Ua-GBM" firstAttribute="leading" secondItem="xKv-sr-VSm" secondAttribute="leading" id="u1i-2k-ab8"/>
                 </constraints>
             </collectionViewCellContentView>
@@ -33,8 +44,14 @@
             <size key="customSize" width="206" height="185"/>
             <connections>
                 <outlet property="imageView" destination="3Mj-Ua-GBM" id="HeD-0H-9bu"/>
+                <outlet property="loader" destination="hbi-Fy-daL" id="sgp-69-kqz"/>
             </connections>
-            <point key="canvasLocation" x="87" y="33"/>
+            <point key="canvasLocation" x="249" y="7"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>

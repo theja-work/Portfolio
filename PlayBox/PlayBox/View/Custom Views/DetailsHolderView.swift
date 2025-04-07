@@ -16,6 +16,21 @@ class DetailsHolderView : UIView , DetailsHolderProtocol {
     
     var scrollView: UIScrollView?
     
+    var stackView : UIStackView?
+    
+    var durationLabelStack = {
+        
+        let stack = UIStackView(frame: .zero)
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.axis = .horizontal
+        stack.distribution = .fillEqually
+        stack.alignment = .leading
+        stack.spacing = 8.0
+        stack.backgroundColor = .clear
+        
+        return stack
+    }()
+    
     var collection: UICollectionView?
     
     var collectionTitle : UILabel?
@@ -106,8 +121,38 @@ class DetailsHolderView : UIView , DetailsHolderProtocol {
         scrollView?.backgroundColor = .systemBlue.withAlphaComponent(0.3)
         scrollView?.clipsToBounds = true
         scrollView?.layer.cornerRadius = 4.0
+        scrollView?.scrollsToTop = true
         
-        scrollView?.contentSize = CGSize(width: view.bounds.width , height: view.bounds.height + 100)
+        setupStackView()
+    }
+    
+    private func setupStackView() {
+        
+        guard let scrollView = scrollView else {return}
+        
+        stackView = UIStackView(frame: .zero)
+        
+        stackView?.translatesAutoresizingMaskIntoConstraints = false
+        
+        scrollView.addSubview(stackView!)
+        
+        stackView?.axis = .vertical
+        stackView?.spacing = 12
+        stackView?.alignment = .fill
+        stackView?.distribution = .fill
+        stackView?.backgroundColor = .clear
+        
+        stackView?.topAnchor.constraint(equalTo: scrollView.topAnchor , constant: 5).isActive = true
+        stackView?.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor , constant: -5).isActive = true
+        stackView?.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
+        stackView?.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
+        
+        scrollView.contentSize = CGSize(width: stackView?.bounds.width ?? 0, height: stackView?.bounds.height ?? 0)
+        
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
         
     }
     
@@ -227,59 +272,55 @@ class DetailsHolderView : UIView , DetailsHolderProtocol {
     
     private func setupTitle(titleLabel:UILabel) {
         
-        guard let scrollHolder = self.scrollView else {return}
+        guard let holder = self.stackView else {return}
         
-        scrollHolder.addSubview(titleLabel)
+        holder.addArrangedSubview(titleLabel)
         
         self.title = titleLabel
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.numberOfLines = 0
         
-        titleLabel.leadingAnchor.constraint(equalTo: scrollHolder.leadingAnchor, constant: 10).isActive = true
-        titleLabel.topAnchor.constraint(equalTo: scrollHolder.topAnchor, constant: 10).isActive = true
-        titleLabel.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.9).isActive = true
-        titleLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: view.bounds.width * 0.1).isActive = true
+        titleLabel.leadingAnchor.constraint(equalTo: holder.leadingAnchor, constant: 10).isActive = true
+        titleLabel.trailingAnchor.constraint(equalTo: holder.trailingAnchor, constant: -10).isActive = true
         
     }
     
     private func setupMaturityConsent(label:UILabel) {
         
-        guard let scrollHolder = self.scrollView , let title = self.title else {return}
+        guard let holder = self.stackView else {return}
         
-        scrollHolder.addSubview(label)
+        holder.addArrangedSubview(durationLabelStack)
+        durationLabelStack.addArrangedSubview(label)
         
         self.maturityRating = label
         
         label.translatesAutoresizingMaskIntoConstraints = false
         
-        label.leadingAnchor.constraint(equalTo: scrollHolder.leadingAnchor, constant: 10).isActive = true
-        label.topAnchor.constraint(equalTo: title.bottomAnchor, constant: 10).isActive = true
+        durationLabelStack.leadingAnchor.constraint(equalTo: holder.leadingAnchor, constant: 10).isActive = true
+        durationLabelStack.trailingAnchor.constraint(equalTo: holder.trailingAnchor, constant: -10).isActive = true
+        durationLabelStack.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.05).isActive = true
+        
         label.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.3).isActive = true
-        label.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.05).isActive = true
     }
     
     private func setupDuration(label:UILabel) {
         
-        guard let scrollHolder = self.scrollView , let title = self.title , let maturityRating = self.maturityRating else {return}
-        
-        scrollHolder.addSubview(label)
+        durationLabelStack.addArrangedSubview(label)
         
         self.duration = label
         
         label.translatesAutoresizingMaskIntoConstraints = false
         
-        label.leadingAnchor.constraint(equalTo: maturityRating.trailingAnchor, constant: 10).isActive = true
-        label.topAnchor.constraint(equalTo: title.bottomAnchor, constant: 10).isActive = true
         label.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.3).isActive = true
-        label.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.05).isActive = true
+        
     }
     
     private func setupDescription(label:UILabel) {
         
-        guard let scrollHolder = self.scrollView , let duration = self.duration else {return}
+        guard let holder = self.stackView else {return}
         
-        scrollHolder.addSubview(label)
+        holder.addArrangedSubview(label)
         
         self.contentDescription = label
         
@@ -287,25 +328,26 @@ class DetailsHolderView : UIView , DetailsHolderProtocol {
         
         label.translatesAutoresizingMaskIntoConstraints = false
         
-        label.leadingAnchor.constraint(equalTo: scrollHolder.leadingAnchor, constant: 10).isActive = true
-        label.topAnchor.constraint(equalTo: duration.bottomAnchor, constant: 10).isActive = true
+        label.leadingAnchor.constraint(equalTo: holder.leadingAnchor, constant: 10).isActive = true
         label.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.9).isActive = true
         label.heightAnchor.constraint(greaterThanOrEqualToConstant: view.bounds.height * 0.2).isActive = true
         
+        holder.setCustomSpacing(5, after: label)
     }
     
     private func setupPlayButton(button:UIButton) {
         
-        guard let scrollHolder = self.scrollView , let expand = expandButton else {return}
+        guard let holder = self.stackView else {return}
         
-        scrollHolder.addSubview(button)
+        holder.addArrangedSubview(button)
         
         self.playButton = button
         
         button.translatesAutoresizingMaskIntoConstraints = false
         
-        button.centerXAnchor.constraint(equalTo: scrollHolder.centerXAnchor).isActive = true
-        button.topAnchor.constraint(equalTo: expand.bottomAnchor, constant: 10).isActive = true
+        button.addTarget(self, action: #selector(playButtonAction), for: .touchUpInside)
+        
+        button.centerXAnchor.constraint(equalTo: holder.centerXAnchor).isActive = true
         button.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.75).isActive = true
         button.heightAnchor.constraint(equalToConstant: view.bounds.width * 0.15).isActive = true
         
@@ -315,16 +357,15 @@ class DetailsHolderView : UIView , DetailsHolderProtocol {
     
     private func setupDownloadButton(button:UIButton) {
         
-        guard let scrollHolder = self.scrollView , let playButton = playButton else {return}
+        guard let holder = self.stackView else {return}
         
-        scrollHolder.addSubview(button)
+        holder.addArrangedSubview(button)
         
         self.download = button
         
         button.translatesAutoresizingMaskIntoConstraints = false
         
-        button.centerXAnchor.constraint(equalTo: scrollHolder.centerXAnchor).isActive = true
-        button.topAnchor.constraint(equalTo: playButton.bottomAnchor, constant: 10).isActive = true
+        button.centerXAnchor.constraint(equalTo: holder.centerXAnchor).isActive = true
         button.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.75).isActive = true
         button.heightAnchor.constraint(equalToConstant: view.bounds.width * 0.15).isActive = true
         
@@ -334,9 +375,9 @@ class DetailsHolderView : UIView , DetailsHolderProtocol {
     
     private func setupExpandButton(button:UIButton) {
         
-        guard let scrollHolder = self.scrollView , let contentDescription = contentDescription else {return}
+        guard let holder = self.stackView else {return}
         
-        scrollHolder.addSubview(button)
+        holder.addArrangedSubview(button)
         
         self.expandButton = button
         
@@ -344,8 +385,7 @@ class DetailsHolderView : UIView , DetailsHolderProtocol {
         
         button.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
         button.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10).isActive = true
-        button.topAnchor.constraint(equalTo: contentDescription.bottomAnchor).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 10).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 14).isActive = true
         
         button.contentMode = .center
         
@@ -355,16 +395,15 @@ class DetailsHolderView : UIView , DetailsHolderProtocol {
     
     private func setupCollectionTitle(label:UILabel) {
         
-        guard let scrollHolder = self.scrollView , let download = self.download else {return}
+        guard let holder = self.stackView else {return}
         
-        scrollHolder.addSubview(label)
+        holder.addArrangedSubview(label)
         
         self.collectionTitle = label
         
         label.translatesAutoresizingMaskIntoConstraints = false
         
-        label.topAnchor.constraint(equalTo: download.bottomAnchor, constant: 10).isActive = true
-        label.leadingAnchor.constraint(equalTo: scrollHolder.leadingAnchor, constant: 10).isActive = true
+        label.leadingAnchor.constraint(equalTo: holder.leadingAnchor, constant: 10).isActive = true
         label.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.9).isActive = true
         label.heightAnchor.constraint(equalToConstant: view.bounds.width * 0.1).isActive = true
         
@@ -372,48 +411,60 @@ class DetailsHolderView : UIView , DetailsHolderProtocol {
     
     private func setupCollection(collection:UICollectionView) {
         
-        guard let scrollHolder = self.scrollView , let collectionTitle = collectionTitle else {return}
+        guard let holder = self.stackView else {return}
         
-        scrollHolder.addSubview(collection)
+        holder.addArrangedSubview(collection)
         
         self.collection = collection
         
         collection.translatesAutoresizingMaskIntoConstraints = false
-        
         collection.delegate = self
         collection.dataSource = self
-        
         collection.backgroundColor = .clear
-        
-        collection.topAnchor.constraint(equalTo: collectionTitle.bottomAnchor, constant: 10).isActive = true
-        collection.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        collection.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.9).isActive = true
-        collection.heightAnchor.constraint(equalToConstant: 180).isActive = true
-        
         collection.showsHorizontalScrollIndicator = false
-        collection.showsVerticalScrollIndicator = false
         
-        //collection.register(CatalogImageCVCell.classForCoder(), forCellWithReuseIdentifier: CatalogImageCVCell.getCellIdentifier())
+        collection.heightAnchor.constraint(equalToConstant: 180).isActive = true
+        collection.leadingAnchor.constraint(equalTo: holder.leadingAnchor, constant: 10).isActive = true
+        collection.trailingAnchor.constraint(equalTo: holder.trailingAnchor, constant: -10).isActive = true
         
         collection.register(UINib(nibName: CatalogImageCVCell.getNibName(), bundle: Bundle(for: CatalogImageCVCell.classForCoder())), forCellWithReuseIdentifier: CatalogImageCVCell.getCellIdentifier())
         
     }
     
-    @objc func expandButtonTapped() {
+    @objc func playButtonAction(sender button : UIButton) {
         
+        let title = detailHolderDelegate?.isPlaying() ?? false ? "Play" : "Pause"
         
+        DispatchQueue.main.async {
+            button.setTitle(title, for: .normal)
+        }
         
-        scrollView?.contentSize = CGSize(width: view.bounds.width , height: view.bounds.height + 100)
+        detailHolderDelegate?.isPlaying() ?? false ? pause() : play()
         
     }
     
-    private func getContentSize() -> CGSize {
+    private func play() {
+        detailHolderDelegate?.play()
+    }
+    
+    private func pause() {
+        detailHolderDelegate?.pause()
+    }
+    
+    private func startDownload() {
         
-        guard let components = components else {return .zero}
+    }
+    
+    @objc func expandButtonTapped() {
+        guard let contentDescription = contentDescription else { return }
         
+        UIView.performWithoutAnimation {
+            contentDescription.numberOfLines = (contentDescription.numberOfLines == 3) ? 0 : 3
+            expandButton?.setImage(UIImage(named: contentDescription.numberOfLines == 3 ? "down" : "up"), for: .normal)
+            
+            
+        }
         
-        
-        return .zero
     }
     
 }
@@ -441,6 +492,14 @@ extension DetailsHolderView : UICollectionViewDelegate , UICollectionViewDelegat
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         5.0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        guard let item = relatedItems?[indexPath.row] else {return}
+        
+        detailHolderDelegate?.didSelect(item: item)
+        
     }
     
 }

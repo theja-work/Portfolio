@@ -22,14 +22,6 @@ class ContentDetailsViewModel : ContentDetailsViewModelDependency {
         
     }
     
-    private var image : UIImage? {
-        
-        didSet {
-            dataDelegate?.updateImage(image: image)
-        }
-        
-    }
-    
     private var video : VideoItem?
     
     private var relatedVideos : [VideoItem] = [] {
@@ -45,25 +37,6 @@ class ContentDetailsViewModel : ContentDetailsViewModelDependency {
     init(dataDelegate: ContentDetailsViewUpdateDelegate? = nil, video: VideoItem? = nil) {
         self.dataDelegate = dataDelegate
         self.video = video
-    }
-    
-    func loadImage() {
-        
-        guard let imageUrl = video?.thumbnail else {return}
-        
-        isLoading = true
-        
-        Service.getImageFrom(url: imageUrl) { [weak self] image in
-            
-            guard let localSelf = self else {return}
-                
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0, execute: {
-                localSelf.isLoading = false
-            })
-            
-            localSelf.image = image
-        }
-        
     }
     
     func getRelatedItems() {

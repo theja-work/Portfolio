@@ -60,7 +60,6 @@ class ContentDetailsViewController : UIViewController {
         setNeedsUpdateOfSupportedInterfaceOrientations()
         setupViewModel()
         setupPlayerView()
-        viewModel?.loadImage()
         setupDetails()
     }
     
@@ -70,6 +69,12 @@ class ContentDetailsViewController : UIViewController {
         if let delegate = UIApplication.shared.delegate as? AppDelegate {
             delegate.orientation = .landscape
         }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        playerView.cleanUp()
     }
     
     func setupViewModel() {
@@ -84,6 +89,10 @@ class ContentDetailsViewController : UIViewController {
         playerView?.loader.shadeAffect = true
         playerView?.loader.setNeedsLayout()
         playerView?.loader.layoutIfNeeded()
+        
+        guard let item = self.video else {return}
+        
+        playerView.configureVideo(item: item)
     }
     
     func setupDetails() {
@@ -120,7 +129,7 @@ class ContentDetailsViewController : UIViewController {
         
         playerLandscapeTransition()
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
             self.playerView.translatesAutoresizingMaskIntoConstraints = true
             self.playerView.frame = CGRect(x: 0, y: 0, width: width, height: height)
         }
@@ -131,7 +140,7 @@ class ContentDetailsViewController : UIViewController {
         
         playerPortraitTransition()
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: {
             self.playerView.translatesAutoresizingMaskIntoConstraints = false
             self.playerView.transform = .identity
         })
@@ -144,7 +153,7 @@ class ContentDetailsViewController : UIViewController {
             animation.fromValue = 0
             
             animation.toValue = UIDevice.current.orientation == .landscapeRight ? -CGFloat.pi / 2 : CGFloat.pi / 2
-            animation.duration = 0.1
+            animation.duration = 0.05
             self.playerView.layer.add(animation, forKey: playerRotationAnimationKey)
         }
     }
@@ -152,7 +161,7 @@ class ContentDetailsViewController : UIViewController {
     private func playerPortraitTransition() {
         let isLandscapeRight = UIDevice.current.orientation == .landscapeRight
         
-        UIView.animate(withDuration: 0.2, animations: {
+        UIView.animate(withDuration: 0.05, animations: {
             self.playerView.transform = isLandscapeRight ? CGAffineTransform(rotationAngle: CGFloat.pi) : CGAffineTransform(rotationAngle: -CGFloat.pi)
         }) { _ in
             // Reset transform after animation to ensure proper positioning
@@ -171,14 +180,7 @@ extension ContentDetailsViewController : ContentDetailsViewUpdateDelegate {
             return
         }
         
-        DispatchQueue.main.async {
-            
-            self.playerView?.thumbnailImageView?.image = AppUtilities.shared.removeBlackPadding(from: image)
-            self.playerView?.thumbnailImageView?.contentMode = .scaleToFill
-            self.playerView?.thumbnailImageView?.setNeedsLayout()
-            self.playerView?.thumbnailImageView?.layoutIfNeeded()
-            
-        }
+        playerView.setupThumbnail(image: image)
         
     }
     
@@ -218,6 +220,8 @@ extension ContentDetailsViewController : DetailsHolderDelegate {
     
     func didSelect(item: VideoItem) {
         Logger.log(item.title)
+        
+        playerView.configureVideo(item: item)
     }
     
     func scrollType() -> UICollectionView.ScrollDirection {
@@ -229,11 +233,11 @@ extension ContentDetailsViewController : DetailsHolderDelegate {
     }
     
     func play() {
-        
+        playerView.play()
     }
     
     func pause() {
-        
+        playerView.pause()
     }
     
     func startDownload() {
@@ -246,6 +250,14 @@ extension ContentDetailsViewController : DetailsHolderDelegate {
     
     func deleteDownload() {
         
+    }
+    
+    func isPlaying() -> Bool {
+        playerView.isPlaying()
+    }
+    
+    func isDownloading() -> Bool {
+        playerView.isDownloading()
     }
     
 }

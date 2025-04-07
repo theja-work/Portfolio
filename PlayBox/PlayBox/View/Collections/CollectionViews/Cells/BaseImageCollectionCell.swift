@@ -21,6 +21,8 @@ class BaseImageCollectionCell : UICollectionViewCell {
     
     @IBOutlet weak var imageView: UIImageView!
     
+    @IBOutlet weak var loader: Loader!
+    
     var imageGradient : CAGradientLayer?
     
     var item : VideoItem?
@@ -35,13 +37,51 @@ class BaseImageCollectionCell : UICollectionViewCell {
         super.awakeFromNib()
         
         setupGradient()
+        loader.skin = .CellImage
     }
+    
+    private static let imageCache : NSCache<NSString,UIImage> = {
+        
+        let cache = NSCache<NSString,UIImage>()
+        cache.countLimit = 100
+        cache.totalCostLimit = 200 * 1024 * 1024
+        
+        return cache
+    }()
     
     func setupCell(item:VideoItem) {
         
+        let key = NSString(string: item.thumbnail)
+        
+        self.imageView.image = nil
+        
+        loader.showLoader()
+        
+        if let image = BaseImageCollectionCell.imageCache.object(forKey: key) {
+            loader.hideLoader()
+            setupImage(image: image)
+        }
+        else {
+            
+            Service.getImageFrom(url: item.thumbnail) { [weak self] image in
+                
+                guard let self = self else {return}
+                
+                self.loader.hideLoader()
+                
+                self.setupImage(image: image)
+                
+            }
+            
+        }
+        
+    }
+    
+    func setupImage(image:UIImage) {
+        
         DispatchQueue.main.async {
             
-            self.imageView.loadImage(from: URL(string: item.thumbnail)!)
+            self.imageView.image = image
             
             self.imageView.contentMode = .scaleToFill
             
