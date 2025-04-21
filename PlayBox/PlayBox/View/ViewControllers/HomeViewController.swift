@@ -40,6 +40,27 @@ class HomeViewController : UIViewController {
     private var loader : Loader?
     private var refreshData : UIRefreshControl?
     
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+    
+    convenience init(catalogTableView: UITableView!, viewModel: VideoViewModel? = nil, loader: Loader? = nil, refreshData: UIRefreshControl? = nil) {
+        
+        self.init(nibName: "Home", bundle: nil)
+        
+        self.catalogTableView = catalogTableView
+        self.viewModel = viewModel
+        self.loader = loader
+        self.refreshData = refreshData
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -205,15 +226,15 @@ extension HomeViewController : VideoUpdatesProtocol {
         case .success(let result):
             printVideos(videos: result)
         case .serverError(let code, let message):
-            AppUtilities.shared.log("Server error with code : \(code) : message : \(message)")
+            Logger.log("Server error with code : \(code) : message : \(message)")
         case .parsingError(let code, let message):
-            AppUtilities.shared.log("Parsing error with code : \(code) : message : \(message)")
+            Logger.log("Parsing error with code : \(code) : message : \(message)")
         case .dataNotFound:
-            AppUtilities.shared.log("dataNotFound")
+            Logger.log("dataNotFound")
         case .networkError:
-            AppUtilities.shared.log("networkError")
+            Logger.log("networkError")
         case .unkownError:
-            AppUtilities.shared.log("unkownError")
+            Logger.log("unkownError")
         }
         
     }

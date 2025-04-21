@@ -31,7 +31,7 @@ class VideoViewModel : VideoViewModelDependency {
     var isLoading : Bool = false {
         
         didSet {
-            AppUtilities.shared.log("isLoading : \(isLoading)")
+            Logger.log("isLoading : \(isLoading)")
             videoUpdatesDelegate?.updateLoader(isLoading: isLoading)
         }
         

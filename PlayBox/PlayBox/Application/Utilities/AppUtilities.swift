@@ -14,14 +14,6 @@ final class AppUtilities {
     
     private init(){}
     
-    func log(_ message: String,
-             file: String = #file,
-             function: String = #function,
-             line: Int = #line) {
-        let fileName = (file as NSString).lastPathComponent
-        print("[\(fileName):\(function)] \(line) - \(message)")
-    }
-    
     func removeBlackPadding(from image: UIImage) -> UIImage? {
         guard let cgImage = image.cgImage else { return nil }
         

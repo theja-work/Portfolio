@@ -10,6 +10,7 @@ import UIKit
 
 class ContentDetailsViewController : UIViewController {
     
+    //MARK: - Type methods
     class func navigationController(item : VideoItem) -> UINavigationController? {
         
         let storyboard = UIStoryboard(name: "Home", bundle: nil)
@@ -33,12 +34,14 @@ class ContentDetailsViewController : UIViewController {
         return viewController
     }
     
+    //MARK: - Storyboard outlets
     @IBOutlet weak var playerView: PlayerHolderView!
     
     @IBOutlet weak var loader: Loader!
     
     @IBOutlet weak var detailsHolderView: DetailsHolderView!
     
+    //MARK: - Instance Properties
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         .landscape
     }
@@ -75,8 +78,24 @@ class ContentDetailsViewController : UIViewController {
         super.viewWillDisappear(animated)
         
         playerView.cleanUp()
+        
+        if let delegate = UIApplication.shared.delegate as? AppDelegate {
+            delegate.orientation = .portrait
+        }
     }
     
+    override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        
+        if UIDevice.current.orientation.isLandscape {
+            landScapeTransition()
+        }
+        else {
+            portraitTransition()
+        }
+    }
+    
+    //MARK: - Instance methods
     func setupViewModel() {
         
         guard let item = video else {return}
@@ -85,6 +104,7 @@ class ContentDetailsViewController : UIViewController {
     }
     
     func setupPlayerView() {
+        
         playerView?.setupPlayerDelegate(delegate: self)
         playerView?.loader.shadeAffect = true
         playerView?.loader.setNeedsLayout()
@@ -101,25 +121,12 @@ class ContentDetailsViewController : UIViewController {
         
         guard let item = self.video else {return}
         
-        detailsHolderView?.setupBuilder(builder: DetailsHolderComponentBuilder())
+        detailsHolderView?.setupItem(item: item)
         
         viewModel?.getRelatedItems()
         
-        detailsHolderView?.setupItem(item: item)
-        
         detailsHolderView?.setNeedsLayout()
         detailsHolderView?.layoutIfNeeded()
-    }
-    
-    override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        
-        if UIDevice.current.orientation.isLandscape {
-            landScapeTransition()
-        }
-        else {
-            portraitTransition()
-        }
     }
     
     private func landScapeTransition() {
@@ -132,6 +139,7 @@ class ContentDetailsViewController : UIViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
             self.playerView.translatesAutoresizingMaskIntoConstraints = true
             self.playerView.frame = CGRect(x: 0, y: 0, width: width, height: height)
+            self.detailsHolderView.isHidden = true
         }
         
     }
@@ -143,6 +151,7 @@ class ContentDetailsViewController : UIViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: {
             self.playerView.translatesAutoresizingMaskIntoConstraints = false
             self.playerView.transform = .identity
+            self.detailsHolderView.isHidden = false
         })
         
     }
@@ -171,6 +180,7 @@ class ContentDetailsViewController : UIViewController {
 
 }
 
+//MARK: - Delegate methods
 extension ContentDetailsViewController : ContentDetailsViewUpdateDelegate {
     
     func updateImage(image: UIImage?) {
@@ -230,6 +240,10 @@ extension ContentDetailsViewController : DetailsHolderDelegate {
     
     func cellSize() -> CGSize {
         CGSize(width: 120, height: 180)
+    }
+    
+    func getDuration() -> String {
+        playerView.playerSkin.getDuration() 
     }
     
     func play() {

@@ -63,7 +63,7 @@ class VideoAPI {
         let cacheKey = self.url as NSString
         
         if let cachedData = cache.object(forKey: cacheKey) , !isCacheExpired(cachedData.timestamp) {
-            AppUtilities.shared.log("Returning data from cache")
+            Logger.log("Returning data from cache")
             
             do {
                 
@@ -80,7 +80,7 @@ class VideoAPI {
             return
         }
         else {
-            AppUtilities.shared.log("Failed to load from cache")
+            Logger.log("Failed to load from cache")
         }
         
         service.callWithDataLoader { dataResponse in

@@ -14,7 +14,6 @@ class Service {
     private var jsonParams: [String: Any]?
     private var methodType: HTTPMethods
     
-
     private var url: String {
         endpoint + api
     }

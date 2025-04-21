@@ -27,6 +27,7 @@ protocol DetailsHolderDelegate where Self : UIViewController {
     func cellSize() -> CGSize
     func play()
     func pause()
+    func getDuration() -> String
     func startDownload()
     func pauseDownload()
     func deleteDownload()

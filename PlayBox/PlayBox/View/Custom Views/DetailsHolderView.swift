@@ -23,7 +23,7 @@ class DetailsHolderView : UIView , DetailsHolderProtocol {
         let stack = UIStackView(frame: .zero)
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .horizontal
-        stack.distribution = .fillEqually
+        stack.distribution = .fill
         stack.alignment = .leading
         stack.spacing = 8.0
         stack.backgroundColor = .clear
@@ -63,6 +63,15 @@ class DetailsHolderView : UIView , DetailsHolderProtocol {
     
     @IBOutlet weak var view : UIView!
     
+    let titleStyling = PlayBoxLabelStyling()
+    let maturityRatingStyling = PlayBoxLabelStyling()
+    let durationStyling = PlayBoxLabelStyling()
+    let descriptionStyling = PlayBoxLabelStyling()
+    let collectionTitleStyling = PlayBoxLabelStyling()
+    let playButtonStyling = PlayBoxButtonStyling()
+    let downloadButtonStyling = PlayBoxButtonStyling()
+    let expandButtonStyling = PlayBoxButtonStyling()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -97,7 +106,20 @@ class DetailsHolderView : UIView , DetailsHolderProtocol {
     
     private func setupView() {
         
+        components = [DetailsPageUIComponents]()
+        components?.append(.Title(labelDependency: titleStyling))
+        components?.append(.MaturityRating(labelDependency: maturityRatingStyling))
+        components?.append(.Duration(labelDependency: durationStyling))
+        components?.append(.ContentDescription(labelDependency: descriptionStyling))
+        components?.append(.ExpandButton(expandButtonStyling))
+        components?.append(.PlayButton(playButtonStyling))
+        components?.append(.DownloadButton(downloadButtonStyling))
+        components?.append(.CollectionTitle(labelDependency: collectionTitleStyling))
+        components?.append(.Collection(scrollDirection: .horizontal))
+        
         setupScrollView()
+        
+        setupBuilder(builder: DetailsHolderComponentBuilder())
         
         view.setNeedsLayout()
         view.layoutIfNeeded()
@@ -123,6 +145,8 @@ class DetailsHolderView : UIView , DetailsHolderProtocol {
         scrollView?.layer.cornerRadius = 4.0
         scrollView?.scrollsToTop = true
         
+        scrollView?.contentSize = CGSize(width: view?.bounds.width ?? 0, height: view?.bounds.height ?? 0)
+        
         setupStackView()
     }
     
@@ -144,10 +168,8 @@ class DetailsHolderView : UIView , DetailsHolderProtocol {
         
         stackView?.topAnchor.constraint(equalTo: scrollView.topAnchor , constant: 5).isActive = true
         stackView?.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor , constant: -5).isActive = true
-        stackView?.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
-        stackView?.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
-        
-        scrollView.contentSize = CGSize(width: stackView?.bounds.width ?? 0, height: stackView?.bounds.height ?? 0)
+        stackView?.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.95).isActive = true
+        stackView?.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
         
     }
     
@@ -161,7 +183,7 @@ class DetailsHolderView : UIView , DetailsHolderProtocol {
         DispatchQueue.main.async {
             self.title?.text = item.title
             self.maturityRating?.text = "U/A"
-            self.duration?.text = "00h : 00m"
+            self.duration?.text = self.detailHolderDelegate?.getDuration() ?? "00h : 00m"
             self.contentDescription?.text = item.description
         }
         
@@ -174,31 +196,6 @@ class DetailsHolderView : UIView , DetailsHolderProtocol {
     func setupBuilder(builder : DetailsHolderUIComponentBuilderDependency) {
         
         self.builder = builder
-        
-        setupComponents()
-    }
-    
-    func setupComponents() {
-        
-        let titleStyling = PlayBoxLabelStyling()
-        let maturityRatingStyling = PlayBoxLabelStyling()
-        let durationStyling = PlayBoxLabelStyling()
-        let descriptionStyling = PlayBoxLabelStyling()
-        let collectionTitleStyling = PlayBoxLabelStyling()
-        let playButtonStyling = PlayBoxButtonStyling()
-        let downloadButtonStyling = PlayBoxButtonStyling()
-        let expandButtonStyling = PlayBoxButtonStyling()
-        
-        components = [DetailsPageUIComponents]()
-        components?.append(.Title(labelDependency: titleStyling))
-        components?.append(.MaturityRating(labelDependency: maturityRatingStyling))
-        components?.append(.Duration(labelDependency: durationStyling))
-        components?.append(.ContentDescription(labelDependency: descriptionStyling))
-        components?.append(.ExpandButton(expandButtonStyling))
-        components?.append(.PlayButton(playButtonStyling))
-        components?.append(.DownloadButton(downloadButtonStyling))
-        components?.append(.CollectionTitle(labelDependency: collectionTitleStyling))
-        components?.append(.Collection(scrollDirection: .horizontal))
         
         buildUIComponents()
     }
@@ -281,8 +278,7 @@ class DetailsHolderView : UIView , DetailsHolderProtocol {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.numberOfLines = 0
         
-        titleLabel.leadingAnchor.constraint(equalTo: holder.leadingAnchor, constant: 10).isActive = true
-        titleLabel.trailingAnchor.constraint(equalTo: holder.trailingAnchor, constant: -10).isActive = true
+        titleLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 32).isActive = true
         
     }
     
@@ -297,11 +293,8 @@ class DetailsHolderView : UIView , DetailsHolderProtocol {
         
         label.translatesAutoresizingMaskIntoConstraints = false
         
-        durationLabelStack.leadingAnchor.constraint(equalTo: holder.leadingAnchor, constant: 10).isActive = true
-        durationLabelStack.trailingAnchor.constraint(equalTo: holder.trailingAnchor, constant: -10).isActive = true
         durationLabelStack.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.05).isActive = true
         
-        label.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.3).isActive = true
     }
     
     private func setupDuration(label:UILabel) {
@@ -328,11 +321,27 @@ class DetailsHolderView : UIView , DetailsHolderProtocol {
         
         label.translatesAutoresizingMaskIntoConstraints = false
         
-        label.leadingAnchor.constraint(equalTo: holder.leadingAnchor, constant: 10).isActive = true
-        label.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.9).isActive = true
         label.heightAnchor.constraint(greaterThanOrEqualToConstant: view.bounds.height * 0.2).isActive = true
         
         holder.setCustomSpacing(5, after: label)
+    }
+    
+    private func setupExpandButton(button:UIButton) {
+        
+        guard let holder = self.stackView else {return}
+        
+        holder.addArrangedSubview(button)
+        
+        self.expandButton = button
+        
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        button.heightAnchor.constraint(equalToConstant: 14).isActive = true
+        
+        button.contentMode = .center
+        
+        button.addTarget(self, action: #selector(expandButtonTapped), for: .touchUpInside)
+        
     }
     
     private func setupPlayButton(button:UIButton) {
@@ -347,8 +356,6 @@ class DetailsHolderView : UIView , DetailsHolderProtocol {
         
         button.addTarget(self, action: #selector(playButtonAction), for: .touchUpInside)
         
-        button.centerXAnchor.constraint(equalTo: holder.centerXAnchor).isActive = true
-        button.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.75).isActive = true
         button.heightAnchor.constraint(equalToConstant: view.bounds.width * 0.15).isActive = true
         
         button.configuration = .plain()
@@ -365,31 +372,9 @@ class DetailsHolderView : UIView , DetailsHolderProtocol {
         
         button.translatesAutoresizingMaskIntoConstraints = false
         
-        button.centerXAnchor.constraint(equalTo: holder.centerXAnchor).isActive = true
-        button.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.75).isActive = true
         button.heightAnchor.constraint(equalToConstant: view.bounds.width * 0.15).isActive = true
         
         button.configuration = .plain()
-        
-    }
-    
-    private func setupExpandButton(button:UIButton) {
-        
-        guard let holder = self.stackView else {return}
-        
-        holder.addArrangedSubview(button)
-        
-        self.expandButton = button
-        
-        button.translatesAutoresizingMaskIntoConstraints = false
-        
-        button.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
-        button.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 14).isActive = true
-        
-        button.contentMode = .center
-        
-        button.addTarget(self, action: #selector(expandButtonTapped), for: .touchUpInside)
         
     }
     
@@ -403,8 +388,6 @@ class DetailsHolderView : UIView , DetailsHolderProtocol {
         
         label.translatesAutoresizingMaskIntoConstraints = false
         
-        label.leadingAnchor.constraint(equalTo: holder.leadingAnchor, constant: 10).isActive = true
-        label.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.9).isActive = true
         label.heightAnchor.constraint(equalToConstant: view.bounds.width * 0.1).isActive = true
         
     }
@@ -424,8 +407,6 @@ class DetailsHolderView : UIView , DetailsHolderProtocol {
         collection.showsHorizontalScrollIndicator = false
         
         collection.heightAnchor.constraint(equalToConstant: 180).isActive = true
-        collection.leadingAnchor.constraint(equalTo: holder.leadingAnchor, constant: 10).isActive = true
-        collection.trailingAnchor.constraint(equalTo: holder.trailingAnchor, constant: -10).isActive = true
         
         collection.register(UINib(nibName: CatalogImageCVCell.getNibName(), bundle: Bundle(for: CatalogImageCVCell.classForCoder())), forCellWithReuseIdentifier: CatalogImageCVCell.getCellIdentifier())
         
@@ -499,6 +480,7 @@ extension DetailsHolderView : UICollectionViewDelegate , UICollectionViewDelegat
         guard let item = relatedItems?[indexPath.row] else {return}
         
         detailHolderDelegate?.didSelect(item: item)
+        setupItem(item: item)
         
     }
     

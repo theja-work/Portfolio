@@ -140,6 +140,20 @@ class PlayerSkin : UIView {
         
     }
     
+    func getDuration() -> String {
+        
+        guard let duration = player?.currentItem?.duration,
+              CMTimeGetSeconds(duration).isFinite else {
+            return "00h : 00m"
+        }
+        
+        let totalSeconds = Int(CMTimeGetSeconds(duration))
+        let hours = totalSeconds / 3600
+        let minutes = (totalSeconds % 3600) / 60
+        
+        return String(format: "%02dh : %02dm", hours, minutes)
+    }
+    
     func play() {
         
         hideControls()
