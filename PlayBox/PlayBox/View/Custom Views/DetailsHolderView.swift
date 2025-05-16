@@ -185,6 +185,10 @@ class DetailsHolderView : UIView , DetailsHolderProtocol {
             self.maturityRating?.text = "U/A"
             self.duration?.text = self.detailHolderDelegate?.getDuration() ?? "00h : 00m"
             self.contentDescription?.text = item.description
+            
+            self.contentDescription?.numberOfLines = 3
+            
+            self.expandButton?.setImage(UIImage(named: "down"), for: .normal)
         }
         
     }
@@ -317,13 +321,17 @@ class DetailsHolderView : UIView , DetailsHolderProtocol {
         
         self.contentDescription = label
         
-        label.numberOfLines = 3
+        self.contentDescription?.numberOfLines = 3
         
-        label.translatesAutoresizingMaskIntoConstraints = false
+        self.contentDescription?.lineBreakMode = .byWordWrapping
         
-        label.heightAnchor.constraint(greaterThanOrEqualToConstant: view.bounds.height * 0.2).isActive = true
+        self.contentDescription?.setContentHuggingPriority(.required, for: .vertical)
         
-        holder.setCustomSpacing(5, after: label)
+        self.contentDescription?.translatesAutoresizingMaskIntoConstraints = false
+        
+        if let description = self.contentDescription {
+            holder.setCustomSpacing(5, after: description)
+        }
     }
     
     private func setupExpandButton(button:UIButton) {
@@ -332,15 +340,22 @@ class DetailsHolderView : UIView , DetailsHolderProtocol {
         
         holder.addArrangedSubview(button)
         
-        self.expandButton = button
-        
         button.translatesAutoresizingMaskIntoConstraints = false
         
-        button.heightAnchor.constraint(equalToConstant: 14).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
         button.contentMode = .center
         
-        button.addTarget(self, action: #selector(expandButtonTapped), for: .touchUpInside)
+        button.semanticContentAttribute = .forceRightToLeft
+
+        var config = UIButton.Configuration.plain()
+        config.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+
+        button.configuration = config
+        
+        self.expandButton = button
+        
+        self.expandButton?.addTarget(self, action: #selector(expandButtonTapped), for: .touchUpInside)
         
     }
     
@@ -443,7 +458,12 @@ class DetailsHolderView : UIView , DetailsHolderProtocol {
             contentDescription.numberOfLines = (contentDescription.numberOfLines == 3) ? 0 : 3
             expandButton?.setImage(UIImage(named: contentDescription.numberOfLines == 3 ? "down" : "up"), for: .normal)
             
+            self.stackView?.layoutIfNeeded()
             
+            if let scrollView = self.scrollView , contentDescription.numberOfLines == 0 {
+                let topInset = scrollView.adjustedContentInset.top
+                scrollView.setContentOffset(CGPoint(x: 0, y: -topInset), animated: true)
+            }
         }
         
     }

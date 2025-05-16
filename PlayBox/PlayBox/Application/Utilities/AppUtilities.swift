@@ -95,6 +95,28 @@ final class AppUtilities {
         return CGRect(x: 0, y: minY + 2, width: width, height: newHeight)
     }
     
+    func heightForLabel(text: String, font: UIFont, width: CGFloat, numberOfLines: Int) -> CGFloat {
+        let maxHeight: CGFloat
+        if numberOfLines == 0 {
+            // Unlimited lines — calculate full height
+            maxHeight = .greatestFiniteMagnitude
+        } else {
+            // Height for N lines
+            maxHeight = font.lineHeight * CGFloat(numberOfLines)
+        }
+
+        let constraintRect = CGSize(width: width, height: maxHeight)
+        
+        let boundingBox = text.boundingRect(
+            with: constraintRect,
+            options: [.usesLineFragmentOrigin, .usesFontLeading],
+            attributes: [.font: font],
+            context: nil
+        )
+
+        return ceil(boundingBox.height)
+    }
+    
 }
 
 class Logger {

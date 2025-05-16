@@ -93,6 +93,7 @@ class ContentDetailsViewController : UIViewController {
         else {
             portraitTransition()
         }
+        
     }
     
     //MARK: - Instance methods

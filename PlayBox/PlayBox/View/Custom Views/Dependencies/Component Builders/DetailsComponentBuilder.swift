@@ -46,7 +46,7 @@ class DetailsHolderComponentBuilder : DetailsHolderUIComponentBuilderDependency 
             
             guard let dependency = labelDependency as? PlayBoxLabelStyling else {return nil}
             
-            dependency.buildStyling(title: "", font: .systemFont(ofSize: 16), textColor: .white, backGroundColor: .clear, cornerRadius: nil)
+            dependency.buildStyling(title: "", font: .systemFont(ofSize: 16), textColor: .lightGray, backGroundColor: .clear, cornerRadius: nil)
             
             return getLabel(from: dependency)
             
@@ -66,7 +66,7 @@ class DetailsHolderComponentBuilder : DetailsHolderUIComponentBuilderDependency 
             
             guard let dependency = labelDependency as? PlayBoxLabelStyling else {return nil}
             
-            dependency.buildStyling(title: "", font: .systemFont(ofSize: 16), textColor: .white, backGroundColor: .clear, cornerRadius: nil)
+            dependency.buildStyling(title: "", font: .systemFont(ofSize: 16), textColor: .systemYellow.withAlphaComponent(0.6), backGroundColor: .clear, cornerRadius: nil)
             
             return getLabel(from: dependency)
             
