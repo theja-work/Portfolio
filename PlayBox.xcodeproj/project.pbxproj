@@ -51,43 +51,9 @@
 		43B059E42D306662009A3D8F /* PlayBoxUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PlayBoxUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		43B059EC2D306662009A3D8F /* Exceptions for "PlayBox" folder in "PlayBox" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Application/Configuration/Info.plist,
-				Application/Configuration/SceneDelegate.swift,
-				Application/Testing/PlayBoxTests/AppDelegateTests.swift,
-				Application/Testing/PlayBoxUITests/PlayBoxUITests.swift,
-				Application/Testing/PlayBoxUITests/PlayBoxUITestsLaunchTests.swift,
-			);
-			target = 43B059C02D30665F009A3D8F /* PlayBox */;
-		};
-		43B05A052D30716C009A3D8F /* Exceptions for "PlayBox" folder in "PlayBoxTests" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Application/Testing/PlayBoxTests/AppDelegateTests.swift,
-			);
-			target = 43B059D92D306662009A3D8F /* PlayBoxTests */;
-		};
-		43B05A062D30716C009A3D8F /* Exceptions for "PlayBox" folder in "PlayBoxUITests" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Application/Testing/PlayBoxUITests/PlayBoxUITests.swift,
-				Application/Testing/PlayBoxUITests/PlayBoxUITestsLaunchTests.swift,
-			);
-			target = 43B059E32D306662009A3D8F /* PlayBoxUITests */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		43B059C32D30665F009A3D8F /* PlayBox */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				43B059EC2D306662009A3D8F /* Exceptions for "PlayBox" folder in "PlayBox" target */,
-				43B05A052D30716C009A3D8F /* Exceptions for "PlayBox" folder in "PlayBoxTests" target */,
-				43B05A062D30716C009A3D8F /* Exceptions for "PlayBox" folder in "PlayBoxUITests" target */,
-			);
 			path = PlayBox;
 			sourceTree = "<group>";
 		};
