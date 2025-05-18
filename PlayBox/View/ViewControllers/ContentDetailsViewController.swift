@@ -256,15 +256,15 @@ extension ContentDetailsViewController : DetailsHolderDelegate {
     }
     
     func startDownload() {
-        
+        // add download logic here.
     }
     
     func pauseDownload() {
-        
+        // add pause logic here.
     }
     
     func deleteDownload() {
-        
+        // add delete logic here. 
     }
     
     func isPlaying() -> Bool {
